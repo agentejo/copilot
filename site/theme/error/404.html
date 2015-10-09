@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title>404</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+        <link rel="icon" href="@base('/favicon.png')" type="image/png">
+
+        @assets(['theme:css/site.css', 'theme:js/site.js'])
+
+    </head>
+    <body class="flex flex-middle u-text-center">
+
+        <div class="container">
+
+            <h1>404</h1>
+
+            <a class="site-brand" href="@route('/')" title="Get me home">
+                <img src="@url('theme:media/logo.svg')" alt="Logo">
+            </a>
+
+            <p>
+                Uuups, I'm sorry to say,<br>
+                but the requested file not found.
+            </p>
+
+            <a href="@route('/')" class="button">Get me home</a>
+        </div>
+
+    </body>
+</html>

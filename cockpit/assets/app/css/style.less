@@ -1,0 +1,87 @@
+/*
+ * Run `lessc style.less > style.css -x`
+ */
+
+@import (less) "../../lib/codemirror/lib/codemirror.css";
+@import (less) "../../lib/codemirror/lib/show-hint.css";
+@import (less) "../../lib/codemirror/theme/dark.css";
+@import (less) "../../lib/codemirror/theme/light.css";
+@import "less/uikit/uikit.less";
+
+//@global-primary-background: #d73d32;
+
+.uk-selected {
+    background: @global-selected-background;
+}
+
+.app-header {
+
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+
+    .uk-navbar {
+
+        & > div > *:first-child {
+            margin-left: -15px;
+        }
+    }
+}
+
+.app-header-topbar {
+
+    background-color: @global-primary-background;
+    padding: 10px 0;
+    box-sizing: border-box;
+
+    a { text-decoration: none !important; }
+
+    .uk-contrast * {
+        color: @global-contrast-color;
+    }
+}
+
+.app-panel-dropdown {
+    margin-top: 10px;
+    border: none;
+    width: 600px;
+    max-width: 85vw;
+    border: none;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.22);
+
+    &:after {
+    	bottom: 100%;
+    	left: 30px;
+    	border: solid transparent;
+    	content: " ";
+    	height: 0;
+    	width: 0;
+    	position: absolute;
+    	pointer-events: none;
+    	border-color: none;
+    	border-bottom-color: @global-background;
+    	border-width: 8px;
+    	margin-left: -8px;
+    }
+}
+
+.app-main {
+    margin-top: @global-margin-large;
+}
+
+.app-footer {
+    margin: (2 * @global-margin-large) 0;
+}
+
+// vendor
+
+.trumbowyg-box, .trumbowyg-editor {
+    width: 100% !important;
+}
+
+.trumbowyg-box {
+    margin: unset !important;
+
+    .trumbowyg-button-pane, .trumbowyg-editor {
+        background: @global-background;
+    }
+}

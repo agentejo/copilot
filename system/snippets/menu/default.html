@@ -1,0 +1,42 @@
+
+{%
+
+    $options = array_merge([
+
+        'class'       => '',
+        'activeClass' => 'active'
+
+    ], isset($options) ? $options:[]);
+
+    $level = isset($level) ? $level : 0;
+%}
+
+<ul class="{{ $level==0 ? $options['class']:'' }}" data-level="{{ $level }}">
+    @foreach($data as $label => $link)
+
+    {%
+        $children = is_array($link) ? $link : false;
+        $link     = $children ? '#':$link;
+        $active   = ($meta->route == $link || ($link != '/' && strpos($meta->route, $link)===0));
+
+        if ($children) {
+            $urls = array_values($children);
+            $link = array_shift($urls);
+        }
+
+        $url = (strpos($link, '://') !== false) ? $link : copi::routeUrl($link);
+
+    %}
+
+    <li class="{{ $active ? $options['activeClass']:'' }}">
+        <a href="{{ $url }}">{{ $label }}</a>
+
+        @if($children)
+
+            @snippet('menu/default', ['data' => $children, 'level'=>++$level, 'options'=>['activeClass' => @$options['activeClass']]])
+
+        @endif
+    </li>
+
+    @end
+</ul>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title>{{ $meta->get('title', $site['site.title']) }} </title>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+        <link rel="icon" href="@base('/favicon.png')" type="image/png">
+
+        @assets(['theme:css/site.css', 'theme:lib/jquery.min.js', 'theme:lib/uikit/js/uikit.min.js', 'theme:js/site.js'])
+        @assets($meta->assets)
+
+        @trigger('site.header')
+
+    </head>
+    <body>
+
+        <div class="uk-container uk-container-center">
+
+            <div class="uk-margin-top">
+                <a class="uk-text-large uk-text-bold uk-link-muted" href="@route('/')" title="Get me home">Copilot</a>
+            </div>
+
+            <nav class="uk-navbar uk-margin-top">
+                @menu('main', ['class'=>'uk-navbar-nav', 'activeClass' => 'uk-active'])
+            </nav>
+        </div>
+
+        <main class="site-main">
+
+            <div class="uk-container uk-container-center">
+                {{ $content_for_layout }}
+            </div>
+
+        </main>
+
+        <footer class="site-footer">
+
+            <div class="uk-container uk-container-center">
+                <strong>Built with the lovely <a href="http://cocopi.co">Copilot</a></strong>
+            </div>
+
+        </footer>
+
+        @trigger('site.footer')
+
+    </body>
+</html>

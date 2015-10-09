@@ -1,0 +1,62 @@
+//
+// Component: Badge
+//
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+@badge-background:                              @global-primary-background;
+@badge-padding-horizontal:                      15px;
+@badge-font-size:                               12px;
+@badge-font-weight:                             600;
+@badge-line-height:                             34px;
+@badge-color:                                   @global-contrast-color;
+@badge-text-transform:                          uppercase;
+@badge-hover-color:                             @global-contrast-color;
+
+@badge-notification-font-size:                  round((@global-font-size * 0.78)); // 11px / 12px
+@badge-notification-line-height:                round((@badge-notification-font-size * 1.81)); // 20px / 22px
+
+@badge-success-background:                      @global-success-background;
+@badge-warning-background:                      @global-warning-background;
+@badge-danger-background:                       @global-danger-background;
+
+
+// Component
+// ========================================================================
+
+.hook-badge() {}
+
+
+// Color modifier
+// ========================================================================
+
+//
+// Modifier: `badge-success`
+//
+
+.hook-badge-success() {}
+
+//
+// Modifier: `badge-warning`
+//
+
+.hook-badge-warning() {}
+
+//
+// Modifier: `badge-danger`
+//
+
+.hook-badge-danger() {}
+
+
+// Miscellaneous
+// ========================================================================
+
+.hook-badge-misc() {
+
+    .uk-badge-notification { padding: 0 7px; }
+
+}

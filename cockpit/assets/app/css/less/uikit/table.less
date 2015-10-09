@@ -1,0 +1,37 @@
+//
+// Component: Table
+//
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+@table-margin-vertical:                         @global-margin;
+
+@table-caption-color:                           @global-muted-color;
+@table-caption-font-size:                       round((@global-font-size * 0.85)); // 12px / 14px
+
+
+// Component
+// ========================================================================
+
+.hook-table() {
+    background-color:                           @global-contrast-color;
+}
+
+
+// Miscellaneous
+// ========================================================================
+
+.hook-table-misc() {
+
+    .uk-table {
+        padding: @global-border-radius;
+        border-radius: @global-border-radius;
+
+        tbody tr:not(:last-child) {
+            border-bottom: 1px  lighten(@global-border, 10%) solid;
+        }
+    }
+}
