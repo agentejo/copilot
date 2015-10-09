@@ -45,7 +45,7 @@ $app->on('admin.init', function() use($app) {
         if(strpos($this['route'], '/coco') !== 0) return;
 
         if (!$this->module('coco')->getLicense()) {
-            $this->renderView('coco:views/partials/licensewarning.php');
+            //$this->renderView('coco:views/partials/licensewarning.php');
         }
     });
 
