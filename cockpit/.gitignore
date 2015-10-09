@@ -5,9 +5,8 @@
 .project
 .settings
 .idea
-
+/storage/*
 /config/*
-/modules/addons/*/*
 /tests/*
 
 !.gitignore

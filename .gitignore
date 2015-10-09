@@ -5,3 +5,5 @@
 .project
 .settings
 .idea
+/storage/tmp/*
+/storage/thumbs/*
