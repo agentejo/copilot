@@ -18,7 +18,7 @@
             options  = App.$.extend({
                 'root': root || '/',
                 'types': App.$.extend({
-                    'page': {label: 'Page'},
+                    'html': {label: 'Html'},
                     'markdown': {label: 'Markdown', ext: 'md'}
                 }, COPILOT_PAGE_TYPES)
             }, options)

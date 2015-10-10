@@ -17,13 +17,13 @@
     </head>
     <body>
 
-        <div class="uk-container uk-container-center">
+        <div class="uk-container uk-container-center uk-text-center">
 
-            <div class="uk-margin-top">
-                <a class="uk-text-large uk-text-bold uk-link-muted" href="@route('/')" title="Get me home">Copilot</a>
+            <div>
+                <a class="uk-text-large uk-text-bold uk-link-muted" href="@route('/')" title="Get me home"> <img src="@url('theme:media/logo.svg')" alt="Logo"></a>
             </div>
 
-            <nav class="uk-navbar uk-margin-top">
+            <nav class="uk-navbar uk-display-inline-block">
                 @menu('main', ['class'=>'uk-navbar-nav', 'activeClass' => 'uk-active'])
             </nav>
         </div>
@@ -36,7 +36,7 @@
 
         </main>
 
-        <footer class="site-footer">
+        <footer class="site-footer uk-margin-large-top">
 
             <div class="uk-container uk-container-center">
                 <strong>Built with the lovely <a href="http://cocopi.co">Copilot</a></strong>

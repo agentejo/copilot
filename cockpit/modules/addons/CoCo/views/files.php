@@ -189,19 +189,18 @@
 
             e.stopPropagation();
 
-            item = e.item.folder || e.item.file;
+            item = e.item.file;
 
             App.ui.prompt("Please enter a name:", item.filename, function(name){
 
-                if (name!=item.name && name.trim()) {
+                if (name!=item.filename && name.trim()) {
 
                     requestapi({"cmd":"rename", "path": item.relpath, "name":name});
                     item.path = item.path.replace(item.filename, name);
-                    item.name = name;
+                    item.filename = name;
 
                     $this.update();
                 }
-
             });
         }
 

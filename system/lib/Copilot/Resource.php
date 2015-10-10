@@ -5,7 +5,8 @@ namespace Copilot;
 use copi;
 
 /**
- *
+ * Class Resource
+ * @package Copilot
  */
 class Resource {
 
@@ -20,8 +21,7 @@ class Resource {
     protected $meta;
 
     /**
-     * [__construct description]
-     * @param [type] $path [description]
+     * @param $path
      */
     public function __construct($path) {
 
@@ -34,10 +34,9 @@ class Resource {
     }
 
     /**
-     * [meta description]
-     * @param  [type] $key     [description]
-     * @param  [type] $default [description]
-     * @return [type]          [description]
+     * @param null $key
+     * @param null $default
+     * @return \ContainerArray|null
      */
     public function meta($key=null, $default=null) {
 
@@ -60,7 +59,9 @@ class Resource {
     }
 
     /**
-     *
+     * @param $data
+     * @param bool|true $extend
+     * @return $this
      */
     public function updateMeta($data, $extend = true) {
 
@@ -74,65 +75,71 @@ class Resource {
     }
 
     /**
-     * [path description]
-     * @return [type]
+     * @return mixed
      */
     public function path() {
         return $this->path;
     }
 
     /**
-     * [relpath description]
-     * @return [type] [description]
+     * @return mixed
      */
     public function relpath() {
         return $this->relpath;
     }
 
     /**
-     * [mime description]
-     * @return [type]
+     * @return mixed
      */
     public function mime() {
         return $this->mime;
     }
 
     /**
-     * [ext description]
-     * @return [type]
+     * @return mixed
      */
     public function ext() {
         return $this->ext;
     }
 
     /**
-     * [filename description]
-     * @return [type]
+     * @return mixed
      */
     public function filename() {
         return $this->filename;
     }
 
     /**
-     * [dir description]
-     * @return [type]
+     * @return mixed
      */
     public function dir() {
         return $this->dir;
     }
 
     /**
-     * [exists description]
-     * @return [type] [description]
+     * @return boolean
      */
     public function exists() {
         return $this->exists;
     }
 
     /**
-     * [size description]
-     * @param  [type] $format [description]
-     * @return [type]         [description]
+     * @return string
+     */
+    public function base64() {
+        return base64_encode($this->content());
+    }
+
+    /**
+     * @return string
+     */
+    public function dataUri() {
+        return 'data:'.$this->mime().';base64,'.$this->base64();
+    }
+
+    /**
+     * @param null $format
+     * @return int
      */
     public function size($format = null) {
 
@@ -146,9 +153,8 @@ class Resource {
     }
 
     /**
-     * [modified description]
-     * @param  [type] $format [description]
-     * @return [type]         [description]
+     * @param null $format
+     * @return bool|int|string
      */
     public function modified($format = null) {
 
@@ -158,14 +164,16 @@ class Resource {
     }
 
     /**
-     * [content description]
-     * @return [type] [description]
+     * @return null|string
      */
     public function content() {
 
         return $this->exists() ? file_get_contents($this->path) : null;
     }
 
+    /**
+     * @return array|bool
+     */
     public function imageSize() {
 
         if ($info = $this->imageInfo()) {
@@ -175,6 +183,9 @@ class Resource {
         return false;
     }
 
+    /**
+     * @return array|bool
+     */
     public function imageInfo() {
 
         if (!$this->exists || !$this->isImage()) {
@@ -185,8 +196,7 @@ class Resource {
     }
 
     /**
-     * [url description]
-     * @return [type] [description]
+     * @return string
      */
     public function url() {
 
@@ -198,8 +208,7 @@ class Resource {
     }
 
     /**
-     * [thumb_url description]
-     * @return [type] [description]
+     * @return mixed|string
      */
     public function thumb_url() {
 
@@ -223,8 +232,7 @@ class Resource {
     }
 
     /**
-     * [parents description]
-     * @return [type]
+     * @return PageCollection
      */
     public function parents() {
 
@@ -241,8 +249,7 @@ class Resource {
     }
 
     /**
-     * [parent description]
-     * @return [type]
+     * @return null
      */
     public function parent() {
 
@@ -262,7 +269,7 @@ class Resource {
     }
 
     /**
-     *
+     * @return bool
      */
     public function delete() {
 
@@ -275,7 +282,8 @@ class Resource {
     }
 
     /**
-     *
+     * @param $filename
+     * @return $this
      */
     public function rename($filename) {
 
@@ -294,16 +302,14 @@ class Resource {
     }
 
     /**
-     * [__toString description]
-     * @return string [description]
+     * @return mixed
      */
     public function __toString() {
-        return $this->content();
+        return $this->path;
     }
 
     /**
-     * [toArray description]
-     * @return array [description]
+     * @return array
      */
     public function toArray() {
 

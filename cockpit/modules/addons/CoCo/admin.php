@@ -39,16 +39,6 @@ $app->on('admin.init', function() use($app) {
 
     });
 
-    $this->on('app.layout.contentbefore', function() {
-
-        // load only within coco module
-        if(strpos($this['route'], '/coco') !== 0) return;
-
-        if (!$this->module('coco')->getLicense()) {
-            //$this->renderView('coco:views/partials/licensewarning.php');
-        }
-    });
-
     // bind admin routes /coco/*
     $this->bindClass('CoCo\\Controller\\Utils', 'coco/utils');
     $this->bindClass('CoCo\\Controller\\Admin', 'coco');

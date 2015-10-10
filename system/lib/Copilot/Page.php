@@ -5,7 +5,8 @@ namespace Copilot;
 use copi;
 
 /**
- *
+ * Class Page
+ * @package Copilot
  */
 class Page {
 
@@ -32,11 +33,11 @@ class Page {
 
     protected $depth;
     protected $files;
+    protected $layout;
 
     /**
-     * [fromCache description]
-     * @param  [type]
-     * @return [type]
+     * @param $path
+     * @return mixed
      */
     public static function fromCache($path) {
 
@@ -48,8 +49,7 @@ class Page {
     }
 
     /**
-     * [__construct description]
-     * @param [type]
+     * @param $path
      */
     public function __construct($path) {
 
@@ -61,16 +61,16 @@ class Page {
         $this->content  = null;
         $this->parts    = null;
         $this->depth    = null;
+        $this->layout   = null;
 
         $this->_initPaths();
 
     }
 
     /**
-     * [meta description]
-     * @param  [type] $key     [description]
-     * @param  [type] $default [description]
-     * @return [type]          [description]
+     * @param null $key
+     * @param null $default
+     * @return array|\ContainerArray|null
      */
     public function meta($key=null, $default=null) {
 
@@ -86,9 +86,9 @@ class Page {
     }
 
     /**
-     * [set description]
-     * @param [type] $key   [description]
-     * @param [type] $value [description]
+     * @param $key
+     * @param $value
+     * @return $this
      */
     public function set($key, $value) {
 
@@ -98,39 +98,36 @@ class Page {
     }
 
     /**
-     * [path description]
-     * @return [type] [description]
+     * @return mixed
      */
     public function path() {
         return $this->path;
     }
 
     /**
-     * [contentpath description]
-     * @return [type] [description]
+     * @return mixed
      */
     public function contentpath() {
         return $this->contentpath;
     }
 
     /**
-     * [relpath description]
-     * @return [type] [description]
+     * @return mixed
      */
     public function relpath() {
         return $this->relpath;
     }
 
     /**
-     * [slug description]
-     * @return [type] [description]
+     * @return mixed
      */
     public function slug() {
         return $this->slug;
     }
 
     /**
-     *
+     * @param $slug
+     * @return $this
      */
     public function setSlug($slug) {
 
@@ -161,64 +158,56 @@ class Page {
     }
 
     /**
-     * [ext description]
-     * @return [type]
+     * @return mixed
      */
     public function ext() {
         return $this->ext;
     }
 
     /**
-     * [filename description]
-     * @return [type]
+     * @return mixed
      */
     public function filename() {
         return $this->filename;
     }
 
     /**
-     * [dir description]
-     * @return [type]
+     * @return mixed
      */
     public function dir() {
         return $this->dir;
     }
 
     /**
-     * [contentdir description]
-     * @return [type]
+     * @return mixed
      */
     public function contentdir() {
         return $this->contentdir;
     }
 
     /**
-     * [url description]
-     * @return [type]
+     * @return mixed
      */
     public function url() {
         return $this->url;
     }
 
     /**
-     * [permalink description]
-     * @return [type] [description]
+     * @return string
      */
     public function permalink() {
         return copi::$app->getSiteUrl(false).$this->url();
     }
 
     /**
-     * [isIndex description]
-     * @return boolean
+     * @return bool
      */
     public function isIndex() {
         return ($this->basename == 'index');
     }
 
     /**
-     * [isRootIndex description]
-     * @return boolean [description]
+     * @return bool
      */
     public function isRootIndex() {
         // @TODO make more pretty
@@ -227,23 +216,22 @@ class Page {
     }
 
     /**
-     * [isVisible description]
-     * @return boolean
+     * @return bool
      */
     public function isVisible() {
         return (substr($this->isIndex() && !$this->isRootIndex()  ? basename($this->dir):$this->filename, 0, 1) !== '_');
     }
 
     /**
-     * [isHidden description]
-     * @return boolean
+     * @return bool
      */
     public function isHidden() {
         return !$this->isVisible();
     }
 
     /**
-     *
+     * @param $visible
+     * @return $this
      */
     public function setVisibility($visible) {
 
@@ -286,8 +274,7 @@ class Page {
     }
 
     /**
-     * [parents description]
-     * @return [type]
+     * @return PageCollection
      */
     public function parents() {
 
@@ -304,8 +291,7 @@ class Page {
     }
 
     /**
-     * [parent description]
-     * @return [type]
+     * @return mixed|null
      */
     public function parent() {
 
@@ -325,8 +311,7 @@ class Page {
     }
 
     /**
-     * [children description]
-     * @return [type]
+     * @return $this|PageCollection
      */
     public function children() {
 
@@ -343,8 +328,8 @@ class Page {
     }
 
     /**
-     * [siblings description]
-     * @return [type]
+     * @param null $filter
+     * @return $this|PageCollection
      */
     public function siblings($filter = null) {
 
@@ -377,9 +362,8 @@ class Page {
     }
 
     /**
-     * [pages description]
-     * @param  [type] $path [description]
-     * @return [type]       [description]
+     * @param string $path
+     * @return PageCollection
      */
     public function pages($path = '') {
 
@@ -400,9 +384,8 @@ class Page {
     }
 
     /**
-     * [page description]
-     * @param  [type] $path [description]
-     * @return [type]       [description]
+     * @param $path
+     * @return mixed|null
      */
     public function page($path) {
 
@@ -423,8 +406,7 @@ class Page {
     }
 
     /**
-     * [depth description]
-     * @return [type]
+     * @return int|null
      */
     public function depth() {
 
@@ -436,9 +418,8 @@ class Page {
     }
 
     /**
-     * [data description]
-     * @param  [type] $store [description]
-     * @return [type]        [description]
+     * @param $store
+     * @return array|\DataCollection
      */
     public function data($store) {
 
@@ -448,9 +429,8 @@ class Page {
     }
 
     /**
-     * [file description]
-     * @param  [type] $path [description]
-     * @return [type]       [description]
+     * @param $path
+     * @return Resource
      */
     public function file($path) {
 
@@ -460,9 +440,8 @@ class Page {
     }
 
     /**
-     * [files description]
-     * @param  [type] $path [description]
-     * @return [type]       [description]
+     * @param string $path
+     * @return mixed
      */
     public function files($path = '/') {
 
@@ -484,9 +463,8 @@ class Page {
     }
 
     /**
-     * [image description]
-     * @param  [type] $path [description]
-     * @return [type]       [description]
+     * @param $path
+     * @return null|Resource
      */
     public function image($path) {
 
@@ -496,9 +474,8 @@ class Page {
     }
 
     /**
-     * [images description]
-     * @param  [type] $path [description]
-     * @return [type]       [description]
+     * @param $path
+     * @return mixed
      */
     public function images($path) {
 
@@ -506,9 +483,8 @@ class Page {
     }
 
     /**
-     * [modified description]
-     * @param  [type] $format [description]
-     * @return [type]         [description]
+     * @param null $format
+     * @return bool|int|string
      */
     public function modified($format = null) {
 
@@ -517,6 +493,10 @@ class Page {
         return $format ? date($format, $timestamp) : $timestamp;
     }
 
+    /**
+     * @param bool|true $parse
+     * @return \ContainerArray|string
+     */
     public function rawmeta($parse = true) {
 
         $content = $this->contents();
@@ -535,6 +515,9 @@ class Page {
         return $meta;
     }
 
+    /**
+     * @return string
+     */
     public function rawcontent() {
 
         $content = $this->contents();
@@ -557,9 +540,9 @@ class Page {
     }
 
     /**
-     * [content description]
-     * @param  [type] $part [description]
-     * @return [type]       [description]
+     * @param null $part
+     * @param array $slots
+     * @return array|null
      */
     public function content($part = null, $slots = []) {
 
@@ -588,42 +571,48 @@ class Page {
     }
 
     /**
-     * [setContent description]
-     * @param [type] $content [description]
+     * @param $content
      */
     public function setContent($content) {
         $this->content = $content;
     }
 
-    public function getType() {
-        return $this->meta('type', 'page');
-    }
-
-    public function getLayout() {
-
-        $type = $this->getType();
-
-        $typedefinition = [];
-
-        if ($typepath = copi::path("types:{$type}.yaml")) {
-            $typedefinition = copi::$app->helper('yaml')->fromFile($typepath);
-        }
-
-        $typedefinition = array_merge(['layout'=>'raw'], $typedefinition);
-        $layout         = $this->meta('layout', $typedefinition['layout']);
-
-        return $layout;
+    /**
+     * @return string
+     */
+    public function type() {
+        return $this->meta('type', 'html');
     }
 
     /**
-     * [render description]
-     * @param  [type] $slots [description]
-     * @return [type]        [description]
+     * @return string
+     */
+    public function layout() {
+
+        if (!$this->layout) {
+
+            $type    = $this->type();
+            $typedef = [];
+
+            if ($typepath = copi::path("types:{$type}.yaml")) {
+                $typedef = copi::$app->helper('yaml')->fromFile($typepath);
+            }
+
+            $typedef       = array_merge(['layout'=>'raw'], $typedef);
+            $this->layout  = $this->meta('layout', $typedef['layout']);
+        }
+
+        return $this->layout;
+    }
+
+    /**
+     * @param array $slots
+     * @return string
      */
     public function render($slots = []) {
 
         $content = $this->content(null, $slots);
-        $layout  = $this->getLayout();
+        $layout  = $this->layout();
 
         if ($layout) {
 
@@ -651,9 +640,8 @@ class Page {
     }
 
     /**
-     * [parts description]
-     * @param  [type] $name [description]
-     * @return [type]       [description]
+     * @param null $name
+     * @return array|null
      */
     public function parts($name = null) {
 
@@ -693,7 +681,7 @@ class Page {
     }
 
     /**
-     *
+     * @return mixed
      */
     public function delete() {
         return copi::$app->helper('fs')->delete($this->isIndex() && !$this->isRootIndex() ? $this->dir : $this->path);
@@ -701,8 +689,7 @@ class Page {
 
 
     /**
-     * [_meta description]
-     * @return [type] [description]
+     * @return array|\ContainerArray
      */
     protected function _meta(){
 
@@ -723,8 +710,7 @@ class Page {
     }
 
     /**
-     * [_collectMeta description]
-     * @return [type]
+     * @return array
      */
     protected function _collectMeta() {
 
@@ -752,18 +738,15 @@ class Page {
     }
 
     /**
-     * [_getPath description]
-     * @param  [type] $path [description]
-     * @return [type]       [description]
+     * @param $path
+     * @return string
      */
     protected function _getPath($path) {
-
         return (strpos($path, ':') !== false) ? copi::$app->path($path) : $this->dir.'/'.trim($path, '/');
     }
 
     /**
-     * [_initPaths description]
-     * @return [type] [description]
+     *
      */
     protected function _initPaths() {
 
@@ -788,24 +771,21 @@ class Page {
     }
 
     /**
-     * [__toString description]
-     * @return string [description]
+     * @return string
      */
     public function __toString() {
         return $this->content();
     }
 
     /**
-    * [__toJSON description]
-    * @return string [description]
+     * @return string
      */
     public function toJSON(){
         return json_encode($this->jsonSerialize());
     }
 
     /**
-     * [toArray description]
-     * @return array [description]
+     * @return array
      */
     public function toArray() {
 
@@ -814,12 +794,13 @@ class Page {
 
         $array = get_object_vars($this);
 
-        $array['type']       = $this->getType();
+        $array['type']       = $this->type();
         $array['visible']    = $this->isVisible();
         $array['children']   = $this->children()->count();
         $array['isRoot']     = $this->isRootIndex();
         $array['rawcontent'] = $this->rawcontent();
         $array['rawmeta']    = $this->rawmeta();
+        $array['layout']     = $this->layout();
 
         return $array;
     }

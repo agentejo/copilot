@@ -1,2 +1,4 @@
 label: Markdown
 ext: md
+content:
+    type: markdown

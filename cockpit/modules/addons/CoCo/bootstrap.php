@@ -79,12 +79,35 @@ $this->module("coco")->extend([
         return $asarray ? $page->files()->toArray(): $page->files();
     },
 
-    'getLicense' => function() {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  $l1c3=null;$d474=null;try{$d474=(array)JWT::decode(strval($this->app[base64_decode('Y29jby5saWNlbnNl')]),base64_decode('Y29jbw=='),[base64_decode('SFMyNTY=')]);}catch(Exception $e){}if(isset($d474[base64_decode('bmFtZQ==')],$d474[base64_decode('Y29tcGFueQ==')],$d474[base64_decode('Y3JlYXRlZA==')],$d474[base64_decode('ZW1haWw=')],$d474[base64_decode('dHlwZQ==')])){$l1c3=$d474;}return $l1c3;
+    'getLicense' => function() {
 
-        if (file_exists(__DIR__.'/license.lic')) {
-            return $this->app->decode(file_get_contents(__DIR__.'/license.lic'));
+        /**
+         * Hello Code monkey ;-)
+         *
+         * Nothing really special here. A simple snippet to check the license code.
+         * It's simple to hack. But please consider supporting this project by
+         * buying a license instead. Be awesome.
+         *
+         * Anyway, have fun using CoCoPi!
+         *
+         * Greets
+         * Artur
+         *
+         */
+
+        $license = ['type' => 'trial'];
+        $code    = (string)$this->app['coco.license'];
+        $data    = [];
+
+        try {
+            $data = (array)JWT::decode($code, 'coco', ['HS256']);
+        } catch(Exception $e) {}
+
+        if (isset($data['name'], $data['company'], $data['created'], $data['email'], $data['type'])) {
+            $license = $data;
+            $license['code'] = $code;
         }
 
-        return false;
+        return (object)$license;
     }
 ]);

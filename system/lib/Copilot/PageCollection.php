@@ -5,7 +5,8 @@ namespace Copilot;
 use copi;
 
 /**
- *
+ * Class PageCollection
+ * @package Copilot
  */
 class PageCollection implements \Iterator {
 
@@ -15,9 +16,8 @@ class PageCollection implements \Iterator {
     protected $chain;
 
     /**
-     * [fromFolder description]
-     * @param  [type] $path [description]
-     * @return [type]       [description]
+     * @param $path
+     * @return PageCollection
      */
     public static function fromFolder($path) {
 
@@ -51,8 +51,8 @@ class PageCollection implements \Iterator {
     }
 
     /**
-     * [__construct description]
-     * @param [type] $pages [description]
+     * @param $pages
+     * @param null $chain
      */
     public function __construct($pages, $chain = null) {
 
@@ -62,41 +62,36 @@ class PageCollection implements \Iterator {
     }
 
     /**
-     * [count description]
-     * @return [type] [description]
+     * @return int
      */
     public function count() {
         return count($this->pages);
     }
 
     /**
-     * [first description]
-     * @return [type] [description]
+     * @return null
      */
     public function first() {
         return isset($this->pages[0]) ? $this->pages[0] : null;
     }
 
     /**
-     * [last description]
-     * @return [type] [description]
+     * @return null
      */
     public function last() {
         return isset($this->pages[0]) ? $this->pages[count($this->pages)-1] : null;
     }
 
     /**
-     * [reverse description]
-     * @return [type]
+     * @return PageCollection
      */
     public function reverse() {
         return $this->setPages(array_reverse($this->pages));
     }
 
     /**
-     * [limit description]
-     * @param  [type] $number [description]
-     * @return [type]         [description]
+     * @param $number
+     * @return PageCollection
      */
     public function limit($number) {
 
@@ -106,9 +101,8 @@ class PageCollection implements \Iterator {
     }
 
     /**
-     * [skip description]
-     * @param  [type] $number [description]
-     * @return [type]         [description]
+     * @param $number
+     * @return PageCollection
      */
     public function skip($number) {
 
@@ -118,9 +112,8 @@ class PageCollection implements \Iterator {
     }
 
     /**
-     * [not description]
-     * @param  [type] $criteria [description]
-     * @return [type]           [description]
+     * @param $criteria
+     * @return $this|PageCollection
      */
     public function not($criteria) {
 
@@ -146,8 +139,7 @@ class PageCollection implements \Iterator {
     }
 
     /**
-     * [visible description]
-     * @return [type] [description]
+     * @return PageCollection
      */
     public function visible() {
 
@@ -164,8 +156,7 @@ class PageCollection implements \Iterator {
     }
 
     /**
-     * [hidden description]
-     * @return [type]
+     * @return PageCollection
      */
     public function hidden() {
 
@@ -182,9 +173,8 @@ class PageCollection implements \Iterator {
     }
 
     /**
-     * [filter description]
-     * @param  [type] $criteria [description]
-     * @return [type]           [description]
+     * @param $criteria
+     * @return PageCollection
      */
     public function filter($criteria) {
 
@@ -195,10 +185,9 @@ class PageCollection implements \Iterator {
     }
 
     /**
-     * [sort description]
-     * @param  [type]  $expr [description]
-     * @param  integer $dir  [description]
-     * @return [type]        [description]
+     * @param $expr
+     * @param int $dir
+     * @return $this
      */
     public function sort($expr, $dir = 1) {
 
@@ -254,8 +243,7 @@ class PageCollection implements \Iterator {
     }
 
     /**
-     * [end description]
-     * @return [type]           [description]
+     * @return null
      */
     public function end() {
 
@@ -263,8 +251,8 @@ class PageCollection implements \Iterator {
     }
 
     /**
-     * [setPages description]
-     * @param [type] $pages [description]
+     * @param $pages
+     * @return PageCollection
      */
     protected function setPages($pages) {
 
@@ -298,14 +286,12 @@ class PageCollection implements \Iterator {
     }
 
     /**
-     * [toArray description]
-     * @return [type]
+     * @return array
      */
     public function toArray() {
         $pages = [];
 
         foreach ($this->pages as $page) {
-
             $pages[] = $page->toArray();
         }
 
@@ -313,8 +299,7 @@ class PageCollection implements \Iterator {
     }
 
     /**
-    * [__toJSON description]
-    * @return string [description]
+     * @return string
      */
     public function toJSON(){
         return json_encode($this->toArray());

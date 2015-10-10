@@ -16,10 +16,11 @@ class Admin extends \Cockpit\AuthController {
 
     public function settings() {
 
-        $meta = (object)$this->helper('yaml')->fromFile('site:content/_meta.yaml');
-        $info = json_decode($this->helper('fs')->read('coco:module.json'));
+        $meta    = (object)$this->helper('yaml')->fromFile('site:content/_meta.yaml');
+        $info    = json_decode($this->helper('fs')->read('coco:module.json'));
+        $license = $this->module('coco')->getLicense();
 
-        return $this->render('coco:views/settings.php', compact('meta', 'info'));
+        return $this->render('coco:views/settings.php', compact('meta', 'info', 'license'));
     }
 
     public function page($path) {
@@ -31,17 +32,22 @@ class Admin extends \Cockpit\AuthController {
         }
 
         $page     = new \Copilot\Page($path);
-        $type     = $page->getType();
+        $type     = $page->type();
         $typedef  = [];
 
         if ($path = copi::path("types:{$type}.yaml")) {
             $typedef = $this->app->helper('yaml')->fromFile($path);
         }
 
-        $type = array_merge([
+        $type = array_replace_recursive([
             'name' => $type,
-            'fields' => []
-        ], $typedef);
+            'ext' => 'html',
+            'content' => [
+                'visible' => true,
+                'type'    => $page->ext() == 'md' ? 'markdown':'html'
+            ],
+            'meta' => []
+        ], (array)$typedef);
 
         return $this->render('coco:views/page.php', compact('page', 'type'));
     }

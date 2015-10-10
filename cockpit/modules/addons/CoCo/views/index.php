@@ -97,9 +97,12 @@
         <div class="uk-grid-margin uk-width-medium-1-3">
             <div class="uk-panel">
                 <h4>@lang('Site')</h4>
-                <a href="{{ $app->pathToUrl('site:') }}" target="_blank">
-                    <i class="uk-icon-home"></i> {{ str_replace(['http://', 'https://'],'', $app->getSiteUrl()) }}
-                </a>
+
+                <div class="uk-text-truncate">
+                    <a href="{{ $app->pathToUrl('site:') }}" target="_blank">
+                        <i class="uk-icon-home"></i> {{ str_replace(['http://', 'https://'],'', $app->getSiteUrl()) }}
+                    </a>
+                </div>
             </div>
         </div>
     </div>
