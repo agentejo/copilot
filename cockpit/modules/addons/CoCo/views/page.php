@@ -215,7 +215,7 @@
         this.type      = {{ json_encode($type) }};
         this.updates   = { slug: '' };
 
-        this.contentType = this.type.content.type || this.type.ext == 'md' ? 'markdown':'html'
+        this.contentType = this.type.content.type ?  this.type.content.type : this.type.ext == 'md' ? 'markdown':'html';
         this.view = App.Utils.count(this.type.meta) ? 'fields':'content';
 
         this.on('mount', function() {
