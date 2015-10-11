@@ -19,6 +19,8 @@ class Resource {
     protected $exists;
     protected $mime;
     protected $meta;
+    protected $imageinfo;
+    protected $dimensions;
 
     /**
      * @param $path
@@ -184,6 +186,79 @@ class Resource {
     }
 
     /**
+     * @return object
+     */
+    public function dimensions() {
+
+        if (!$this->dimensions) {
+            $dim = [ 'width' => 0, 'height'=> 0 ];
+
+            if ($info = $this->imageInfo()) {
+                $dim = ['width' => $info[0], 'height'=>$info[1]];
+            }
+
+            $this->dimensions = (object)$dim;
+        }
+
+        return $this->dimensions;
+    }
+
+    /**
+     * @return int
+     */
+    public function width() {
+        return $this->dimensions()->width;
+    }
+
+    /**
+     * @return int
+     */
+    public function height() {
+        return $this->dimensions()->height;
+    }
+
+    /**
+     * @return int
+     */
+    public function ratio() {
+        return ($this->dimensions()->width / $this->dimensions()->height);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPortrait() {
+        return ($this->dimensions()->height > $this->dimensions()->width);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isLandscape() {
+        return ($this->dimensions()->height < $this->dimensions()->width);
+    }
+
+    /**
+     * Checks if the dimensions of the asset are square
+     *
+     * @return boolean
+     */
+    public function isSquare() {
+        return ($this->dimensions()->height == $this->dimensions()->width);
+    }
+
+    /**
+     * landscape | portrait | square
+     *
+     * @return string
+     */
+    public function orientation() {
+        if($this->isPortrait())  return 'portrait';
+        if($this->isLandscape()) return 'landscape';
+        if($this->isSquare())    return 'square';
+    }
+
+    /**
      * @return array|bool
      */
     public function imageInfo() {
@@ -192,7 +267,11 @@ class Resource {
             return false;
         }
 
-        return getimagesize($this->path);
+        if (!$this->imageinfo) {
+            $this->imageinfo = getimagesize($this->path);
+        }
+
+        return $this->imageinfo;
     }
 
     /**
@@ -317,11 +396,13 @@ class Resource {
 
         $array = get_object_vars($this);
 
-        $array['size']      = $this->size();
-        $array['fsize']     = $this->size(true);
-        $array['isImage']   = $this->isImage();
-        $array['imageSize'] = $this->isImage() ? $this->imageSize() : false;
-        $array['imageInfo'] = $this->isImage() ? $this->imageInfo() : false;
+        $array['size']        = $this->size();
+        $array['fsize']       = $this->size(true);
+        $array['isImage']     = $this->isImage();
+        $array['imageSize']   = $this->isImage() ? $this->imageSize() : false;
+        $array['imageInfo']   = $this->isImage() ? $this->imageInfo() : false;
+        $array['dimensions']  = $this->dimensions();
+        $array['orientation'] = $this->orientation();
 
         return $array;
     }

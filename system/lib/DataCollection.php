@@ -1,7 +1,7 @@
 <?php
 
 /**
- *
+ * Class DataCollection
  */
 class DataCollection implements \Iterator {
 
@@ -9,9 +9,8 @@ class DataCollection implements \Iterator {
     protected $items;
 
     /**
-     * [create description]
-     * @param  [type] $items [description]
-     * @return [type]        [description]
+     * @param $items
+     * @return DataCollection
      */
     public static function create($items) {
 
@@ -21,8 +20,7 @@ class DataCollection implements \Iterator {
     }
 
     /**
-     * [__construct description]
-     * @param [type] $items [description]
+     * @param $items
      */
     public function __construct($items) {
 
@@ -30,41 +28,36 @@ class DataCollection implements \Iterator {
     }
 
     /**
-     * [count description]
-     * @return [type] [description]
+     * @return int
      */
     public function count() {
         return count($this->items);
     }
 
     /**
-     * [first description]
-     * @return [type] [description]
+     * @return null
      */
     public function first() {
         return isset($this->items[0]) ? $this->items[0] : null;
     }
 
     /**
-     * [last description]
-     * @return [type] [description]
+     * @return null
      */
     public function last() {
         return isset($this->items[0]) ? $this->items[count($this->items)-1] : null;
     }
 
     /**
-     * [reverse description]
-     * @return [type] [description]
+     * @return DataCollection
      */
     public function reverse() {
         return $this->setItems(array_reverse($this->items));
     }
 
     /**
-     * [limit description]
-     * @param  [type] $number [description]
-     * @return [type]         [description]
+     * @param $number
+     * @return DataCollection
      */
     public function limit($number) {
 
@@ -74,9 +67,8 @@ class DataCollection implements \Iterator {
     }
 
     /**
-     * [skip description]
-     * @param  [type] $number [description]
-     * @return [type]         [description]
+     * @param $number
+     * @return DataCollection
      */
     public function skip($number) {
 
@@ -86,9 +78,8 @@ class DataCollection implements \Iterator {
     }
 
     /**
-     * [not description]
-     * @param  [type] $criteria [description]
-     * @return [type]           [description]
+     * @param $criteria
+     * @return DataCollection
      */
     public function not($criteria) {
 
@@ -96,9 +87,8 @@ class DataCollection implements \Iterator {
     }
 
     /**
-     * [filter description]
-     * @param  [type] $criteria [description]
-     * @return [type]           [description]
+     * @param $criteria
+     * @return DataCollection
      */
     public function filter($criteria) {
 
@@ -109,10 +99,9 @@ class DataCollection implements \Iterator {
     }
 
     /**
-     * [sort description]
-     * @param  [type]  $expr [description]
-     * @param  integer $dir  [description]
-     * @return [type]        [description]
+     * @param $expr
+     * @param int $dir
+     * @return $this
      */
     public function sort($expr, $dir = 1) {
 
@@ -164,8 +153,31 @@ class DataCollection implements \Iterator {
     }
 
     /**
-     * [setItems description]
-     * @param [type] $items [description]
+     * @param $obj
+     * @return bool|int
+     */
+    public function index($obj) {
+
+        foreach ($this->items as $index => $item) {
+            if ((string)$item === (string)$obj) {
+                return $index;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $index
+     * @return bool
+     */
+    public function eq($index) {
+        return isset($this->items[$index]) ? $this->items[$index] : false;
+    }
+
+    /**
+     * @param $items
+     * @return DataCollection
      */
     protected function setItems($items) {
 
@@ -175,8 +187,7 @@ class DataCollection implements \Iterator {
     }
 
     /**
-     * [toArray description]
-     * @return [type] [description]
+     * @return array
      */
     public function toArray() {
 
