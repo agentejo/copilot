@@ -4,6 +4,7 @@ namespace Copilot;
 
 use copi;
 
+
 /**
  * Class PageCollection
  * @package Copilot
@@ -16,14 +17,14 @@ class PageCollection implements \Iterator {
     protected $chain;
 
     /**
-     * @param $path
+     * @param $folder
      * @return PageCollection
      */
-    public static function fromFolder($path) {
+    public static function fromFolder($folder) {
 
         $pages = [];
 
-        foreach (copi::helper('fs')->ls($path) as $file) {
+        foreach (copi::helper('fs')->ls($folder) as $file) {
 
             if ($file->isDir()) {
 
@@ -42,6 +43,43 @@ class PageCollection implements \Iterator {
 
             } elseif (in_array($file->getExtension(), ['html', 'md']) && $file->getBasename('.'.$file->getExtension()) != 'index') {
                 $pages[] = Page::fromCache($file->getRealPath());
+            }
+        }
+
+        $collection = new self($pages);
+
+        return $collection;
+    }
+
+    /**
+     * @param $folder
+     * @param null $criteria
+     * @return PageCollection
+     */
+    public static function find($folder, $criteria = null) {
+
+        if ($criteria && is_string($criteria)) {
+            $criteria = create_function('$p', "return ({$criteria});");
+        }
+
+        $pages = [];
+
+        if (file_exists($path)) {
+
+            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($folder), \RecursiveIteratorIterator::SELF_FIRST);
+
+            foreach($files as $filename => $file){
+
+                if ($file->isFile() && in_array($file->getExtension(), ['md','html'])) {
+
+                    $page = Page::fromCache($file->getRealPath());
+
+                    if ($criteria && $criteria($page)) {
+                        $pages[] = $page;
+                    } else {
+                        $pages[] = $page;
+                    }
+                }
             }
         }
 
@@ -178,10 +216,11 @@ class PageCollection implements \Iterator {
      */
     public function filter($criteria) {
 
-        $criteria = create_function('$p', "return ({$criteria});");
+        if (is_string($criteria)) {
+            $criteria = create_function('$p', "return ({$criteria});");
+        }
 
         return $this->setPages(array_values(array_filter($this->pages, $criteria)));
-
     }
 
     /**

@@ -9,9 +9,7 @@ class copi {
     public static $meta;
 
     /**
-     * [init description]
-     * @param  [type] $app [description]
-     * @return [type]      [description]
+     * @param $app
      */
     public static function init($app) {
 
@@ -38,26 +36,23 @@ class copi {
     }
 
     /**
-     * [run description]
-     * @return [type] [description]
+     * @return mixed
      */
     public static function run() {
         return self::$app->trigger('copilot.init')->run();
     }
 
     /**
-     * [__callStatic description]
-     * @param  [type] $method [description]
-     * @param  [type] $args   [description]
-     * @return [type]         [description]
+     * @param $method
+     * @param $args
+     * @return mixed
      */
     public static function __callStatic($method, $args) {
         return call_user_func_array([self::$app, $method], $args);
     }
 
     /**
-     * [home description]
-     * @return [type]       [description]
+     * @return mixed|null
      */
     public static function home() {
 
@@ -87,9 +82,8 @@ class copi {
     }
 
     /**
-     * [page description]
-     * @param  [type] $path [description]
-     * @return [type]       [description]
+     * @param $path
+     * @return mixed|null
      */
     public static function page($path) {
 
@@ -109,9 +103,8 @@ class copi {
 
 
     /**
-     * [pages description]
-     * @param  [type] $folder [description]
-     * @return [type]         [description]
+     * @param $folder
+     * @return \Copilot\PageCollection
      */
     public static function pages($folder) {
 
@@ -125,10 +118,24 @@ class copi {
     }
 
     /**
-     * [snippet description]
-     * @param  [type] $snippet [description]
-     * @param  [type] $slots   [description]
-     * @return [type]          [description]
+     * @param $folder
+     * @param null $criteria
+     * @return \Copilot\PageCollection
+     */
+    public static function find($folder, $criteria = null) {
+
+        if (strpos($folder, ':') === false && !self::$app->isAbsolutePath($folder)) {
+            $path = "content:{$folder}";
+        } else {
+            $path = $folder;
+        }
+
+        return \Copilot\PageCollection::find($path, $criteria);
+    }
+
+    /**
+     * @param $snippet
+     * @param array $slots
      */
     public static function snippet($snippet, $slots = []) {
 
@@ -143,10 +150,8 @@ class copi {
     }
 
     /**
-     * [menu description]
-     * @param  [type] $menu    [description]
-     * @param  [type] $options [description]
-     * @return [type]          [description]
+     * @param $menu
+     * @param array $options
      */
     public static function menu($menu, $options = []) {
 
@@ -172,9 +177,8 @@ class copi {
     }
 
     /**
-     * [data description]
-     * @param  [type] $store [description]
-     * @return [type]        [description]
+     * @param $store
+     * @return array|DataCollection
      */
     public static function data($store) {
 
@@ -205,10 +209,9 @@ class copi {
     }
 
     /**
-     * [view description]
-     * @param  [type] $template [description]
-     * @param  [type] $slots    [description]
-     * @return [type]           [description]
+     * @param $template
+     * @param array $slots
+     * @return string
      */
     public static function view($template, $slots = []) {
 
@@ -253,10 +256,9 @@ class copi {
     }
 
     /**
-     * [render_page description]
-     * @param  [type] $view  [description]
-     * @param  [type] $slots [description]
-     * @return [type]        [description]
+     * @param $view
+     * @param array $slots
+     * @return bool|string
      */
     public static function render_page($view, $slots = []) {
 
@@ -284,10 +286,9 @@ class copi {
     }
 
     /**
-     * [render_page_route description]
-     * @param  [type] $route [description]
-     * @param  [type] $slots [description]
-     * @return [type]        [description]
+     * @param null $route
+     * @param array $slots
+     * @return bool|string
      */
     public static function render_page_route($route = null, $slots = []) {
 

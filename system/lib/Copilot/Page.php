@@ -385,6 +385,14 @@ class Page {
     }
 
     /**
+     * @param null $criteria
+     * @return PageCollection
+     */
+    public function find($criteria = null) {
+        return PageCollection::find($this->dir, $criteria);
+    }
+
+    /**
      * @param $path
      * @return mixed|null
      */
