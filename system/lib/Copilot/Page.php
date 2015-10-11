@@ -274,9 +274,10 @@ class Page {
     }
 
     /**
+     * @param $reversed
      * @return PageCollection
      */
-    public function parents() {
+    public function parents($reversed = false) {
 
         $array = [];
         $page  = $this;
@@ -285,7 +286,7 @@ class Page {
             $array[] = $page;
         }
 
-        $pages = new PageCollection($array);
+        $pages = new PageCollection($reversed ? array_reverse($array):$array);
 
         return $pages;
     }
