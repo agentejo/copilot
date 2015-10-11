@@ -477,7 +477,7 @@ class Page {
      * @param $path
      * @return mixed
      */
-    public function images($path) {
+    public function images($path = '/') {
 
         return $this->files($path)->filter('$item->exists() && $item->isImage()');
     }
