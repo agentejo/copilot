@@ -51,7 +51,7 @@
         <div class="uk-grid-margin" each="{file in files}" show="{ parent.infilter(file) }">
             <div class="uk-panel uk-panel-box uk-panel-card">
 
-                <div class="uk-cover-background uk-position-relative" style="background-image: { coco.getFileIconCls(file.filename) == 'image' ? 'url('+SITE_URL+file.relpath+')': 'none' }">
+                <div class="uk-cover-background uk-position-relative" style="background-image: { coco.getFileIconCls(file.filename) == 'image' ? 'url('+file.url+')': 'none' }">
                     <canvas class="uk-responsive-width uk-display-block" width="400" height="200"></canvas>
                     <a class="uk-position-cover uk-text-muted uk-flex uk-flex-middle uk-flex-center" href="@route('/coco/file'){ file.relpath }">
                         <div class="uk-text-large uk-text-center" if="{!file.isImage}">
