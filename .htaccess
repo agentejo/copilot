@@ -17,6 +17,7 @@ Options -Indexes
 
     # Protect some contents
     RewriteRule ^.*/?\.git+ - [F,L]
+    RewriteRule ^content/(.*)\.(html|md)$ /error [R=301,L]
 
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
