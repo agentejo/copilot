@@ -302,7 +302,7 @@ class PageCollection implements \Iterator {
      */
     protected function setPages($pages) {
 
-        $collection = new self($pages, $this);
+        $collection = new static($pages, $this);
 
         return $collection;
     }
