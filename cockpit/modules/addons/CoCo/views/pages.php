@@ -6,7 +6,7 @@
 </style>
 <div class="uk-form" riot-view>
 
-    <ul  class="uk-breadcrumb">
+    <ul class="uk-breadcrumb">
         @render('coco:views/partials/subnav.php')
         <li each="{p in parents}" data-uk-dropdown>
             <a href="@route('/coco/page'){ p.relpath }"><i class="uk-icon-home" if="{p.isRoot}"></i> { p.meta.title.substring(0, 15) }</a>
@@ -41,9 +41,9 @@
         </div>
     </div>
 
-    <div class="uk-grid uk-grid-match uk-grid-width-medium-1-3 uk-grid-width-large-1-4" if="{children.length}">
+    <div name="container" class="uk-grid uk-grid-match uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-sortable" show="{children.length}">
 
-        <div class="uk-grid-margin" each="{child,idx in children}" show="{ parent.infilter(child) }">
+        <div class="uk-grid-margin" each="{child,idx in children}" show="{ parent.infilter(child) }" data-path="{ child.path }">
             <div class="uk-panel uk-panel-box uk-panel-card">
                 <div class="uk-flex">
                     <span class="uk-margin-small-right" data-uk-dropdown>
@@ -94,8 +94,24 @@
         this.mixin(RiotBindMixin);
 
         this.page     = {{ json_encode($page->toArray()) }};
-        this.children = {{ json_encode($page->children()->toArray()) }};
+        this.children = {{ json_encode($page->children()->sorted()->toArray()) }};
         this.parents  = {{ json_encode(array_reverse($page->parents()->toArray())) }};
+
+        this.on('mount', function() {
+
+            var sortable = UIkit.sortable(App.$('[name="container"]'), {animation: true}).element.on("change.uk.sortable", function(e, sortable, ele) {
+
+                var order = [];
+
+                sortable.element.children().each(function(index){
+                    order.push(this.getAttribute('data-path'));
+                });
+
+                App.request('/coco/utils/updatePagesOrder', {order: order}).then(function(){
+                    App.ui.notify("Pages reordered", "success");
+                });
+            });
+        });
 
         createPage(e) {
 

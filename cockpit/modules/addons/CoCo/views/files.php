@@ -46,12 +46,12 @@
     </div>
 
 
-    <div class="uk-grid uk-grid-match uk-grid-width-medium-1-3 uk-grid-width-large-1-4" if="{files && files.length}">
+    <div name="container" class="uk-grid uk-grid-match uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-sortable" show="{files && files.length}">
 
-        <div class="uk-grid-margin" each="{file in files}" show="{ parent.infilter(file) }">
+        <div class="uk-grid-margin" each="{file in files}" show="{ parent.infilter(file) }" data-path="{ file.path }">
             <div class="uk-panel uk-panel-box uk-panel-card">
 
-                <div class="uk-cover-background uk-position-relative" style="background-image: { coco.getFileIconCls(file.filename) == 'image' ? 'url('+SITE_URL+file.relpath+')': 'none' }">
+                <div class="uk-cover-background uk-position-relative" style="background-image: { coco.getFileIconCls(file.filename) == 'image' ? 'url('+file.url+')': 'none' }">
                     <canvas class="uk-responsive-width uk-display-block" width="400" height="200"></canvas>
                     <a class="uk-position-cover uk-text-muted uk-flex uk-flex-middle uk-flex-center" href="@route('/coco/file'){ file.relpath }">
                         <div class="uk-text-large uk-text-center" if="{!file.isImage}">
@@ -164,6 +164,19 @@
                 uploaddrop      = UIkit.uploadDrop('body', uploadSettings);
 
                 UIkit.init(this.root);
+
+                var sortable = UIkit.sortable(App.$('[name="container"]'), {animation: true}).element.on("change.uk.sortable", function(e, sortable, ele) {
+
+                    var order = [];
+
+                    sortable.element.children().each(function(index){
+                        order.push(this.getAttribute('data-path'));
+                    });
+
+                    App.request('/coco/utils/updateResourcesOrder', {order: order}).then(function(){
+                        App.ui.notify("Files reordered", "success");
+                    });
+                });
             });
         });
 
@@ -179,7 +192,7 @@
                     $this.files = data.result;
                     $this.update();
 
-                }, 500);
+                }, 100);
 
             });
 
@@ -195,11 +208,15 @@
 
                 if (name!=item.filename && name.trim()) {
 
-                    requestapi({"cmd":"rename", "path": item.relpath, "name":name});
-                    item.path = item.path.replace(item.filename, name);
-                    item.filename = name;
+                    App.callmodule('coco', 'renameResource', [item.path, name.trim()]).then(function(data) {
 
-                    $this.update();
+                        item.path = item.path.replace(item.filename, name);
+                        item.url = item.url.replace(encodeURI(item.filename), encodeURI(name));
+                        item.relpath = item.relpath.replace(item.filename, name);
+                        item.filename = name;
+
+                        $this.update();
+                    });
                 }
             });
         }
@@ -208,18 +225,15 @@
 
             e.stopPropagation();
 
-            item = e.item.folder || e.item.file;
+            item = e.item.file;
 
             App.ui.confirm("Are you sure?", function() {
 
-                requestapi({"cmd":"removefiles", "paths": item.relpath}, function(){
+                App.callmodule('coco', 'deleteResource', [item.path]).then(function(data) {
 
                     index = $this.files.indexOf(item);
-
                     $this.files.splice(index, 1);
-
-                    App.ui.notify("Files(s) deleted", "success");
-
+                    App.ui.notify("File deleted", "success");
                     $this.update();
                 });
             });

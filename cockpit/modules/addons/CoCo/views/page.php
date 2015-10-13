@@ -210,8 +210,8 @@
 
         this.page      = {{ json_encode($page->toArray()) }};
         this.parents   = {{ json_encode(array_reverse($page->parents()->toArray())) }};
-        this.children  = {{ json_encode($page->children()->toArray()) }};
-        this.files     = {{ json_encode($page->files()->toArray()) }};
+        this.children  = {{ json_encode($page->children()->sorted()->toArray()) }};
+        this.files     = {{ json_encode($page->files()->sorted()->toArray()) }};
         this.type      = {{ json_encode($type) }};
         this.updates   = { slug: '' };
 

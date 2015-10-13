@@ -113,7 +113,7 @@
         var $this = this;
 
         this.home =  {{ json_encode($home ? $home->toArray() : null) }};
-        this.pages = {{ $pages->toJSON() }};
+        this.pages = {{ $pages->sorted()->toJSON() }};
 
         createPage(e) {
 

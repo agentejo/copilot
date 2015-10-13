@@ -86,6 +86,42 @@ class Page {
     }
 
     /**
+     * @param bool|true $parse
+     * @return \ContainerArray|string
+     */
+    public function rawmeta($parse = true) {
+
+        $content = $this->contents();
+        $meta    = '';
+
+        if ($dividerpos = strpos($content, self::CONTENT_MARKER)) {
+
+            $meta = substr($content, 0, strpos($content, self::CONTENT_MARKER));
+        }
+
+        if ($parse) {
+            $meta = copi::$app->helper('yaml')->fromString($meta);
+            $meta = new \ContainerArray($meta);
+        }
+
+        return $meta;
+    }
+
+    /**
+     * @param $data
+     * @param bool|true $extend
+     * @return $this
+     */
+    public function updateMeta($data, $extend = true) {
+
+        $meta = $extend ? $this->rawmeta()->extend($data) : new \ContainerArray($data);
+        $this->meta = $meta;
+        file_put_contents($this->path(), implode("\n===\n\n", [copi::$app->helper('yaml')->toYAML($meta->toArray()), $this->rawcontent()]));
+
+        return $this;
+    }
+
+    /**
      * @param $key
      * @param $value
      * @return $this
@@ -465,7 +501,7 @@ class Page {
                 }
             }
 
-            $this->files[$path] = new \DataCollection($files);
+            $this->files[$path] = new ResourceCollection($files);
         }
 
         return $this->files[$path];
@@ -500,28 +536,6 @@ class Page {
         $timestamp = filemtime($this->path);
 
         return $format ? date($format, $timestamp) : $timestamp;
-    }
-
-    /**
-     * @param bool|true $parse
-     * @return \ContainerArray|string
-     */
-    public function rawmeta($parse = true) {
-
-        $content = $this->contents();
-        $meta    = '';
-
-        if ($dividerpos = strpos($content, self::CONTENT_MARKER)) {
-
-            $meta = substr($content, 0, strpos($content, self::CONTENT_MARKER));
-        }
-
-        if ($parse) {
-            $meta = copi::$app->helper('yaml')->fromString($meta);
-            $meta = new \ContainerArray($meta);
-        }
-
-        return $meta;
     }
 
     /**
@@ -761,6 +775,8 @@ class Page {
 
         $contentpath = copi::$app->path('content:');
 
+        $this->path = str_replace(DIRECTORY_SEPARATOR, '/', $this->path);
+
         $this->ext         = pathinfo($this->path, \PATHINFO_EXTENSION);
         $this->dir         = dirname($this->path);
         $this->contentdir  = str_replace($contentpath, '/', $this->dir);
@@ -790,7 +806,7 @@ class Page {
      * @return string
      */
     public function toJSON(){
-        return json_encode($this->jsonSerialize());
+        return json_encode($this->toArray());
     }
 
     /**

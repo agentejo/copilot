@@ -76,7 +76,25 @@ $this->module("coco")->extend([
             return [];
         }
 
-        return $asarray ? $page->files()->toArray(): $page->files();
+        return $asarray ? $page->files()->sorted()->toArray(): $page->files()->sorted();
+    },
+
+    'renameResource' => function($path, $name) {
+
+        if ($res = copi::resource($path)) {
+            return $res->rename($name)->toArray();
+        }
+
+        return false;
+    },
+
+    'deleteResource' => function($path) {
+
+        if ($res = copi::resource($path)) {
+            return $res->delete();
+        }
+
+        return false;
     },
 
     'getLicense' => function() {

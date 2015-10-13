@@ -65,4 +65,30 @@ class Utils extends \Cockpit\AuthController {
 
         return false;
     }
+
+    public function updateResourcesOrder() {
+
+        if ($order = $this->param('order', false)) {
+
+            foreach($order as $index=>$path) {
+                if ($res = copi::resource($path)) {
+                    $res->updateMeta(['sort' => $index]);
+                }
+            }
+        }
+        return $order;
+    }
+
+    public function updatePagesOrder() {
+
+        if ($order = $this->param('order', false)) {
+
+            foreach($order as $index=>$path) {
+                if ($page = copi::page($path)) {
+                    $page->updateMeta(['sort' => $index]);
+                }
+            }
+        }
+        return $order;
+    }
 }

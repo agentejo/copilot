@@ -118,6 +118,26 @@ class copi {
     }
 
     /**
+     * @param $path
+     * @return null
+     */
+    public static function resource($path) {
+
+        if (strpos($path, ':') === false && !self::$app->isAbsolutePath($path)) {
+            $path = "content:{$path}";
+        }
+
+        if ($path = self::$app->path($path)) {
+
+            $resource = new \Copilot\Resource($path);
+
+            return $resource;
+        }
+
+        return null;
+    }
+
+    /**
      * @param $folder
      * @param null $criteria
      * @return \Copilot\PageCollection

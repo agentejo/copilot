@@ -282,6 +282,13 @@ class PageCollection implements \Iterator {
     }
 
     /**
+     *
+     */
+    public function sorted() {
+       return $this->sort('$p->meta("sort")');
+    }
+
+    /**
      * @return null
      */
     public function end() {

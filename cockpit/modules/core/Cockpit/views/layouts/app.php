@@ -6,25 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
     <script>
-
         // App constants
-
-        var SITE_URL = '{{ $app->pathToUrl('site:') }}';
-
+        var SITE_URL = '{{ rtrim($app->pathToUrl('site:'), '/') }}';
     </script>
 
     {{ $app->assets($app('admin')->data->get('assets'), $app['cockpit/version']) }}
 
     <script>
-
-        (function(App){
-
-            App = App || {};
-
-            App.$data = {{ json_encode($app('admin')->data->get('extract')) }};
-
-        })(App);
-
+        App.$data = {{ json_encode($app('admin')->data->get('extract')) }};
     </script>
 
     @trigger('app.layout.header')
@@ -64,7 +53,7 @@
 
                                         <ul class="uk-nav uk-nav-side uk-nav-dropdown">
 
-                                            <li class="{{ $app['route'] == '/' ? 'uk-active':'' }}"><a href="@route('/')"><i class="uk-icon-justify uk-icon-dashboard"></i> @lang('Dashboard')</a></li>
+                                            <li class="{{ $app['route'] == '/cockpit/dashboard' ? 'uk-active':'' }}"><a href="@route('/cockpit/dashboard')"><i class="uk-icon-justify uk-icon-dashboard"></i> @lang('Dashboard')</a></li>
 
                                             @hasaccess?('cockpit', 'manage.accounts')
                                             <li class="{{ strpos($app['route'],'/accounts')===0 ? 'uk-active':'' }}"><a href="@route('/accounts')"><i class="uk-icon-justify uk-icon-users"></i> @lang('Accounts')</a></li>

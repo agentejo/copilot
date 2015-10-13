@@ -407,8 +407,16 @@ class Resource {
         return $array;
     }
 
+    /**
+     * @return string
+     */
+    public function toJSON(){
+        return json_encode($this->toArray());
+    }
+
     protected function _initPaths() {
 
+        $this->path     = str_replace(DIRECTORY_SEPARATOR, '/', $this->path);
         $this->relpath  = str_replace(CP_ROOT_DIR, '', $this->path);
         $this->filename = basename($this->path);
         $this->dir      = dirname($this->path);
