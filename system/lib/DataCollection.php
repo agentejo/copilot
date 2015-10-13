@@ -181,7 +181,7 @@ class DataCollection implements \Iterator {
      */
     protected function setItems($items) {
 
-        $collection = new self($items, $this);
+        $collection = new static($items, $this);
 
         return $collection;
     }
