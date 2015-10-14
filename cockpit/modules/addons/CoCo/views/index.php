@@ -49,9 +49,9 @@
                 </div>
             </div>
 
-            <div class="uk-margin uk-margin-left" if="{pages.length}">
+            <div name="container" class="uk-margin uk-margin-left uk-sortable" show="{pages.length}">
 
-                <div class="uk-panel uk-panel-box uk-panel-card uk-margin" each="{ page,idx in pages }" if="{ !page.isRoot }">
+                <div class="uk-panel uk-panel-box uk-panel-card uk-margin" each="{ page,idx in pages }" if="{ !page.isRoot }"  data-path="{ page.path }">
 
                     <div class="uk-grid uk-grid-small">
                         <div>
@@ -114,6 +114,24 @@
 
         this.home =  {{ json_encode($home ? $home->toArray() : null) }};
         this.pages = {{ $pages->sorted()->toJSON() }};
+
+
+        this.on('mount', function() {
+
+            var sortable = UIkit.sortable(App.$('[name="container"]'), {animation: true}).element.on("change.uk.sortable", function(e, sortable, ele) {
+
+                var order = [];
+
+                sortable.element.children().each(function(index){
+                    order.push(this.getAttribute('data-path'));
+                });
+
+                App.request('/coco/utils/updatePagesOrder', {order: order}).then(function(){
+                    App.ui.notify("Pages reordered", "success");
+                });
+            });
+        });
+
 
         createPage(e) {
 
