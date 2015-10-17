@@ -43,7 +43,7 @@
 
                 <div class="uk-panel uk-panel-box uk-panel-card">
 
-                    <div class="uk-text-large">CoCo</div>
+                    <div class="uk-text-large">COCOPi</div>
                     <span class="uk-badge uk-margin-small-top">{{ $info->version }}</span>
 
                     @if($license->type != 'trial')
@@ -54,7 +54,10 @@
 
                     <div class="uk-margin">
 
-                        <p>{{ $license->name }}</p>
+                        <p>
+                            {{ $license->name }}<br>
+                            <span class="uk-text-small">{{ @$license->domain }}</span>
+                        </p>
 
                         <div class="uk-grid uk-margin">
                             <div class="uk-width-3-4">

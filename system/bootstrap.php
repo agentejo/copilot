@@ -129,8 +129,12 @@ $copilot("yaml")->setCachePath(CP_TMP_DIR);
 /**
  * check for bootsraping Cockpit
  */
-if ($copilot['cockpit']) {
+if (!function_exists('cockpit') && $copilot['cockpit']) {
     include_once($copilot->retrieve('cockpit/path', CP_ROOT_DIR.'/cockpit').'/bootstrap.php');
+}
+
+if (defined('COCKPIT_DIR')) {
+    $copilot->path('cockpit', COCKPIT_DIR);
 }
 
 /**

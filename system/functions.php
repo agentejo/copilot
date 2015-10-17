@@ -30,9 +30,7 @@ function thumb_url($image, $width = null, $height = null, $options=array()) {
 
     if ($width && is_array($height)) {
         $options = $height;
-        $height  = $width;
-    } else {
-        $height = $height ?: $width;
+        $height  = null;
     }
 
     $options = array_merge(array(
@@ -58,15 +56,11 @@ function thumb_url($image, $width = null, $height = null, $options=array()) {
         return $url;
     }
 
-    if (!is_numeric($height)) {
-        $height = $width;
-    }
-
     if (is_null($width) && is_null($height)) {
         return copi::$app->pathToUrl($path);
     }
 
-    if (!in_array($mode, ['crop', 'best_fit', 'resize'])) {
+    if (!in_array($mode, ['crop', 'best_fit', 'resize','fit_to_width'])) {
         $mode = 'crop';
     }
 

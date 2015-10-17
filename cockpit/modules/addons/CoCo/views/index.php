@@ -7,7 +7,7 @@
 <div riot-view>
 
     <div class="uk-grid">
-        <div class="uk-grid-margin uk-width-medium-2-3">
+        <div class="uk-grid-margin uk-width-medium-3-4">
 
             <div class="uk-margin">
 
@@ -40,6 +40,9 @@
                         </div>
                         <div class="uk-width-1-5 uk-text-muted uk-text-small">
                             { home.type }
+                        </div>
+                        <div class="uk-width-1-5 uk-text-muted uk-text-small uk-text-tuncate">
+                            <a href="{ page.url }" target="_blank">/</a>
                         </div>
                         <div>
                             <span class="uk-badge">{ home.children }</span>
@@ -74,6 +77,9 @@
                         <div class="uk-width-1-5 uk-text-muted uk-text-small">
                             { page.type }
                         </div>
+                        <div class="uk-width-1-5 uk-text-muted uk-text-small uk-text-tuncate">
+                            <a href="{ page.url }" target="_blank">/{ page.slug }</a>
+                        </div>
                         <div>
                             <span class="uk-badge">{ page.children }</span>
                         </div>
@@ -81,7 +87,7 @@
 
                 </div>
 
-                <a class="uk-button uk-button-large uk-button-primary" onclick="{ createPage }" root="/">@lang('Create another page')</a>
+                <a class="uk-button uk-button-large uk-width-1-1 uk-width-medium-1-4 uk-button-primary" onclick="{ createPage }" title="@lang('Create another page')" data-uk-tooltip="\{pos:'right'\}" root="/"><i class="uk-icon-plus"></i></a>
 
             </div>
 
@@ -94,7 +100,7 @@
             </div>
 
         </div>
-        <div class="uk-grid-margin uk-width-medium-1-3">
+        <div class="uk-grid-margin uk-width-medium-1-4">
             <div class="uk-panel">
                 <h4>@lang('Site')</h4>
 

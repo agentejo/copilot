@@ -788,11 +788,16 @@ class Page {
         $this->slug        = preg_replace('/^_/', '', ($this->basename == 'index') ? basename($this->dir) : $this->basename);
         $this->files       = []; // files cache
 
-        $url = str_replace($contentpath, '/', $this->path);
-        $url = copi::$app->routeUrl($url);
-        $url = str_replace($this->filename, ($this->isIndex() ? '' : $this->basename), $url);
+        if ($this->isRootIndex()) {
+            $this->url = copi::$app->routeUrl('/');
+        } else {
 
-        $this->url = str_replace('/_', '/', $url);
+            $url = str_replace($contentpath, '/', $this->path);
+            $url = copi::$app->routeUrl($url);
+            $url = str_replace($this->filename, ($this->isIndex() ? '' : $this->basename), $url);
+
+            $this->url = str_replace('/_', '/', $url);
+        }
     }
 
     /**

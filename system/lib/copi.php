@@ -144,10 +144,8 @@ class copi {
      */
     public static function find($folder, $criteria = null) {
 
-        if (strpos($folder, ':') === false && !self::$app->isAbsolutePath($folder)) {
-            $path = "content:{$folder}";
-        } else {
-            $path = $folder;
+        if (!self::$app->isAbsolutePath($folder)) {
+            $path = self::$app->path('content:'.$folder);
         }
 
         return \Copilot\PageCollection::find($path, $criteria);

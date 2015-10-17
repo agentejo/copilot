@@ -64,7 +64,7 @@ class PageCollection implements \Iterator {
 
         $pages = [];
 
-        if (file_exists($path)) {
+        if (file_exists($folder)) {
 
             $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($folder), \RecursiveIteratorIterator::SELF_FIRST);
 

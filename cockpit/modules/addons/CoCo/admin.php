@@ -52,11 +52,21 @@ $app->on('admin.init', function() use($app) {
     ]);
 
     /**
-     * listen to app search to filter content
+     * listen to app search to filter pages
      */
     $this->on('cockpit.search', function($search, $list) {
 
+        copi::find(null, function($page) use($search, $list) {
 
+            if (stripos($page->meta('title', ''), $search) !== false) {
+
+                $list[] = [
+                    'icon'  => 'file-text-o',
+                    'title' => $page->meta('title', $page->filename()),
+                    'url'   => $this->routeUrl('/coco/page'.$page->relpath())
+                ];
+            }
+        });
     });
 
 

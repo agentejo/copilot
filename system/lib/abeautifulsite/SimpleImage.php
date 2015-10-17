@@ -1,13 +1,16 @@
 <?php
 /**
  * @package     SimpleImage class
- * @version     2.5.6
+ * @version     2.5.5
  * @author      Cory LaViska for A Beautiful Site, LLC (http://www.abeautifulsite.net/)
  * @author      Nazar Mokrynskyi <nazar@mokrynskyi.com> - merging of forks, namespace support, PhpDoc editing, adaptive_resize() method, other fixes
  * @license     This software is licensed under the MIT license: http://opensource.org/licenses/MIT
  * @copyright   A Beautiful Site, LLC
  *
  */
+
+namespace abeautifulsite;
+use Exception;
 
 /**
  * Class SimpleImage
@@ -957,7 +960,7 @@ class SimpleImage {
      * @throws Exception
      *
      */
-    function text($text, $font_file, $font_size = 12, $color = '#000000', $position = 'center', $x_offset = 0, $y_offset = 0, $stroke_color = null, $stroke_size = null) {
+    function text($text, $font_file, $font_size = 12, $color = '#000000', $position = 'center', $x_offset = 0, $y_offset = 0) {
 
         // todo - this method could be improved to support the text angle
         $angle = 0;
@@ -1018,15 +1021,7 @@ class SimpleImage {
         // Add the text
         imagesavealpha($this->image, true);
         imagealphablending($this->image, true);
-        if( isset($stroke_color) && isset($stroke_size) ) {
-            // Text with stroke
-            $rgba = $this->normalize_color($color);
-            $stroke_color = imagecolorallocatealpha($this->image, $rgba['r'], $rgba['g'], $rgba['b'], $rgba['a']);
-            $this->imagettfstroketext($this->image, $font_size, $angle, $x, $y, $color, $stroke_color, $stroke_size, $font_file, $text);
-        } else {
-            // Text without stroke
-            imagettftext($this->image, $font_size, $angle, $x, $y, $color, $font_file, $text);
-        }
+        imagettftext($this->image, $font_size, $angle, $x, $y, $color, $font_file, $text);
 
         return $this;
 
@@ -1202,32 +1197,6 @@ class SimpleImage {
         imagealphablending($src_im, true);
         imagecopy($dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h);
 
-    }
-
-    /**
-     *  Same as imagettftext(), but allows for a stroke color and size
-     *
-     * @param  object &$image       A GD image object
-     * @param  float $size          The font size
-     * @param  float $angle         The angle in degrees
-     * @param  int $x               X-coordinate of the starting position
-     * @param  int $y               Y-coordinate of the starting position
-     * @param  int &$textcolor      The color index of the text
-     * @param  int &$stroke_color   The color index of the stroke
-     * @param  int $stroke_size     The stroke size in pixels
-     * @param  string $fontfile     The path to the font to use
-     * @param  string $text         The text to output
-     *
-     * @return array                This method has the same return values as imagettftext()
-     *
-     */
-    protected function imagettfstroketext(&$image, $size, $angle, $x, $y, &$textcolor, &$strokecolor, $stroke_size, $fontfile, $text) {
-        for( $c1 = ($x - abs($stroke_size)); $c1 <= ($x + abs($stroke_size)); $c1++ ) {
-            for($c2 = ($y - abs($stroke_size)); $c2 <= ($y + abs($stroke_size)); $c2++) {
-                $bg = imagettftext($image, $size, $angle, $c1, $c2, $strokecolor, $fontfile, $text);
-            }
-        }
-        return imagettftext($image, $size, $angle, $x, $y, $textcolor, $fontfile, $text);
     }
 
     /**
