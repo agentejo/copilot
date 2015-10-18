@@ -12,13 +12,13 @@
 
                 @if($home)
                 <li>
-                    <a href="@route('/coco/page'.$home->relpath())"><i class="uk-icon-justify uk-icon-home"></i> {{ $home->meta('title') }}</a>
+                    <a class="uk-display-block" href="@route('/coco/page'.$home->relpath())"><i class="uk-icon-justify uk-icon-home"></i> {{ $home->meta('title') }}</a>
                 </li>
                 @endif
 
                 @foreach($pages as $page)
                 <li>
-                    <a href="@route('/coco/page'.$page->relpath())"><i class="uk-icon-justify uk-icon-file-text-o"></i> {{ $page->meta('title') }}</a>
+                    <a class="uk-display-block uk-margin-small-top uk-margin-small-left" href="@route('/coco/page'.$page->relpath())"><i class="uk-icon-justify uk-icon-file-text-o"></i> {{ $page->meta('title') }}</a>
                 </li>
                 @endforeach
             </ul>
