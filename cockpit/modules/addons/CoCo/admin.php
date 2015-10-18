@@ -71,7 +71,11 @@ $app->on('admin.init', function() use($app) {
 
 
     // dashboard widgets
-    $this->on("admin.dashboard.aside", function() {
-        //$this->renderView("coco:views/widgets/dashboard.php");
+    $this->on("admin.dashboard.main", function() {
+
+        $home  = copi::home();
+        $pages = copi::pages('content:');
+
+        $this->renderView("coco:views/widgets/dashboard.php", compact('pages', 'home'));
     }, 100);
 });
