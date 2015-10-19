@@ -47,6 +47,11 @@
                     </div>
                 </div>
                 <br>
+
+                <div class="uk-margin" if="{ type.description }">
+                    <div class="uk-alert">{ type.description }</div>
+                </div>
+
                 <ul class="uk-tab uk-margin">
                     <li class="{ t == parent.tab ? 'uk-active':'' }" each="{t in tabs}">
                         <a onclick="{ parent.selectTab }" select="{t}">{t}</a>
