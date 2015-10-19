@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="uk-panel uk-panel-box uk-panel-card uk-margin" if="{home}">
-                    <div class="uk-grid uk-grid-small">
+                    <div class="uk-grid">
                         <div class="">
                             <span class="uk-margin-small-right" data-uk-dropdown>
                                 <i class="uk-icon-home uk-text-{ home.visible ? 'success':'danger' }"></i>
@@ -35,10 +35,9 @@
                             </span>
                         </div>
                         <div class="uk-flex-item-1">
-
                             <a href="@route('/coco/page'){ home.relpath }">{ home.meta.title || home.basename }</a>
                         </div>
-                        <div class="uk-width-1-5 uk-text-muted uk-text-small">
+                        <div class="uk-text-muted uk-text-small">
                             { home.type }
                         </div>
                         <div class="uk-width-1-5 uk-text-muted uk-text-small uk-text-tuncate">
@@ -52,11 +51,11 @@
                 </div>
             </div>
 
-            <div name="container" class="uk-margin uk-margin-left uk-sortable" show="{pages.length}">
+            <div name="container" class="uk-margin uk-sortable" show="{pages.length}">
 
                 <div class="uk-panel uk-panel-box uk-panel-card uk-margin" each="{ page,idx in pages }" if="{ !page.isRoot }"  data-path="{ page.path }">
 
-                    <div class="uk-grid uk-grid-small">
+                    <div class="uk-grid">
                         <div>
                             <span class="uk-margin-small-right" data-uk-dropdown>
                                 <i class="uk-icon-file-text-o uk-text-{ page.visible ? 'success':'danger' }"></i>
@@ -74,7 +73,7 @@
                         <div class="uk-flex-item-1">
                             <a href="@route('/coco/page'){ page.relpath }">{ page.meta.title || page.basename }</a>
                         </div>
-                        <div class="uk-width-1-5 uk-text-muted uk-text-small">
+                        <div class="uk-text-muted uk-text-small">
                             { page.type }
                         </div>
                         <div class="uk-width-1-5 uk-text-muted uk-text-small uk-text-tuncate">
