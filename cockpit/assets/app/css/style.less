@@ -8,7 +8,8 @@
 @import (less) "../../lib/codemirror/theme/light.css";
 @import "less/uikit/uikit.less";
 
-//@global-primary-background: #d73d32;
+//@global-primary-background: #039be5;
+//@global-link-color: @global-primary-background;
 
 .uk-selected {
     background: @global-selected-background;
@@ -16,7 +17,7 @@
 
 .app-header {
 
-    background-color: #fff;
+    background-color: @global-background;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 
     .uk-navbar {
@@ -62,6 +63,13 @@
     	border-width: 8px;
     	margin-left: -8px;
     }
+}
+
+.app-modulesbar li a.uk-active {
+    background-color: @global-background;
+    padding: 10px  15px;
+    margin: -10px 0;
+    color: @global-primary-background;
 }
 
 .app-main {
