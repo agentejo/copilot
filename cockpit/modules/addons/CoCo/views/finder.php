@@ -10,6 +10,8 @@
         <ul name="tab" class="uk-tab">
             <li class="uk-active"><a>Site</a></li>
             <li><a>Content</a></li>
+            <li><a>Theme</a></li>
+            <li><a>Menu</a></li>
         </ul>
     </div>
 
@@ -19,6 +21,13 @@
         </li>
         <li>
             <cp-finder root="/content"></cp-finder>
+        </li>
+        </li>
+        <li>
+            <cp-finder root="/site/theme"></cp-finder>
+        </li>
+        <li>
+            <cp-finder root="/site/config/menu"></cp-finder>
         </li>
     </ul>
 
