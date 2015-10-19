@@ -39,11 +39,19 @@
                             <label class="uk-text-small">Slug</label>
                             <input name="slug" type="text" class="uk-width-1-1 uk-form-large" placeholder="{ slugpreview }" onkeyup="{ update }">
                         </div>
-                        <div class="uk-form-row ">
+                        <div class="uk-form-row">
                             <label class="uk-text-small">Type</label>
-                            <select name="type" class="uk-width-1-1 uk-form-large">
-                                <option value="{key}" each="{key,val in opts.types}">{ val.label || key }</option>
-                            </select>
+                            <div class="uk-margin-small-top" data-uk-dropdown="\{mode:'click'\}">
+                                <a>{ (opts.types[type] && opts.types[type].label) || type }</a>
+                                <div class="uk-dropdown">
+                                    <ul class="uk-nav uk-nav-dropdown">
+                                        <li class="uk-nav-header">Select a type</li>
+                                        <li each="{key,val in opts.types}">
+                                            <a class="uk-dropdown-close" data-type="{ key }" onclick="{ parent.selectType }">{ val.label || key }</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </form>
                     <div class="uk-modal-footer uk-text-right">
@@ -54,6 +62,7 @@
                     <script type="view/script">
 
                         this.slugpreview = '';
+                        this.type = 'html';
 
                         updateSlugPreview() {
                             this.slugpreview = this.title.value.toLowerCase().replace(/\s/g, '-');
@@ -64,13 +73,17 @@
                             App.callmodule('coco', 'createPage', [opts.root, {
                                 title: this.title.value,
                                 slug: this.slug ? this.slug.value :'',
-                                type : this.type.value
+                                type : this.type
                             }]).then(function(data) {
 
                                 if (data.result) {
                                     location.href = App.route('/coco/page/'+data.result);
                                 }
                             });
+                        };
+
+                        selectType(e) {
+                            this.type = e.target.getAttribute('data-type');
                         };
 
                     </script>
