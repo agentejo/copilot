@@ -724,7 +724,7 @@ class Page {
         }
 
         if ($code) {
-            $meta = array_merge($meta, copi::$app->helper('yaml')->fromString($code));
+            $meta = array_merge($meta, $this->_getCachedMetaData());
         }
 
         $meta = new \ContainerArray($meta);
@@ -758,6 +758,56 @@ class Page {
         }
 
         return $meta;
+    }
+
+    /**
+     * @return array
+     */
+    protected function _getCachedMetaData() {
+
+        $cachedfile = copi::path('tmp:').'/'.basename($this->path).'.meta.'.md5($this->path).'.php';
+
+        if (!file_exists($cachedfile)) {
+            $cachedfile = $this->cache_meta($cachedfile, null);
+        }
+
+        if ($cachedfile) {
+
+            $mtime = filemtime($this->path);
+
+            if (filemtime($cachedfile)!=$mtime) {
+                $cachedfile = $this->cache_meta($cachedfile, $mtime);
+            }
+        }
+
+        if ($cachedfile) {
+            return include($cachedfile);
+        }
+
+        return [];
+    }
+
+    /**
+     * @param  string $cachedfile
+     * @param  int $filemtime
+     * @return bool|string
+     */
+    protected function cache_meta($cachedfile, $filemtime = null) {
+
+        if (!$filemtime){
+            $filemtime = filemtime($this->path);
+        }
+
+        $meta = copi::$app->helper('yaml')->fromString($this->rawmeta(false));
+
+        $data = var_export($meta, true);
+
+        if (file_put_contents($cachedfile, "<?php return {$data};")) {
+            touch($cachedfile,  $filemtime);
+            return $cachedfile;
+        }
+
+        return false;
     }
 
     /**
