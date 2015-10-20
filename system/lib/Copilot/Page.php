@@ -742,10 +742,6 @@ class Page {
         $dir      = $this->dir;
         $metafile = "{$dir}/_meta.yaml";
 
-        if (isset(self::$metaCache[$metafile])) {
-            return self::$metaCache[$metafile];
-        }
-
         while ($dir != CP_ROOT_DIR) {
 
             $metafile = "{$dir}/_meta.yaml";
@@ -762,7 +758,7 @@ class Page {
             $dir = dirname($dir);
         }
 
-        return $meta;
+        return is_array($meta) ? $meta:[];
     }
 
     /**
