@@ -739,7 +739,12 @@ class Page {
 
         $meta = [];
 
-        $dir  = $this->dir;
+        $dir      = $this->dir;
+        $metafile = "{$dir}/_meta.yaml";
+
+        if (isset(self::$metaCache[$metafile])) {
+            return self::$metaCache[$metafile];
+        }
 
         while ($dir != CP_ROOT_DIR) {
 
