@@ -6,7 +6,6 @@
 .settings
 .idea
 /storage/*
-/modules/addons/*/*
 /tests/*
 
 !.gitignore
