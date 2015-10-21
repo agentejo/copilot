@@ -41,7 +41,7 @@
                             { home.type }
                         </div>
                         <div class="uk-width-1-5 uk-text-muted uk-text-small uk-text-tuncate">
-                            <a href="{ page.url }" target="_blank">/</a>
+                            <a href="{ home.url }" target="_blank">/</a>
                         </div>
                         <div>
                             <span class="uk-badge">{ home.children }</span>
