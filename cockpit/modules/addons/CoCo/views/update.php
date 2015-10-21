@@ -11,13 +11,13 @@
 
         <h1>@lang('System Update')</h1>
 
-        <div class="uk-text-large uk-margin-large-top" show="{status.length}">
+        <div show="{status.length}">
 
-            <p class="{idx<parent.status.length-1 ? 'uk-text-muted':'uk-text-primary'}" each="{s,idx in status}">{ s }</p>
-
-            <p class="uk-text-muted">
+            <p class="uk-text-muted uk-text-large">
                 <i class="uk-icon-spinner uk-icon-spin"></i>
             </p>
+
+            <p class="{idx===0 ? 'uk-text-large uk-text-primary':'uk-text-success'}" each="{s,idx in status}">{ s }</p>
 
         </div>
 
@@ -39,29 +39,45 @@
 
         start() {
 
-            $this.status.push('Generating a backup...');
+            $this.status.unshift('Generating a backup');
 
-            App.request('/coco/update/update/0', {nc:Math.random()}).then(function(){
+            App.request('/coco/update/update/0', {nc:Math.random()}).then(function(data){
 
-                $this.status.push('Downloading latest version...');
+                if (data && data.error) {
+                    return App.ui.alert(data.message || 'Uuups, something went wrong!');
+                }
+
+                $this.status.unshift('Downloading latest version');
                 $this.update();
 
-                App.request('/coco/update/update/1', {nc:Math.random()}).then(function(){
+                App.request('/coco/update/update/1', {nc:Math.random()}).then(function(data){
 
-                    $this.status.push('Extracting zip file...');
+                    if (data && data.error) {
+                        return App.ui.alert(data.message || 'Uuups, something went wrong!');
+                    }
+
+                    $this.status.unshift('Extracting zip file');
                     $this.update();
 
-                    App.request('/coco/update/update/2', {nc:Math.random()}).then(function(){
+                    App.request('/coco/update/update/2', {nc:Math.random()}).then(function(data){
 
-                        $this.status.push('Swapping files...');
+                        if (data && data.error) {
+                            return App.ui.alert(data.message || 'Uuups, something went wrong!');
+                        }
+
+                        $this.status.unshift('Swapping files');
                         $this.update();
 
-                        App.request('/coco/update/update/3', {nc:Math.random()}).then(function(){
+                        App.request('/coco/update/update/3', {nc:Math.random()}).then(function(data){
 
-                            $this.status.push('Cleanup...');
+                            if (data && data.error) {
+                                return App.ui.alert(data.message || 'Uuups, something went wrong!');
+                            }
+
+                            $this.status.unshift('Cleaning up');
                             $this.update();
 
-                            App.request('/coco/update/update/4', {nc:Math.random()}).then(function(){
+                            App.request('/coco/update/update/4', {nc:Math.random()}).then(function(data){
                                 location.href = App.route('/coco');
                             });
                         });
