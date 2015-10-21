@@ -27,7 +27,7 @@
                 </ul>
             </div>
         </li>
-        <li><span class="uk-text-primary">@lang('Pages')</span></li>
+        <li><span class="uk-text-primary">@lang('Pages') <span show="{children.length}">({children.length})</span></span></li>
     </ul>
 
     <div class="uk-margin" if="{children.length}">

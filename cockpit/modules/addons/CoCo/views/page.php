@@ -126,7 +126,7 @@
 
                 <div class="uk-panel uk-panel-box">
 
-                    <h5>@lang('Sub Pages')</h5>
+                    <h5 class="uk-clearfix">@lang('Sub Pages') <span class="uk-text-muted uk-text-small uk-float-right" if="{children.length > 5}">{ children.length }</span></h5>
 
                     <div class="{ children.length > 5 ? 'uk-scrollable-box':'' }" if="{children.length}">
                         <ul class="uk-list uk-list-space" if="{children.length}">
@@ -170,7 +170,7 @@
 
                 <div class="uk-panel uk-panel-box">
 
-                    <h5>@lang('Files')</h5>
+                    <h5 class="uk-clearfix">@lang('Files') <span class="uk-text-muted uk-text-small uk-float-right" if="{files.length > 5}">{ files.length }</span></h5>
 
                     <div class="{ files.length > 5 ? 'uk-scrollable-box':'' }" if="{files.length}">
                         <ul class="uk-list uk-list-space" if="{files.length}">

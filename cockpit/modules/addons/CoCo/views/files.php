@@ -21,7 +21,10 @@
                 </ul>
             </div>
         </li>
-        <li><span class="uk-text-primary">Files</span> <span name="loadprogress" class="uk-hidden"><i class="uk-icon-refresh uk-icon-spin"></i></span></li>
+        <li>
+            <span class="uk-text-primary">Files <span show="{files && files.length}">({files.length})</span></span> 
+            <span name="loadprogress" class="uk-hidden"><i class="uk-icon-refresh uk-icon-spin"></i></span>
+        </li>
     </ul>
 
     <div class="uk-margin" show="{files && files.length}">
