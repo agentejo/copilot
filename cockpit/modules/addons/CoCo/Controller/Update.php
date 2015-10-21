@@ -163,12 +163,17 @@ class Update extends \Cockpit\AuthController {
                 foreach ($files as $file) {
 
                     if (!$file->isFile()) continue;
-                    if (preg_match('/(site\/|content\/|config\/|custom\/|storage\/|modules\/addons|favicon.png|\.backup\.zip)/', $file)) continue;
+                    if (preg_match('/(site\/|content\/|config\/|storage\/|modules\/addons|favicon\.png|\.backup\.zip)/', (string)$file)) continue;
 
                     @unlink($file->getRealPath());
                 }
 
                 $fs->removeEmptySubFolders($root);
+
+                $fs->delete($distroot.'/content');
+                $fs->delete($distroot.'/site');
+                $fs->delete($distroot.'/cockpit/config');
+
                 $fs->copy($distroot, $root);
             }
 
