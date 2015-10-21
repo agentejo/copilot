@@ -40,6 +40,7 @@ $app->on('admin.init', function() use($app) {
     });
 
     // bind admin routes /coco/*
+    $this->bindClass('CoCo\\Controller\\Update', 'coco/update');
     $this->bindClass('CoCo\\Controller\\Utils', 'coco/utils');
     $this->bindClass('CoCo\\Controller\\Admin', 'coco');
 
