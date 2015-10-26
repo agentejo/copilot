@@ -30,7 +30,7 @@ $this->module("coco")->extend([
         $meta = array_merge([
             'title' => '',
             'slug'  => '',
-            'type'  => 'page'
+            'type'  => 'html'
         ], $meta);
 
         if (!$meta['title']) {
@@ -39,8 +39,26 @@ $this->module("coco")->extend([
 
         $meta['slug'] = strtolower(str_replace([' '], ['-'], $meta['slug'] ? $meta['slug'] : $meta['title']));
 
+        $type     = $meta['type'];
+        $typedef  = [];
+
+        if ($path = copi::path("types:{$type}.yaml")) {
+            $typedef = $this->app->helper('yaml')->fromFile($path);
+        }
+
+        $type = array_replace_recursive([
+            'name' => $type,
+            'ext' => 'html',
+            'content' => [
+                'visible' => true,
+                'type'    => isset($typedef) && $typedef['ext'] == 'md' ? 'markdown':'html'
+            ],
+            'meta' => []
+        ], (array)$typedef);
+
+
         $contentfolder = copi::path('content:');
-        $pagepath      = $contentfolder.($root=='home' ? '':  $root.'/'.$meta['slug']).'/'.'index.'.($meta['type']=='markdown' ? 'md':'html');
+        $pagepath      = $contentfolder.($root=='home' ? '':  $root.'/'.$meta['slug']).'/'.'index.'.($type['ext']=='md' ? 'md':'html');
         $time          = date('Y-m-d H:i:s', time());
 
         $content = [
