@@ -32,22 +32,7 @@ class Admin extends \Cockpit\AuthController {
         }
 
         $page     = new \Copilot\Page($path);
-        $type     = $page->type();
-        $typedef  = [];
-
-        if ($path = copi::path("types:{$type}.yaml")) {
-            $typedef = $this->app->helper('yaml')->fromFile($path);
-        }
-
-        $type = array_replace_recursive([
-            'name' => $type,
-            'ext' => 'html',
-            'content' => [
-                'visible' => true,
-                'type'    => $page->ext() == 'md' ? 'markdown':'html'
-            ],
-            'meta' => []
-        ], (array)$typedef);
+        $type     = $this->getPageType($page);
 
         return $this->render('coco:views/page.php', compact('page', 'type'));
     }
@@ -61,8 +46,9 @@ class Admin extends \Cockpit\AuthController {
         }
 
         $page = new \Copilot\Page($path);
+        $type = $this->getPageType($page);
 
-        return $this->render('coco:views/pages.php', compact('page'));
+        return $this->render('coco:views/pages.php', compact('page', 'type'));
     }
 
     public function file($path) {
@@ -94,5 +80,27 @@ class Admin extends \Cockpit\AuthController {
     public function finder() {
 
         return $this->render('coco:views/finder.php');
+    }
+
+    protected function getPageType($page) {
+
+        $type     = $page->type();
+        $typedef  = [];
+
+        if ($path = copi::path("types:{$type}.yaml")) {
+            $typedef = $this->app->helper('yaml')->fromFile($path);
+        }
+
+        $type = array_replace_recursive([
+            'name' => $type,
+            'ext' => 'html',
+            'content' => [
+                'visible' => true,
+                'type'    => $page->ext() == 'md' ? 'markdown':'html'
+            ],
+            'meta' => []
+        ], (array)$typedef);
+
+        return $type;
     }
 }

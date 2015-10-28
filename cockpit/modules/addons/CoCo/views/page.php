@@ -246,7 +246,23 @@
         }
 
         createPage(e) {
-            coco.createPage(this.page.isRoot ? '/':this.page.contentdir);
+
+            var options = {};
+
+            if (this.type && this.type.subpages) {
+
+                var subpages = Array.isArray(this.type.subpages) ? this.type.subpages : [this.type.subpages];
+
+                options.types = {};
+
+                subpages.forEach(function(type) {
+                    if (COPILOT_PAGE_TYPES[type]) {
+                        options.types[type] = COPILOT_PAGE_TYPES[type];
+                    }
+                });
+            }
+
+            coco.createPage(this.page.isRoot ? '/':this.page.contentdir, options);
         }
 
         generateSlugFromTitle() {

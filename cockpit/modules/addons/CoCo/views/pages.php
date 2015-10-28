@@ -96,6 +96,7 @@
         this.page     = {{ json_encode($page->toArray()) }};
         this.children = {{ json_encode($page->children()->sorted()->toArray()) }};
         this.parents  = {{ json_encode(array_reverse($page->parents()->toArray())) }};
+        this.type     = {{ json_encode($type) }};
 
         this.on('mount', function() {
 
@@ -115,7 +116,23 @@
 
         createPage(e) {
 
-            coco.createPage(this.page.isRoot ? '/':this.page.contentdir);
+            var options = {};
+
+            if (this.type && this.type.subpages) {
+
+                var subpages = Array.isArray(this.type.subpages) ? this.type.subpages : [this.type.subpages];
+
+                options.types = {};
+
+                subpages.forEach(function(type) {
+                    if (COPILOT_PAGE_TYPES[type]) {
+                        options.types[type] = COPILOT_PAGE_TYPES[type];
+                    }
+                });
+            }
+
+
+            coco.createPage(this.page.isRoot ? '/':this.page.contentdir, options);
         }
 
         remove(e) {

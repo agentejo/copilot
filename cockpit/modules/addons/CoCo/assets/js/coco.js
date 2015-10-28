@@ -11,9 +11,7 @@
 
     var coco = {
 
-        createPage: function(root, callback, options) {
-
-            callback = callback || function(){};
+        createPage: function(root, options) {
 
             options  = App.$.extend({
                 'root': root || '/',
@@ -62,7 +60,7 @@
                     <script type="view/script">
 
                         this.slugpreview = '';
-                        this.type = 'html';
+                        this.type = Object.keys(opts.types)[0] || 'html';
 
                         updateSlugPreview() {
                             this.slugpreview = this.title.value.toLowerCase().replace(/\s/g, '-');
