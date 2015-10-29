@@ -124,7 +124,7 @@
 
                 </div>
 
-                <div class="uk-panel uk-panel-box">
+                <div class="uk-panel uk-panel-box" if="{type.subpages !== false }">
 
                     <h5 class="uk-clearfix">@lang('Sub Pages') <span class="uk-text-muted uk-text-small uk-float-right" if="{children.length > 5}">{ children.length }</span></h5>
 

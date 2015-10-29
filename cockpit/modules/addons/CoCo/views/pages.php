@@ -31,7 +31,7 @@
     </ul>
 
     <div class="uk-margin" if="{children.length}">
-        <a class="uk-button uk-button-primary" onclick="{ createPage }">@lang('Create Page')</a>
+        <a class="uk-button uk-button-primary" onclick="{ createPage }" if="{ type.subpages !== false }">@lang('Create Page')</a>
 
         <div class="uk-form-icon uk-form uk-text-muted uk-float-right">
 
@@ -80,7 +80,7 @@
             <p>
                 { App.i18n.get('This page has no sub-pages.') }
             </p>
-            <p>
+            <p if="{ type.subpages !== false }">
                 <a class="uk-button uk-button-large uk-button-primary" onclick="{ createPage }">@lang('Create one')</a>
             </p>
         </div>
