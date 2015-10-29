@@ -35,7 +35,7 @@
                         </div>
                         <div class="uk-form-row" if="{opts.root!='home'}">
                             <label class="uk-text-small">Slug</label>
-                            <input name="slug" type="text" class="uk-width-1-1 uk-form-large" placeholder="{ slugpreview }" onkeyup="{ update }">
+                            <input name="slug" type="text" class="uk-width-1-1 uk-form-large" placeholder="{ slugpreview }">
                         </div>
                         <div class="uk-form-row">
                             <label class="uk-text-small">Type</label>
