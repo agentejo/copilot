@@ -1,6 +1,6 @@
 <ul  class="uk-breadcrumb">
     @render('coco:views/partials/subnav.php')
-    <li><span class="uk-text-primary">@lang('Dashboard')</span></li>
+    <li><span class="uk-text-primary">@lang('Pages')</span></li>
 </ul>
 
 
