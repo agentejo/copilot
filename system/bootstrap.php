@@ -19,7 +19,7 @@ spl_autoload_register(function($class){
 
     $class = str_replace('\\', '/', $class).'.php';
 
-    foreach(['system/lib', 'vendor'] as $folder) {
+    foreach(['cockpit/lib', 'system/lib', 'vendor'] as $folder) {
 
         $class_path = CP_ROOT_DIR."/{$folder}/".$class;
 
