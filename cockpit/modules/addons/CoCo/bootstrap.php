@@ -136,7 +136,7 @@ $this->module("coco")->extend([
         $data    = [];
 
         try {
-            $data = (array)JWT::decode($code, 'coco', ['HS256']);
+            $data = (array)JWT::decode($code, 'cocopi', ['HS256']);
         } catch(Exception $e) {}
 
         if (isset($data['name'], $data['company'], $data['created'], $data['email'], $data['type'])) {
