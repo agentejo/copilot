@@ -57,6 +57,7 @@ define('CP_BASE_URL'     , $CP_BASE_URL);
 define('CP_BASE_ROUTE'   , $CP_BASE_ROUTE);
 define('CP_CURRENT_ROUTE', $CP_ROUTE);
 define('CP_TMP_DIR'      , $CP_ROOT_DIR.'/storage/tmp');
+define('CP_CONTENT_DIR'  , $CP_ROOT_DIR.'/content');
 
 $CP_CONFIG = Spyc::YAMLLoad($CP_ROOT_DIR.'/site/config/config.yaml');
 
@@ -89,7 +90,7 @@ $copilot->path('site'    , CP_ROOT_DIR);
 $copilot->path('docroot' , CP_DOCS_ROOT);
 $copilot->path('storage' , CP_ROOT_DIR.'/storage');
 $copilot->path('tmp'     , CP_TMP_DIR);
-$copilot->path('content' , CP_ROOT_DIR.'/content');
+$copilot->path('content' , CP_CONTENT_DIR);
 $copilot->path('uploads' , CP_ROOT_DIR.'/storage/uploads');
 $copilot->path('theme'   , CP_ROOT_DIR.'/site/theme');
 

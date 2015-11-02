@@ -41,6 +41,11 @@ class Page {
      */
     public static function fromCache($path) {
 
+        if (strpos($path, CP_CONTENT_DIR)!==0) {
+            return null;
+        }
+
+
         if (!isset(self::$pagesCache[$path])) {
             self::$pagesCache[$path] = new self($path);
         }
@@ -824,14 +829,12 @@ class Page {
      */
     protected function _initPaths() {
 
-        $contentpath = copi::$app->path('content:');
-
         $this->path = str_replace(DIRECTORY_SEPARATOR, '/', $this->path);
 
         $this->ext         = pathinfo($this->path, \PATHINFO_EXTENSION);
         $this->dir         = dirname($this->path);
-        $this->contentdir  = str_replace($contentpath, '/', $this->dir);
-        $this->contentpath = str_replace($contentpath, '/', $this->path);
+        $this->contentdir  = str_replace(CP_CONTENT_DIR, '/', $this->dir);
+        $this->contentpath = str_replace(CP_CONTENT_DIR, '/', $this->path);
         $this->filename    = basename($this->path);
         $this->basename    = basename($this->path, '.'.$this->ext);
         $this->absUrl      = copi::pathToUrl($this->dir);
@@ -843,11 +846,11 @@ class Page {
             $this->url = copi::$app->routeUrl('/');
         } else {
 
-            $url = str_replace($contentpath, '/', $this->path);
+            $url = str_replace('/_', '/', str_replace(CP_CONTENT_DIR, '/', $this->path));
             $url = copi::$app->routeUrl($url);
             $url = str_replace($this->filename, ($this->isIndex() ? '' : $this->basename), $url);
 
-            $this->url = str_replace('/_', '/', $url);
+            $this->url =  $url;
         }
     }
 
