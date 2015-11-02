@@ -1,9 +1,9 @@
-<script type="riot/tag" src="@base('coco:assets/components/qrcode.html')"></script>
+<script type="riot/tag" src="@base('cocopi:assets/components/qrcode.html')"></script>
 
 
 
 <ul  class="uk-breadcrumb">
-    @render('coco:views/partials/subnav.php')
+    @render('cocopi:views/partials/subnav.php')
     <li><span class="uk-text-primary">@lang('Settings')</span></li>
 </ul>
 
@@ -43,7 +43,7 @@
 
                 <div class="uk-panel uk-panel-box uk-panel-card">
 
-                    <div class="uk-text-large">COCOPi</div>
+                    <div class="uk-text-large">cocopiPi</div>
                     <span class="uk-badge uk-margin-small-top">{{ $info->version }}</span>
 
                     @if($license->type != 'trial')
@@ -102,7 +102,7 @@
 
         save() {
 
-            App.request('/coco/utils/updateSettings', {settings: this.meta}).then(function(data) {
+            App.request('/cocopi/utils/updateSettings', {settings: this.meta}).then(function(data) {
                 App.ui.notify("Settings updated", "success");
             });
         }

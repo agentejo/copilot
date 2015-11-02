@@ -1,6 +1,6 @@
 
 <ul  class="uk-breadcrumb">
-    @render('coco:views/partials/subnav.php')
+    @render('cocopi:views/partials/subnav.php')
     <li><span class="uk-text-primary">@lang('Update')</span></li>
 </ul>
 
@@ -41,7 +41,7 @@
 
             $this.status.unshift('Generating a backup');
 
-            App.request('/coco/update/update/0', {nc:Math.random()}).then(function(data){
+            App.request('/cocopi/update/update/0', {nc:Math.random()}).then(function(data){
 
                 if (data && data.error) {
                     return App.ui.alert(data.message || 'Uuups, something went wrong!');
@@ -50,7 +50,7 @@
                 $this.status.unshift('Downloading latest version');
                 $this.update();
 
-                App.request('/coco/update/update/1', {nc:Math.random()}).then(function(data){
+                App.request('/cocopi/update/update/1', {nc:Math.random()}).then(function(data){
 
                     if (data && data.error) {
                         return App.ui.alert(data.message || 'Uuups, something went wrong!');
@@ -59,7 +59,7 @@
                     $this.status.unshift('Extracting zip file');
                     $this.update();
 
-                    App.request('/coco/update/update/2', {nc:Math.random()}).then(function(data){
+                    App.request('/cocopi/update/update/2', {nc:Math.random()}).then(function(data){
 
                         if (data && data.error) {
                             return App.ui.alert(data.message || 'Uuups, something went wrong!');
@@ -68,7 +68,7 @@
                         $this.status.unshift('Swapping files');
                         $this.update();
 
-                        App.request('/coco/update/update/3', {nc:Math.random()}).then(function(data){
+                        App.request('/cocopi/update/update/3', {nc:Math.random()}).then(function(data){
 
                             if (data && data.error) {
                                 return App.ui.alert(data.message || 'Uuups, something went wrong!');
@@ -77,8 +77,8 @@
                             $this.status.unshift('Cleaning up');
                             $this.update();
 
-                            App.request('/coco/update/update/4', {nc:Math.random()}).then(function(data){
-                                location.href = App.route('/coco');
+                            App.request('/cocopi/update/update/4', {nc:Math.random()}).then(function(data){
+                                location.href = App.route('/cocopi');
                             });
                         });
                     });

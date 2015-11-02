@@ -5,7 +5,7 @@ define('COPILOT_SYSTEM', $this->path('site:system/bootstrap.php'));
 if (COPILOT_SYSTEM) {
 
     /**
-     * bootstrap coco
+     * bootstrap cocopi
      */
     include_once(COPILOT_SYSTEM);
 }
@@ -21,7 +21,7 @@ if (COCKPIT_ADMIN && !COCKPIT_REST && COPILOT_SYSTEM) {
 if (!COPILOT_SYSTEM) return;
 
 
-$this->module("coco")->extend([
+$this->module("cocopi")->extend([
 
     'createPage' => function($root, $meta) {
 
@@ -124,7 +124,7 @@ $this->module("coco")->extend([
          * It's simple to hack. But please consider supporting this project by
          * buying a license instead. Be awesome.
          *
-         * Anyway, have fun using CoCoPi!
+         * Anyway, have fun using cocopiPi!
          *
          * Greets
          * Artur
@@ -132,11 +132,11 @@ $this->module("coco")->extend([
          */
 
         $license = ['type' => 'trial'];
-        $code    = (string)$this->app['coco.license'];
+        $code    = (string)$this->app['cocopi.license'];
         $data    = [];
 
         try {
-            $data = (array)JWT::decode($code, 'cocopi', ['HS256']);
+            $data = (array)JWT::decode($code, 'cocopipi', ['HS256']);
         } catch(Exception $e) {}
 
         if (isset($data['name'], $data['company'], $data['created'], $data['email'], $data['type'])) {

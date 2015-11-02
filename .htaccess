@@ -19,13 +19,15 @@ Options -Indexes
     RewriteRule ^.*/?\.git+ - [F,L]
     RewriteRule ^content/(.*)\.(html|md)$ /error [R=301,L]
 
+    # cockpit admin panel
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule .* index.php [L]
+    RewriteRule ^cockpit/(.*) cockpit/index.php [L]
 
-    <IfModule mod_env.c>
-        SetEnv SITE_URL_REWRITE On
-    </IfModule>
+    # all pages
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*) index.php [L]
 
 </IfModule>
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace CoCo\Controller;
+namespace COCOPi\Controller;
 
 use copi;
 
@@ -11,21 +11,21 @@ class Admin extends \Cockpit\AuthController {
         $home  = copi::home();
         $pages = copi::pages('content:');
 
-        return $this->render('coco:views/index.php', compact('pages', 'home'));
+        return $this->render('cocopi:views/index.php', compact('pages', 'home'));
     }
 
     public function settings() {
 
         $meta    = (object)$this->helper('yaml')->fromFile('site:content/_meta.yaml');
-        $info    = json_decode($this->helper('fs')->read('coco:module.json'));
-        $license = $this->module('coco')->getLicense();
+        $info    = json_decode($this->helper('fs')->read('cocopi:module.json'));
+        $license = $this->module('cocopi')->getLicense();
 
-        return $this->render('coco:views/settings.php', compact('meta', 'info', 'license'));
+        return $this->render('cocopi:views/settings.php', compact('meta', 'info', 'license'));
     }
 
     public function page($path) {
 
-        $path = $this->app->path(str_replace('/coco/page/', 'site:', $this->app['route']));
+        $path = $this->app->path(str_replace('/cocopi/page/', 'site:', $this->app['route']));
 
         if (!$path) {
             return false;
@@ -34,12 +34,12 @@ class Admin extends \Cockpit\AuthController {
         $page     = new \Copilot\Page($path);
         $type     = $this->getPageType($page);
 
-        return $this->render('coco:views/page.php', compact('page', 'type'));
+        return $this->render('cocopi:views/page.php', compact('page', 'type'));
     }
 
     public function pages($path) {
 
-        $path = $this->app->path(str_replace('/coco/pages/', 'site:', $this->app['route']));
+        $path = $this->app->path(str_replace('/cocopi/pages/', 'site:', $this->app['route']));
 
         if (!$path) {
             return false;
@@ -48,12 +48,12 @@ class Admin extends \Cockpit\AuthController {
         $page = new \Copilot\Page($path);
         $type = $this->getPageType($page);
 
-        return $this->render('coco:views/pages.php', compact('page', 'type'));
+        return $this->render('cocopi:views/pages.php', compact('page', 'type'));
     }
 
     public function file($path) {
 
-        $path = $this->app->path(str_replace('/coco/file/', 'site:', $this->app['route']));
+        $path = $this->app->path(str_replace('/cocopi/file/', 'site:', $this->app['route']));
 
         if (!$path) {
             return false;
@@ -61,12 +61,12 @@ class Admin extends \Cockpit\AuthController {
 
         $file = new \Copilot\Resource($path);
 
-        return $this->render('coco:views/file.php', compact('file'));
+        return $this->render('cocopi:views/file.php', compact('file'));
     }
 
     public function files($path) {
 
-        $path = $this->app->path(str_replace('/coco/files/', 'site:', $this->app['route']));
+        $path = $this->app->path(str_replace('/cocopi/files/', 'site:', $this->app['route']));
 
         if (!$path) {
             return false;
@@ -74,12 +74,12 @@ class Admin extends \Cockpit\AuthController {
 
         $page = new \Copilot\Page($path);
 
-        return $this->render('coco:views/files.php', compact('page'));
+        return $this->render('cocopi:views/files.php', compact('page'));
     }
 
     public function finder() {
 
-        return $this->render('coco:views/finder.php');
+        return $this->render('cocopi:views/finder.php');
     }
 
     protected function getPageType($page) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace CoCo\Controller;
+namespace COCOPi\Controller;
 
 use copi;
 
@@ -8,7 +8,7 @@ class Update extends \Cockpit\AuthController {
 
     public function index() {
 
-        return $this->render('coco:views/update.php');
+        return $this->render('cocopi:views/update.php');
     }
 
     public function update($step = 0) {
@@ -84,7 +84,7 @@ class Update extends \Cockpit\AuthController {
      */
     protected function step1() {
 
-        $zipurl  = 'https://github.com/COCOPi/cocopi-kickstart/archive/master.zip';
+        $zipurl  = 'https://github.com/cocopiPi/cocopipi-kickstart/archive/master.zip';
         $message = false;
         $success = false;
 
@@ -92,10 +92,10 @@ class Update extends \Cockpit\AuthController {
             $message = 'Site root folder is not writable!';
         } else {
 
-            if (file_put_contents($this->app->path("#tmp:")."/cocopi-latest.zip", $handle = @fopen($zipurl, 'r'))) {
+            if (file_put_contents($this->app->path("#tmp:")."/cocopipi-latest.zip", $handle = @fopen($zipurl, 'r'))) {
                 $success = true;
             } else {
-                $message = "Couldn't download latest COCOPi!";
+                $message = "Couldn't download latest cocopiPi!";
             }
 
             @fclose($handle);
@@ -113,14 +113,14 @@ class Update extends \Cockpit\AuthController {
         $success = false;
         $message = false;
 
-        if ($this->app->path("#tmp:cocopi-latest.zip") && $this->app->helper("fs")->mkdir("#tmp:cocopi-latest", 0777)) {
+        if ($this->app->path("#tmp:cocopipi-latest.zip") && $this->app->helper("fs")->mkdir("#tmp:cocopipi-latest", 0777)) {
 
             $zip     = new \ZipArchive;
-            $zipfile = $this->app->path("#tmp:cocopi-latest.zip");
+            $zipfile = $this->app->path("#tmp:cocopipi-latest.zip");
 
             if ($zip->open($zipfile) === true) {
 
-                $folder  = $this->app->path("#tmp:cocopi-latest");
+                $folder  = $this->app->path("#tmp:cocopipi-latest");
                 $success = $zip->extractTo($folder) ? $zip->close() : false;
             }
         }
@@ -140,7 +140,7 @@ class Update extends \Cockpit\AuthController {
 
         $success = false;
 
-        if ($folder = $this->app->path("#tmp:cocopi-latest")) {
+        if ($folder = $this->app->path("#tmp:cocopipi-latest")) {
 
             $fs       = $this->app->helper("fs");
             $root     = $this->app->path('site:');

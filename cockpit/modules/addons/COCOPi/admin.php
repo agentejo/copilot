@@ -1,20 +1,20 @@
 <?php
 
 // ACL
-$app("acl")->addResource("coco", ['manage.coco']);
+$app("acl")->addResource("cocopi", ['manage.cocopi']);
 
 
 $app->on('admin.init', function() use($app) {
 
-    if (!$this->module('cockpit')->hasaccess('coco', ['manage.coco'])) {
+    if (!$this->module('cockpit')->hasaccess('cocopi', ['manage.cocopi'])) {
         return;
     }
 
-    // add coco js lib
+    // add cocopi js lib
     $this->on('app.layout.header', function(){
 
-        // load only within coco module
-        if(strpos($this['route'], '/coco') !== 0) return;
+        // load only within cocopi module
+        if(strpos($this['route'], '/cocopi') !== 0) return;
 
         // collect page types
 
@@ -33,23 +33,23 @@ $app->on('admin.init', function() use($app) {
             }
         }
 
-        echo '<script>window.COPILOT_PAGE_TYPES = '.json_encode((object)$types).'</script>';
+        echo '<script>window.COCOPI_PAGE_TYPES = '.json_encode((object)$types).'</script>';
 
-        echo $this->assets('coco:assets/js/coco.js');
+        echo $this->assets('cocopi:assets/js/cocopi.js');
 
     });
 
-    // bind admin routes /coco/*
-    $this->bindClass('CoCo\\Controller\\Update', 'coco/update');
-    $this->bindClass('CoCo\\Controller\\Utils', 'coco/utils');
-    $this->bindClass('CoCo\\Controller\\Admin', 'coco');
+    // bind admin routes /cocopi/*
+    $this->bindClass('cocopi\\Controller\\Update', 'cocopi/update');
+    $this->bindClass('cocopi\\Controller\\Utils', 'cocopi/utils');
+    $this->bindClass('cocopi\\Controller\\Admin', 'cocopi');
 
     // add to modules menu
     $this('admin')->addMenuItem('modules', [
-        'label' => 'Copilot',
+        'label' => 'COCOPi',
         'icon'  => 'paper-plane-o',
-        'route' => '/coco',
-        'active' => strpos($this['route'], '/coco') === 0
+        'route' => '/cocopi',
+        'active' => strpos($this['route'], '/cocopi') === 0
     ]);
 
     /**
@@ -64,7 +64,7 @@ $app->on('admin.init', function() use($app) {
                 $list[] = [
                     'icon'  => 'file-text-o',
                     'title' => $page->meta('title', $page->filename()),
-                    'url'   => $this->routeUrl('/coco/page'.$page->relpath())
+                    'url'   => $this->routeUrl('/cocopi/page'.$page->relpath())
                 ];
             }
         });
@@ -77,6 +77,6 @@ $app->on('admin.init', function() use($app) {
         $home  = copi::home();
         $pages = copi::pages('content:')->sorted();
 
-        $this->renderView("coco:views/widgets/dashboard.php", compact('pages', 'home'));
+        $this->renderView("cocopi:views/widgets/dashboard.php", compact('pages', 'home'));
     }, 100);
 });

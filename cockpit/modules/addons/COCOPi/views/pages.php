@@ -7,23 +7,23 @@
 <div class="uk-form" riot-view>
 
     <ul class="uk-breadcrumb">
-        @render('coco:views/partials/subnav.php')
+        @render('cocopi:views/partials/subnav.php')
         <li each="{p in parents}" data-uk-dropdown>
-            <a href="@route('/coco/page'){ p.relpath }"><i class="uk-icon-home" if="{p.isRoot}"></i> { p.meta.title.substring(0, 15) }</a>
+            <a href="@route('/cocopi/page'){ p.relpath }"><i class="uk-icon-home" if="{p.isRoot}"></i> { p.meta.title.substring(0, 15) }</a>
             <div class="uk-dropdown">
                 <ul class="uk-nav uk-nav-dropdown">
                     <li class="uk-nav-header">@lang('Browse')</li>
-                    <li><a href="@route('/coco/pages'){p.relpath}">@lang('Sub Pages')</a></li>
-                    <li><a href="@route('/coco/files'){p.relpath}">@lang('Files')</a></li>
+                    <li><a href="@route('/cocopi/pages'){p.relpath}">@lang('Sub Pages')</a></li>
+                    <li><a href="@route('/cocopi/files'){p.relpath}">@lang('Files')</a></li>
                 </ul>
             </div>
         </li>
         <li data-uk-dropdown>
-            <a href="@route('/coco/page'.$page->relpath())"><i class="uk-icon-home" if="{page.isRoot}"></i> { page.meta.title.substring(0, 15) }</a>
+            <a href="@route('/cocopi/page'.$page->relpath())"><i class="uk-icon-home" if="{page.isRoot}"></i> { page.meta.title.substring(0, 15) }</a>
             <div class="uk-dropdown">
                 <ul class="uk-nav uk-nav-dropdown">
                     <li class="uk-nav-header">@lang('Browse')</li>
-                    <li><a href="@route('/coco/files'){page.relpath}">@lang('Files')</a></li>
+                    <li><a href="@route('/cocopi/files'){page.relpath}">@lang('Files')</a></li>
                 </ul>
             </div>
         </li>
@@ -51,18 +51,18 @@
                         <div class="uk-dropdown">
                             <ul class="uk-nav uk-nav-dropdown">
                                 <li class="uk-nav-header">@lang('Browse')</li>
-                                <li><a href="@route('/coco/pages'){child.relpath}">@lang('Sub Pages')</a></li>
-                                <li><a href="@route('/coco/files'){child.relpath}">@lang('Files')</a></li>
+                                <li><a href="@route('/cocopi/pages'){child.relpath}">@lang('Sub Pages')</a></li>
+                                <li><a href="@route('/cocopi/files'){child.relpath}">@lang('Files')</a></li>
                                 <li class="uk-nav-divider"></li>
                                 <li><a onclick="{ parent.remove }" data-path="{ child.path }">@lang('Delete')</a></li>
                             </ul>
                         </div>
                     </span>
-                    <a class="uk-flex-item-1 uk-text-truncate" href="@route('/coco/page'){ child.relpath }">{ child.meta.title }</a>
+                    <a class="uk-flex-item-1 uk-text-truncate" href="@route('/cocopi/page'){ child.relpath }">{ child.meta.title }</a>
                 </div>
                 <div class="uk-position-relative">
                     <canvas width="600" height="400"></canvas>
-                    <a class="uk-position-cover" href="@route('/coco/page'){ child.relpath }"></a>
+                    <a class="uk-position-cover" href="@route('/cocopi/page'){ child.relpath }"></a>
                 </div>
                 <div class="uk-margin-small-top uk-text-small uk-text-muted">
                     { child.type }
@@ -108,7 +108,7 @@
                     order.push(this.getAttribute('data-path'));
                 });
 
-                App.request('/coco/utils/updatePagesOrder', {order: order}).then(function(){
+                App.request('/cocopi/utils/updatePagesOrder', {order: order}).then(function(){
                     App.ui.notify("Pages reordered", "success");
                 });
             });
@@ -125,14 +125,14 @@
                 options.types = {};
 
                 subpages.forEach(function(type) {
-                    if (COPILOT_PAGE_TYPES[type]) {
-                        options.types[type] = COPILOT_PAGE_TYPES[type];
+                    if (COCOPI_PAGE_TYPES[type]) {
+                        options.types[type] = COCOPI_PAGE_TYPES[type];
                     }
                 });
             }
 
 
-            coco.createPage(this.page.isRoot ? '/':this.page.contentdir, options);
+            cocopi.createPage(this.page.isRoot ? '/':this.page.contentdir, options);
         }
 
         remove(e) {
@@ -141,7 +141,7 @@
 
             App.ui.confirm("Are you sure?", function() {
 
-                App.callmodule('coco', 'deletePage', [path]).then(function(data) {
+                App.callmodule('cocopi', 'deletePage', [path]).then(function(data) {
 
                     $this.children.splice(e.item.idx, 1);
                     $this.update();

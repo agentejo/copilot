@@ -1,4 +1,4 @@
-# CoCo
+# cocopi
 
 This is the Copilot admin panel for Cockpit.
 

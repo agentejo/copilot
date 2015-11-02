@@ -1,18 +1,18 @@
 <div class="uk-form" riot-view>
 
     <ul  class="uk-breadcrumb">
-        @render('coco:views/partials/subnav.php')
+        @render('cocopi:views/partials/subnav.php')
         <li each="{p in parents}" data-uk-dropdown>
-            <a href="@route('/coco/page'){ p.relpath }"><i class="uk-icon-home" if="{p.isRoot}"></i> { p.meta.title.substring(0, 15) }</a>
+            <a href="@route('/cocopi/page'){ p.relpath }"><i class="uk-icon-home" if="{p.isRoot}"></i> { p.meta.title.substring(0, 15) }</a>
             <div class="uk-dropdown">
                 <ul class="uk-nav uk-nav-dropdown">
                     <li class="uk-nav-header">@lang('Browse')</li>
-                    <li><a href="@route('/coco/pages'){p.relpath}">@lang('Sub Pages')</a></li>
-                    <li><a href="@route('/coco/files'){p.relpath}">@lang('Files')</a></li>
+                    <li><a href="@route('/cocopi/pages'){p.relpath}">@lang('Sub Pages')</a></li>
+                    <li><a href="@route('/cocopi/files'){p.relpath}">@lang('Files')</a></li>
                 </ul>
             </div>
         </li>
-        <li><a href="@route('/coco/files'.$file->parent()->relpath())">@lang('Files')</a></li>
+        <li><a href="@route('/cocopi/files'.$file->parent()->relpath())">@lang('Files')</a></li>
         <li><span class="uk-text-primary">{ file.filename }</span></li>
     </ul>
 
@@ -24,7 +24,7 @@
                     <img src="{ file.url }" alt="" />
                 </div>
                 <div class="uk-text-xlarge uk-text-center" if="{!file.isImage}">
-                    <i class="uk-icon-{ coco.getFileIconCls(file.filename) }"></i>
+                    <i class="uk-icon-{ cocopi.getFileIconCls(file.filename) }"></i>
                     <p>
                         { file.ext.toUpperCase() }
                     </p>
@@ -97,7 +97,7 @@
 
         save() {
 
-            App.request('/coco/utils/updateFile', {file:this.file}).then(function(file) {
+            App.request('/cocopi/utils/updateFile', {file:this.file}).then(function(file) {
                 App.ui.notify("File updated", "success");
             });
         }

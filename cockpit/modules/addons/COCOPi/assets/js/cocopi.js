@@ -9,7 +9,7 @@
         'text'      : /\.(txt|htm|html|php|css|less|js|json|md|markdown|yaml|xml)$/i
     };
 
-    var coco = {
+    var cocopi = {
 
         createPage: function(root, options) {
 
@@ -18,7 +18,7 @@
                 'types': App.$.extend({
                     'html': {label: 'Html'},
                     'markdown': {label: 'Markdown', ext: 'md'}
-                }, COPILOT_PAGE_TYPES)
+                }, COCOPI_PAGE_TYPES)
             }, options)
 
             var dialog = UIkit.modal.dialog(App.Utils.multiline(function() {/*
@@ -68,14 +68,14 @@
 
                         create() {
 
-                            App.callmodule('coco', 'createPage', [opts.root, {
+                            App.callmodule('cocopi', 'createPage', [opts.root, {
                                 title: this.title.value,
                                 slug: this.slug ? this.slug.value :'',
                                 type : this.type
                             }]).then(function(data) {
 
                                 if (data.result) {
-                                    location.href = App.route('/coco/page/'+data.result);
+                                    location.href = App.route('/cocopi/page/'+data.result);
                                 }
                             });
                         };
@@ -125,8 +125,8 @@
         }
     };
 
-    App.$.extend(true, App, coco);
+    App.$.extend(true, App, cocopi);
 
-    window.coco = coco;
+    window.cocopi = cocopi;
 
 })(jQuery);

@@ -1,23 +1,23 @@
 <div class="uk-form" riot-view>
 
     <ul  class="uk-breadcrumb">
-        @render('coco:views/partials/subnav.php')
+        @render('cocopi:views/partials/subnav.php')
         <li each="{p in parents}" data-uk-dropdown>
-            <a href="@route('/coco/page'){ p.relpath }"><i class="uk-icon-home" if="{p.isRoot}"></i> { p.meta.title.substring(0, 15) }</a>
+            <a href="@route('/cocopi/page'){ p.relpath }"><i class="uk-icon-home" if="{p.isRoot}"></i> { p.meta.title.substring(0, 15) }</a>
             <div class="uk-dropdown">
                 <ul class="uk-nav uk-nav-dropdown">
                     <li class="uk-nav-header">@lang('Browse')</li>
-                    <li><a href="@route('/coco/pages'){p.relpath}">@lang('Sub Pages')</a></li>
-                    <li><a href="@route('/coco/files'){p.relpath}">@lang('Files')</a></li>
+                    <li><a href="@route('/cocopi/pages'){p.relpath}">@lang('Sub Pages')</a></li>
+                    <li><a href="@route('/cocopi/files'){p.relpath}">@lang('Files')</a></li>
                 </ul>
             </div>
         </li>
         <li data-uk-dropdown>
-            <a href="@route('/coco/page'.$page->relpath())"><i class="uk-icon-home" if="{page.isRoot}"></i> { page.meta.title.substring(0, 15) }</a>
+            <a href="@route('/cocopi/page'.$page->relpath())"><i class="uk-icon-home" if="{page.isRoot}"></i> { page.meta.title.substring(0, 15) }</a>
             <div class="uk-dropdown">
                 <ul class="uk-nav uk-nav-dropdown">
                     <li class="uk-nav-header">@lang('Browse')</li>
-                    <li><a href="@route('/coco/pages'){page.relpath}">@lang('Sub Pages')</a></li>
+                    <li><a href="@route('/cocopi/pages'){page.relpath}">@lang('Sub Pages')</a></li>
                 </ul>
             </div>
         </li>
@@ -54,9 +54,9 @@
         <div class="uk-grid-margin" each="{file in files}" show="{ parent.infilter(file) }" data-path="{ file.path }">
             <div class="uk-panel uk-panel-box uk-panel-card">
 
-                <div class="uk-cover-background uk-position-relative" style="background-image: { coco.getFileIconCls(file.filename) == 'image' ? 'url('+file.url+')': 'none' }">
+                <div class="uk-cover-background uk-position-relative" style="background-image: { cocopi.getFileIconCls(file.filename) == 'image' ? 'url('+file.url+')': 'none' }">
                     <canvas class="uk-responsive-width uk-display-block" width="400" height="200"></canvas>
-                    <a class="uk-position-cover uk-text-muted uk-flex uk-flex-middle uk-flex-center" href="@route('/coco/file'){ file.relpath }">
+                    <a class="uk-position-cover uk-text-muted uk-flex uk-flex-middle uk-flex-center" href="@route('/cocopi/file'){ file.relpath }">
                         <div class="uk-text-large uk-text-center" if="{!file.isImage}">
                             <p>{ file.ext.toUpperCase() }</p>
                         </div>
@@ -66,7 +66,7 @@
                 <div class="uk-margin-top uk-flex">
 
                     <span class="uk-margin-small-right" data-uk-dropdown>
-                        <a><i class="uk-icon-{ coco.getFileIconCls(file.filename) }"></i></a>
+                        <a><i class="uk-icon-{ cocopi.getFileIconCls(file.filename) }"></i></a>
                         <div class="uk-dropdown">
                             <ul class="uk-nav uk-nav-dropdown">
                                 <li><a onclick="{ parent.rename }">Rename</a></li>
@@ -76,7 +76,7 @@
                         </div>
                     </span>
 
-                    <a class="uk-flex-item-1 uk-text-truncate" href="@route('/coco/file'){ file.relpath }">{ file.filename }</a>
+                    <a class="uk-flex-item-1 uk-text-truncate" href="@route('/cocopi/file'){ file.relpath }">{ file.filename }</a>
 
                 </div>
                 <div class="uk-text-small uk-text-muted uk-margin-small-top">
@@ -176,7 +176,7 @@
                         order.push(this.getAttribute('data-path'));
                     });
 
-                    App.request('/coco/utils/updateResourcesOrder', {order: order}).then(function(){
+                    App.request('/cocopi/utils/updateResourcesOrder', {order: order}).then(function(){
                         App.ui.notify("Files reordered", "success");
                     });
                 });
@@ -187,7 +187,7 @@
 
             $this.loadprogress.classList.remove('uk-hidden');
 
-            App.callmodule('coco', 'getPageResources', [this.page.path, true]).then(function(data) {
+            App.callmodule('cocopi', 'getPageResources', [this.page.path, true]).then(function(data) {
 
                 setTimeout(function(){
 
@@ -211,7 +211,7 @@
 
                 if (name!=item.filename && name.trim()) {
 
-                    App.callmodule('coco', 'renameResource', [item.path, name.trim()]).then(function(data) {
+                    App.callmodule('cocopi', 'renameResource', [item.path, name.trim()]).then(function(data) {
 
                         item.path = item.path.replace(item.filename, name);
                         item.url = item.url.replace(encodeURI(item.filename), encodeURI(name));
@@ -232,7 +232,7 @@
 
             App.ui.confirm("Are you sure?", function() {
 
-                App.callmodule('coco', 'deleteResource', [item.path]).then(function(data) {
+                App.callmodule('cocopi', 'deleteResource', [item.path]).then(function(data) {
 
                     index = $this.files.indexOf(item);
                     $this.files.splice(index, 1);

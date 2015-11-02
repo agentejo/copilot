@@ -1,7 +1,7 @@
-# CoCoPi End User License Agreement
+# cocopiPi End User License Agreement
 
 This End User License Agreement (the "Agreement") is a binding legal agreement between you and Artur Heinze (the "Author"). 
-By installing or using the CoCoPi CMS (the "Software"), you agree to be bound by the terms of this Agreement. 
+By installing or using the cocopiPi CMS (the "Software"), you agree to be bound by the terms of this Agreement. 
 If you do not agree to the Agreement, do not download, install, or use the Software. 
 Installation or use of the Software signifies that you have read, understood, and agreed to be bound by the Agreement.
 
@@ -21,7 +21,7 @@ All rights to the Software not expressly granted herein are reserved by the Auth
 
 ## Technical Support
 
-Technical support is provided as described on http://cocopi.co. No representations or guarantees are made regarding the 
+Technical support is provided as described on http://cocopipi.co. No representations or guarantees are made regarding the 
 response time in which support questions are answered.
 
 ## Refund Policy

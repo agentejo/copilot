@@ -1,6 +1,6 @@
 <?php
 
-namespace CoCo\Controller;
+namespace COCOPi\Controller;
 
 use copi;
 

@@ -1,16 +1,16 @@
 <div class="uk-form" riot-view>
 
     <ul  class="uk-breadcrumb">
-        @render('coco:views/partials/subnav.php')
+        @render('cocopi:views/partials/subnav.php')
         <li each="{p in parents}" data-uk-dropdown>
-            <a href="@route('/coco/page'){ p.relpath }">
+            <a href="@route('/cocopi/page'){ p.relpath }">
                 <i class="uk-icon-home" if="{p.isRoot}"></i> { p.meta.title.substring(0, 15) }
             </a>
             <div class="uk-dropdown">
                 <ul class="uk-nav uk-nav-dropdown">
                     <li class="uk-nav-header">@lang('Browse')</li>
-                    <li><a href="@route('/coco/pages'){p.relpath}">@lang('Sub Pages')</a></li>
-                    <li><a href="@route('/coco/files'){p.relpath}">@lang('Files')</a></li>
+                    <li><a href="@route('/cocopi/pages'){p.relpath}">@lang('Sub Pages')</a></li>
+                    <li><a href="@route('/cocopi/files'){p.relpath}">@lang('Files')</a></li>
                 </ul>
             </div>
         </li>
@@ -139,14 +139,14 @@
                                             <div class="uk-dropdown">
                                                 <ul class="uk-nav uk-nav-dropdown">
                                                     <li class="uk-nav-header">@lang('Browse')</li>
-                                                    <li><a href="@route('/coco/pages'){child.relpath}">@lang('Sub Pages')</a></li>
-                                                    <li><a href="@route('/coco/files'){child.relpath}">@lang('Files')</a></li>
+                                                    <li><a href="@route('/cocopi/pages'){child.relpath}">@lang('Sub Pages')</a></li>
+                                                    <li><a href="@route('/cocopi/files'){child.relpath}">@lang('Files')</a></li>
                                                 </ul>
                                             </div>
                                         </span>
                                     </div>
                                     <div class="uk-flex-item-1 uk-text-truncate">
-                                        <a href="@route('/coco/page'){ child.relpath }">{ child.meta.title }</a>
+                                        <a href="@route('/cocopi/page'){ child.relpath }">{ child.meta.title }</a>
                                     </div>
                                     <div>
                                         <span class="uk-badge">{ child.children }</span>
@@ -162,7 +162,7 @@
                     </div>
 
                     <div class="uk-margin uk-button-group">
-                        <a href="@route('/coco/pages'.$page->relpath())" class="uk-button uk-button-mini">@lang('Browse')</a>
+                        <a href="@route('/cocopi/pages'.$page->relpath())" class="uk-button uk-button-mini">@lang('Browse')</a>
                         <a class="uk-button uk-button-mini uk-button-primary" onclick="{ createPage }" if="{children.length}">@lang('Add Page')</a>
                     </div>
 
@@ -178,10 +178,10 @@
 
                                 <div class="uk-grid uk-grid-small">
                                     <div>
-                                        <i class="uk-icon-{ coco.getFileIconCls(file.filename) }"></i>
+                                        <i class="uk-icon-{ cocopi.getFileIconCls(file.filename) }"></i>
                                     </div>
                                     <div class="uk-flex-item-1 uk-text-truncate">
-                                        <a href="@route('/coco/file'){ file.relpath }">{ file.filename }</a>
+                                        <a href="@route('/cocopi/file'){ file.relpath }">{ file.filename }</a>
                                     </div>
                                     <div>
                                         <span class="uk-text-small uk-text-muted">{ file.fsize }</span>
@@ -196,7 +196,7 @@
                     </div>
 
                     <div class="uk-margin">
-                        <a href="@route('/coco/files'.$page->relpath())" class="uk-button uk-button-mini">@lang('Browse')</a>
+                        <a href="@route('/cocopi/files'.$page->relpath())" class="uk-button uk-button-mini">@lang('Browse')</a>
                     </div>
                 </div>
             </div>
@@ -256,13 +256,13 @@
                 options.types = {};
 
                 subpages.forEach(function(type) {
-                    if (COPILOT_PAGE_TYPES[type]) {
-                        options.types[type] = COPILOT_PAGE_TYPES[type];
+                    if (COCOPI_PAGE_TYPES[type]) {
+                        options.types[type] = COCOPI_PAGE_TYPES[type];
                     }
                 });
             }
 
-            coco.createPage(this.page.isRoot ? '/':this.page.contentdir, options);
+            cocopi.createPage(this.page.isRoot ? '/':this.page.contentdir, options);
         }
 
         generateSlugFromTitle() {
@@ -274,12 +274,12 @@
 
         save() {
 
-            App.request('/coco/utils/updatePage', {page: this.page, updates: this.updates}, 'text').then(function(res) {
+            App.request('/cocopi/utils/updatePage', {page: this.page, updates: this.updates}, 'text').then(function(res) {
 
                 App.ui.notify("Page updated", "success");
 
                 setTimeout(function(){
-                    location.href= App.route('/coco/page'+res);
+                    location.href= App.route('/cocopi/page'+res);
                 }, 1000);
             });
         }

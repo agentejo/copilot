@@ -1,5 +1,5 @@
 <ul  class="uk-breadcrumb">
-    @render('coco:views/partials/subnav.php')
+    @render('cocopi:views/partials/subnav.php')
     <li><span class="uk-text-primary">@lang('Pages')</span></li>
 </ul>
 
@@ -26,8 +26,8 @@
                                 <div class="uk-dropdown">
                                     <ul class="uk-nav uk-nav-dropdown">
                                         <li class="uk-nav-header">@lang('Browse')</li>
-                                        <li><a href="@route('/coco/pages'){home.relpath}">@lang('Sub Pages')</a></li>
-                                        <li><a href="@route('/coco/files'){home.relpath}">@lang('Files')</a></li>
+                                        <li><a href="@route('/cocopi/pages'){home.relpath}">@lang('Sub Pages')</a></li>
+                                        <li><a href="@route('/cocopi/files'){home.relpath}">@lang('Files')</a></li>
                                         <li class="uk-nav-divider"></li>
                                         <li><a onclick="{ remove }" data-path="{ home.path }">@lang('Delete')</a></li>
                                     </ul>
@@ -35,7 +35,7 @@
                             </span>
                         </div>
                         <div class="uk-flex-item-1">
-                            <a href="@route('/coco/page'){ home.relpath }">{ home.meta.title || home.basename }</a>
+                            <a href="@route('/cocopi/page'){ home.relpath }">{ home.meta.title || home.basename }</a>
                         </div>
                         <div class="uk-text-muted uk-text-small">
                             { home.type }
@@ -62,8 +62,8 @@
                                 <div class="uk-dropdown">
                                     <ul class="uk-nav uk-nav-dropdown">
                                         <li class="uk-nav-header">@lang('Browse')</li>
-                                        <li><a href="@route('/coco/pages'){page.relpath}">@lang('Sub Pages')</a></li>
-                                        <li><a href="@route('/coco/files'){page.relpath}">@lang('Files')</a></li>
+                                        <li><a href="@route('/cocopi/pages'){page.relpath}">@lang('Sub Pages')</a></li>
+                                        <li><a href="@route('/cocopi/files'){page.relpath}">@lang('Files')</a></li>
                                         <li class="uk-nav-divider"></li>
                                         <li><a onclick="{ parent.remove }" data-path="{ page.path }">@lang('Delete')</a></li>
                                     </ul>
@@ -71,7 +71,7 @@
                             </span>
                         </div>
                         <div class="uk-flex-item-1">
-                            <a href="@route('/coco/page'){ page.relpath }">{ page.meta.title || page.basename }</a>
+                            <a href="@route('/cocopi/page'){ page.relpath }">{ page.meta.title || page.basename }</a>
                         </div>
                         <div class="uk-text-muted uk-text-small">
                             { page.type }
@@ -131,7 +131,7 @@
                     order.push(this.getAttribute('data-path'));
                 });
 
-                App.request('/coco/utils/updatePagesOrder', {order: order}).then(function(){
+                App.request('/cocopi/utils/updatePagesOrder', {order: order}).then(function(){
                     App.ui.notify("Pages reordered", "success");
                 });
             });
@@ -140,7 +140,7 @@
 
         createPage(e) {
 
-            coco.createPage(e.target.getAttribute('root'));
+            cocopi.createPage(e.target.getAttribute('root'));
         }
 
         remove(e) {
@@ -150,7 +150,7 @@
 
             App.ui.confirm("Are you sure?", function() {
 
-                App.callmodule('coco', 'deletePage', [path]).then(function(data) {
+                App.callmodule('cocopi', 'deletePage', [path]).then(function(data) {
 
                     if (isHome) {
                         $this.home = null;

@@ -1,6 +1,6 @@
 
 <ul  class="uk-breadcrumb">
-    @render('coco:views/partials/subnav.php')
+    @render('cocopi:views/partials/subnav.php')
     <li><span class="uk-text-primary">@lang('Finder')</span></li>
 </ul>
 
