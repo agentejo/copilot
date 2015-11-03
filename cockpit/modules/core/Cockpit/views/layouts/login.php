@@ -6,12 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
     {{ $app->assets($app['app.assets.base'], $app['cockpit/version']) }}
-    {{ $app->assets(['assets:lib/uikit/js/components/form-password.min.js'], $app['cockpit/version']) }}
+    {{ $app->assets(['assets:lib/uikit/js/components/form-password.min.js', 'assets:lib/sky.js'], $app['cockpit/version']) }}
 
 </head>
 <body class="uk-height-viewport uk-flex uk-flex-middle uk-bg-light">
-
-    <div class="uk-bg-primary uk-position-absolute uk-position-top uk-viewport-height-1-2"></div>
 
     <div class="uk-width-medium-1-2 uk-width-large-1-3 uk-container-center uk-position-relative" riot-view>
 
@@ -79,7 +77,12 @@
             }
 
         </script>
+
     </div>
+
+    <script>
+        SKY(document.body, '#025780');
+    </script>
 
 </body>
 </html>

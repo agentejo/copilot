@@ -5,13 +5,14 @@
     <title>Cockpit installation</title>
     <script src="../assets/lib/jquery.js"></script>
     <script src="../assets/lib/uikit/js/uikit.min.js"></script>
+    <script src="../assets/lib/sky.js"></script>
     <link rel="stylesheet" href="../assets/app/css/style.css">
 </head>
 <body class="uk-bg-light-radial uk-height-viewport uk-flex uk-flex-middle">
 
     <div class="uk-width-medium-1-3 uk-container-center uk-text-center uk-animation-slide-fade">
 
-        <div class="uk-panel uk-panel-box uk-panel-card">
+        <div class="uk-panel uk-panel-box uk-panel-space uk-panel-card">
 
             <h1>Installation failed</h1>
 
@@ -32,6 +33,10 @@
         </div>
 
     </div>
+
+    <script>
+        SKY(document.body, '#c31f0c');
+    </script>
 
 </body>
 </html>
