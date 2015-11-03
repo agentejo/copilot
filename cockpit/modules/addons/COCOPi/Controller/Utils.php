@@ -162,16 +162,15 @@ class Utils extends \Cockpit\AuthController {
 
     public function getPageResources() {
 
-        $path    = $this->app->param('path');
-        $asarray = $this->app->param('asarray', false);
+        $path  = $this->app->param('path');
+        $page  = copi::page($path);
+        $res   = [];
 
-        $page = copi::page($path);
-
-        if (!$page) {
-            return [];
+        if ($page) {
+            $res = $page->files()->sorted()->toArray();
         }
 
-        return $asarray ? $page->files()->sorted()->toArray(): $page->files()->sorted();
+        return json_encode($res);
     }
 
     public function renameResource() {

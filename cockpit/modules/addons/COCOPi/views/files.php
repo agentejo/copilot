@@ -187,12 +187,12 @@
 
             $this.loadprogress.classList.remove('uk-hidden');
 
-            App.request('/cocopi/utils/getPageResources', {path:this.page.path, asarray:true}).then(function(data) {
+            App.request('/cocopi/utils/getPageResources', {path:this.page.path}).then(function(data) {
 
                 setTimeout(function(){
 
                     $this.loadprogress.classList.add('uk-hidden');
-                    $this.files = data;
+                    $this.files = data || [];
                     $this.update();
 
                 }, 100);

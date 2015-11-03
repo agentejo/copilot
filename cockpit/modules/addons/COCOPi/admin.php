@@ -21,7 +21,7 @@ $app->on('admin.init', function() use($app) {
         $types = [];
 
         foreach([
-            copi::path('site:system/types'),
+            __DIR__.'/site/types',
             copi::path('site:site/types'),
             copi::path('site:site/theme/types')
         ] as $fol) {
@@ -34,9 +34,7 @@ $app->on('admin.init', function() use($app) {
         }
 
         echo '<script>window.COCOPI_PAGE_TYPES = '.json_encode((object)$types).'</script>';
-
         echo $this->assets('cocopi:assets/js/cocopi.js');
-
     });
 
     // bind admin routes /cocopi/*
