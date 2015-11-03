@@ -19,7 +19,7 @@ $this->module("cocopi")->extend([
          * It's simple to hack. But please consider supporting this project by
          * buying a license instead. Be awesome.
          *
-         * Anyway, have fun using cocopiPi!
+         * Anyway, have fun using COCOPi!
          *
          * Greets
          * Artur
@@ -31,7 +31,7 @@ $this->module("cocopi")->extend([
         $data    = [];
 
         try {
-            $data = (array)JWT::decode($code, 'cocopipi', ['HS256']);
+            $data = (array)JWT::decode($code, 'cocopi', ['HS256']);
         } catch(Exception $e) {}
 
         if (isset($data['name'], $data['company'], $data['created'], $data['email'], $data['type'])) {
