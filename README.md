@@ -1,32 +1,32 @@
-# CoCoPi
+# COCOPi
 
-CoCoPi is a file-based CMS with simplicity and flexibility in mind.
+COCOPi is a file-based CMS with simplicity and flexibility in mind.
 
 ## Trial
 
-Try and test CoCoPi on your local machine or on a test
+Try and test COCOPi on your local machine or on a test
 server as long as you need to make sure it is the right
 tool for your next project.
 
 ## Buy a license
 
-A CoCoPi license is valid for a single domain.
-You can purchase your CoCoPi license by contacting artur@agentejo.com
+A COCOPi license is valid for a single domain.
+You can purchase your COCOPi license by contacting artur@agentejo.com
 
 ## Starterkit
 
-CoCoPi's Starterkit comes with small demo content (powered by Copilot) and an
+COCOPi's Starterkit comes with small demo content (powered by Copilot) and an
 admin panel (powered by Cockpit).
 
 ## Installation
 
-CoCoPi does not need a database server. Just copy CoCoPi's files to your server
+COCOPi does not need a database server. Just copy COCOPi's files to your server
 and visit http://yourdomain.com/cockpit/install to complete the installation.
 
 
 ## Admin Panel
 
-Find the login for CoCoPi's admin panel at
+Find the login for COCOPi's admin panel at
 http://yourdomain.com/cockpit.
 
 
@@ -38,12 +38,12 @@ http://yourdomain.com/cockpit.
 
 ### Download
 
-You can download the latest version of the CoCoPi Starterkit
+You can download the latest version of the COCOPi Starterkit
 from https://github.com/COCOPi/cocopi-kickstart
 
 ### With Git
 
-If you prefer Git, clone CoCoPi's Starterkit repository.
+If you prefer Git, clone COCOPi's Starterkit repository.
 
     git clone https://github.com/COCOPi/cocopi-kickstart.git
 
