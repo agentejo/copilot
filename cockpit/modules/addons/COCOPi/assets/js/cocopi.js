@@ -135,6 +135,10 @@
             } else {
                 return 'file-o';
             }
+        },
+
+        getTypeLabel: function(type) {
+            return COCOPI_PAGE_TYPES[type] && COCOPI_PAGE_TYPES[type].label || type;
         }
     };
 

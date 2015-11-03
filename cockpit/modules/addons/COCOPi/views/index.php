@@ -38,7 +38,7 @@
                             <a href="@route('/cocopi/page'){ home.relpath }">{ home.meta.title || home.basename }</a>
                         </div>
                         <div class="uk-text-muted uk-text-small">
-                            { home.type }
+                            { cocopi.getTypeLabel(home.type) }
                         </div>
                         <div class="uk-width-1-5 uk-text-muted uk-text-small uk-text-tuncate">
                             <a href="{ home.url }" target="_blank">/</a>
@@ -74,7 +74,7 @@
                             <a href="@route('/cocopi/page'){ page.relpath }">{ page.meta.title || page.basename }</a>
                         </div>
                         <div class="uk-text-muted uk-text-small">
-                            { page.type }
+                            { cocopi.getTypeLabel(page.type) }
                         </div>
                         <div class="uk-width-1-5 uk-text-muted uk-text-small uk-text-tuncate">
                             <a href="{ page.url }" target="_blank">/{ page.slug }</a>

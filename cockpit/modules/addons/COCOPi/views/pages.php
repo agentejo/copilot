@@ -65,7 +65,7 @@
                     <a class="uk-position-cover" href="@route('/cocopi/page'){ child.relpath }"></a>
                 </div>
                 <div class="uk-margin-small-top uk-text-small uk-text-muted">
-                    { child.type }
+                    { cocopi.getTypeLabel(child.type) }
                 </div>
             </div>
         </div>
