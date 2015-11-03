@@ -27,7 +27,7 @@
             <cp-finder root="/site/theme"></cp-finder>
         </li>
         <li>
-            <cp-finder root="/site/config/menu"></cp-finder>
+            <cp-finder root="/site/menu"></cp-finder>
         </li>
     </ul>
 
