@@ -16,7 +16,7 @@ $CP_ROUTE    = '/';
 $CP_BASE_URL = dirname(COCKPIT_BASE_URL);
 
 if (COCOPI_FRONTEND) {
-    $CP_ROUTE = str_replace([$CP_BASE_URL.'/index.php', $CP_BASE_URL], '', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+    $CP_ROUTE = str_replace([$CP_BASE_URL.'/index.php', $CP_BASE_URL == '/' ? '':$CP_BASE_URL], '', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
     $CP_ROUTE = trim($CP_ROUTE) == '' ?  '/': $CP_ROUTE;
     $CP_ROUTE = '/'.ltrim($CP_ROUTE, '/');
 }
