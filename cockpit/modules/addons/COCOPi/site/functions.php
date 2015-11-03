@@ -35,7 +35,7 @@ function thumb_url($image, $width = null, $height = null, $options=array()) {
 
     $options = array_merge(array(
         "rebuild"     => false,
-        "cachefolder" => "storage:thumbs",
+        "cachefolder" => "cockpit:storage/thumbs",
         "quality"     => 100,
         "base64"      => false,
         "mode"        => "crop",
