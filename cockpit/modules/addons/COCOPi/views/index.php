@@ -137,7 +137,6 @@
             });
         });
 
-
         createPage(e) {
 
             cocopi.createPage(e.target.getAttribute('root'));
@@ -150,13 +149,15 @@
 
             App.ui.confirm("Are you sure?", function() {
 
-                App.request('/cocopi/deletePage', {path:path}).then(function(data) {
+                App.request('/cocopi/utils/deletePage', {path:path}).then(function(data) {
 
                     if (isHome) {
                         $this.home = null;
                     } else {
                         $this.pages.splice(e.item.idx, 1);
                     }
+
+                    App.ui.notify("Page removed", "success");
 
                     $this.update();
                 });

@@ -143,6 +143,8 @@
 
                 App.request('/cocopi/utils/deletePage', {path:path}).then(function(data) {
 
+                    App.ui.notify("Page removed", "success");
+
                     $this.children.splice(e.item.idx, 1);
                     $this.update();
                 });

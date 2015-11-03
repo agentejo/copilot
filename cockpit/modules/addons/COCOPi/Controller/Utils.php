@@ -144,9 +144,9 @@ class Utils extends \Cockpit\AuthController {
 
         $this->app->helper('fs')->write($pagepath, implode("\n", $content));
 
-        $url = str_replace(copi::path('site:'),'',$pagepath);
+        $url = '/'.str_replace([copi::path('site:'), '//'], ['', '/'], $pagepath);
 
-        return json_encode(copi::page($pagepath)->toArray());
+        return json_encode(['relpath' => $url]);
     }
 
     public function deletePage() {
