@@ -30,6 +30,10 @@
             <div class="uk-grid-margin uk-width-medium-3-4">
 
                 <div class="uk-form-row">
+                    <span class="uk-badge">{ COCOPI_PAGE_TYPES[page.type] && COCOPI_PAGE_TYPES[page.type].label || page.type  }</span>
+                </div>
+
+                <div class="uk-form-row">
                     <label class="uk-text-small">@lang('Title')</label>
                     <div>
                         <input type="text" bind="page.rawmeta.title" class="uk-form-large uk-width-1-1" required>
