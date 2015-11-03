@@ -38,9 +38,9 @@ $app->on('admin.init', function() use($app) {
     });
 
     // bind admin routes /cocopi/*
-    $this->bindClass('cocopi\\Controller\\Update', 'cocopi/update');
-    $this->bindClass('cocopi\\Controller\\Utils', 'cocopi/utils');
-    $this->bindClass('cocopi\\Controller\\Admin', 'cocopi');
+    $this->bindClass('COCOPi\\Controller\\Update', 'cocopi/update');
+    $this->bindClass('COCOPi\\Controller\\Utils', 'cocopi/utils');
+    $this->bindClass('COCOPi\\Controller\\Admin', 'cocopi');
 
     // add to modules menu
     $this('admin')->addMenuItem('modules', [
