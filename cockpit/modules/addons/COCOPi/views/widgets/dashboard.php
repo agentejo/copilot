@@ -26,7 +26,12 @@
         </div>
 
         <div class="uk-panel-box-footer uk-bg-light">
-            <a href="@route('/cocopi')">@lang('Manage Pages')</a>
+            <ul class="uk-grid uk-grid-small uk-text-small">
+                <li><a href="@route('/cocopi')"><i class="uk-icon-clone"></i> @lang('Pages')</a></li>
+                <li><a href="@route('/cocopi/settings')"><i class="uk-icon-cog"></i> @lang('Settings')</a></li>
+                <li><a href="@route('/cocopi/finder')"><i class="uk-icon-folder-o"></i> @lang('Files')</a></li>
+            </ul>
+
         </div>
 
     </div>

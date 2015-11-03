@@ -2,8 +2,8 @@
 
 /**
  * [parse_yaml description]
- * @param  [type] $text [description]
- * @return [type]       [description]
+ * @param  string $text
+ * @return array
  */
 function parse_yaml($text) {
     return copi::helper('yaml')->fromString($text);
@@ -11,20 +11,45 @@ function parse_yaml($text) {
 
 /**
  * [parse_yaml_file description]
- * @param  [type] $path [description]
- * @return [type]       [description]
+ * @param  string $path
+ * @return array
  */
 function parse_yaml_file($path) {
     return copi::helper('yaml')->fromFile($path);
 }
 
+
+/**
+ *
+ * @param  string $path
+ * @return string
+ */
+function url_to($path) {
+
+    $path = trim($path);
+
+    if (!$path) {
+        return '';
+    }
+
+    if (substr($path, 0, 1) == '/') {
+        return copi::$app->routeUrl($path);
+    }
+
+    if (strpos($path, ':') !== false && $file = copi::$app->path($path)) {
+        return copi::$app->pathToUrl($file);
+    }
+
+    return $path;
+}
+
 /**
  * [thumb_url description]
- * @param  [type] $image   [description]
- * @param  [type] $width   [description]
- * @param  [type] $height  [description]
- * @param  array  $options [description]
- * @return [type]          [description]
+ * @param  [type] $image
+ * @param  [type] $width
+ * @param  [type] $height
+ * @param  array  $options
+ * @return [type]
  */
 function thumb_url($image, $width = null, $height = null, $options=array()) {
 

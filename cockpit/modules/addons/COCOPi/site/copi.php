@@ -304,3 +304,5 @@ class copi {
     }
 
 }
+
+include(__DIR__.'/bootstrap.php');

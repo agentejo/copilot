@@ -136,7 +136,7 @@ $site->service('renderer', function() use($site) {
             'start'    => '<?php $app->start(expr); ?>',
             'end'      => '<?php $app->end(expr); ?>',
             'block'    => '<?php $app->block(expr); ?>',
-            'url'      => '<?php echo $app->pathToUrl(expr); ?>',
+            'url'      => '<?php echo url_to(expr); ?>',
 
             'render'   => '<?php echo copi::view(expr); ?>',
             'menu'     => '<?php echo copi::menu(expr); ?>',

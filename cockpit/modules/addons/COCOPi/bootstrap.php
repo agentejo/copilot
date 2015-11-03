@@ -4,8 +4,7 @@ if (!defined('COCOPI_FRONTEND')) {
     define('COCOPI_FRONTEND', false);
 }
 
-include(__DIR__.'/copi.php');
-include(__DIR__.'/site/bootstrap.php');
+include(__DIR__.'/site/copi.php');
 
 $this->module("cocopi")->extend([
 
