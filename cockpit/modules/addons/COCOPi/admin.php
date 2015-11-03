@@ -44,8 +44,8 @@ $app->on('admin.init', function() use($app) {
 
     // add to modules menu
     $this('admin')->addMenuItem('modules', [
-        'label' => 'COCOPi',
-        'icon'  => 'paper-plane-o',
+        'label' => 'Pages',
+        'icon'  => 'clone',
         'route' => '/cocopi',
         'active' => strpos($this['route'], '/cocopi') === 0
     ]);
