@@ -19,15 +19,16 @@
     <div class="uk-grid">
         <div class="uk-grid-margin uk-width-medium-2-3">
             <div class="uk-viewport-height-1-2 uk-flex uk-flex-center uk-flex-middle uk-panel uk-panel-box uk-panel-card { file.isImage ? 'bg-image':''}">
-
-                <div if="{file.isImage}">
-                    <img src="{ file.url }" alt="" />
-                </div>
-                <div class="uk-text-xlarge uk-text-center" if="{!file.isImage}">
-                    <i class="uk-icon-{ cocopi.getFileIconCls(file.filename) }"></i>
-                    <p>
-                        { file.ext.toUpperCase() }
-                    </p>
+                <div class="uk-width-1-1">
+                    <div if="{file.isImage}">
+                        <img riot-src="{ file.url }" />
+                    </div>
+                    <div class="uk-text-xlarge uk-text-center" if="{!file.isImage}">
+                        <i class="uk-icon-{ cocopi.getFileIconCls(file.filename) }"></i>
+                        <p>
+                            { file.ext.toUpperCase() }
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
