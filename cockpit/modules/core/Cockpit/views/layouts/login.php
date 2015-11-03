@@ -9,15 +9,17 @@
     {{ $app->assets(['assets:lib/uikit/js/components/form-password.min.js'], $app['cockpit/version']) }}
 
 </head>
-<body class="uk-height-viewport uk-flex uk-flex-middle uk-bg-light-radial">
+<body class="uk-height-viewport uk-flex uk-flex-middle uk-bg-light">
 
-    <div class="uk-width-medium-1-2 uk-width-large-1-3 uk-container-center" riot-view>
+    <div class="uk-bg-primary uk-position-absolute uk-width-1-1 uk-viewport-height-1-2"></div>
+
+    <div class="uk-width-medium-1-2 uk-width-large-1-3 uk-container-center uk-position-relative" riot-view>
 
         <div class="uk-container uk-container-center">
 
             <form class="uk-form" method="post" action="@route('/auth/check')" onsubmit="{ submit }">
 
-                <div class="uk-panel-box uk-panel-space uk-panel-card uk-animation-scale">
+                <div class="uk-panel-box uk-panel-space uk-panel-card uk-nbfc">
 
                     <div name="header" class="uk-panel-box-header uk-text-bold uk-text-center">
 
