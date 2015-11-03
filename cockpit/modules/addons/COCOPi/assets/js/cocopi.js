@@ -68,14 +68,14 @@
 
                         create() {
 
-                            App.callmodule('cocopi', 'createPage', [opts.root, {
+                            App.request('/cocopi/utils/createPage', {root: opts.root, meta: {
                                 title: this.title.value,
                                 slug: this.slug ? this.slug.value :'',
                                 type : this.type
-                            }]).then(function(data) {
+                            }}).then(function(data) {
 
-                                if (data.result) {
-                                    location.href = App.route('/cocopi/page/'+data.result);
+                                if (data) {
+                                    location.href = App.route('/cocopi/page'+data.relpath);
                                 }
                             });
                         };

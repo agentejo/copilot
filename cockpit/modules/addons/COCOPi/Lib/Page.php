@@ -1,12 +1,12 @@
 <?php
 
-namespace Copilot;
+namespace COCOPi\Lib;
 
 use copi;
 
 /**
  * Class Page
- * @package Copilot
+ * @package cocopi
  */
 class Page {
 
@@ -592,7 +592,7 @@ class Page {
             // try to fix relative urls
             $this->content = copi::helper('utils')->fixRelativeUrls($content, $this->absUrl.'/');
 
-            copi::$app->trigger('copilot.page.content', [$this]);
+            copi::$app->trigger('cocopi.page.content', [$this]);
         }
 
         return $part ? $this->parts($part) : $this->content;
@@ -662,7 +662,7 @@ class Page {
         // try to fix relative urls
         $content = copi::helper('utils')->fixRelativeUrls($content, $this->absUrl.'/');
 
-        copi::trigger('copilot.page.render', [&$content]);
+        copi::trigger('cocopi.page.render', [&$content]);
 
         return $content;
     }

@@ -31,7 +31,7 @@ class Admin extends \Cockpit\AuthController {
             return false;
         }
 
-        $page     = new \Copilot\Page($path);
+        $page     = copi::page($path);
         $type     = $this->getPageType($page);
 
         return $this->render('cocopi:views/page.php', compact('page', 'type'));
@@ -45,7 +45,7 @@ class Admin extends \Cockpit\AuthController {
             return false;
         }
 
-        $page = new \Copilot\Page($path);
+        $page = copi::page($path);
         $type = $this->getPageType($page);
 
         return $this->render('cocopi:views/pages.php', compact('page', 'type'));
@@ -59,7 +59,7 @@ class Admin extends \Cockpit\AuthController {
             return false;
         }
 
-        $file = new \Copilot\Resource($path);
+        $file = copi::resource($path);
 
         return $this->render('cocopi:views/file.php', compact('file'));
     }
@@ -72,7 +72,7 @@ class Admin extends \Cockpit\AuthController {
             return false;
         }
 
-        $page = new \Copilot\Page($path);
+        $page = copi::page($path);
 
         return $this->render('cocopi:views/files.php', compact('page'));
     }

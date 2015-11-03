@@ -1,5 +1,5 @@
 <li data-uk-dropdown>
-    <a href="@route('/cocopi')"><i class="uk-icon-bars"></i> COCPi</a>
+    <a href="@route('/cocopi')"><i class="uk-icon-bars"></i> COCOPi</a>
     <div class="uk-dropdown">
         <ul class="uk-nav uk-nav-dropdown">
             <li><a href="@route('/cocopi')">@lang('Pages')</a></li>

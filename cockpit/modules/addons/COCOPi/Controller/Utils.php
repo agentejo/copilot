@@ -10,7 +10,7 @@ class Utils extends \Cockpit\AuthController {
 
         if ($file = $this->param('file')) {
 
-            $f = new \Copilot\Resource($file['path']);
+            $f = copi::resource($file['path']);
 
             $f->rename($file['filename']);
             $f->updateMeta((array)$file['meta']);
@@ -38,7 +38,7 @@ class Utils extends \Cockpit\AuthController {
 
         if ($page && $updates) {
 
-            $p = new \Copilot\Page($page['path']);
+            $p = copi::page($page['path']);
 
             if (trim($updates['slug'])) {
                 $p->setSlug(strtolower(str_replace(' ', '-', $updates['slug'])));
@@ -90,5 +90,110 @@ class Utils extends \Cockpit\AuthController {
             }
         }
         return $order;
+    }
+
+    public function createPage() {
+
+        $root = $this->app->param('root');
+        $meta = $this->app->param('meta', []);
+
+        $root = ltrim($root, '/');
+
+        $meta = array_merge([
+            'title' => '',
+            'slug'  => '',
+            'type'  => 'html'
+        ], $meta);
+
+        if (!$meta['title']) {
+            return false;
+        }
+
+        $meta['slug'] = strtolower(str_replace([' '], ['-'], $meta['slug'] ? $meta['slug'] : $meta['title']));
+
+        $type     = $meta['type'];
+        $typedef  = [];
+
+        if ($path = copi::path("types:{$type}.yaml")) {
+            $typedef = $this->app->helper('yaml')->fromFile($path);
+        }
+
+        $type = array_replace_recursive([
+            'name' => $type,
+            'ext' => 'html',
+            'content' => [
+                'visible' => true,
+                'type'    => isset($typedef) && $typedef['ext'] == 'md' ? 'markdown':'html'
+            ],
+            'meta' => []
+        ], (array)$typedef);
+
+
+        $contentfolder = copi::path('content:');
+        $pagepath      = $contentfolder.($root=='home' ? '':  $root.'/'.$meta['slug']).'/'.'index.'.($type['ext']=='md' ? 'md':'html');
+        $time          = date('Y-m-d H:i:s', time());
+
+        $content = [
+            "uid: ".uniqid('pid-'),
+            "type: ".$meta['type'],
+            "created: ".$time,
+            "modified: ".$time,
+            "title: ".$meta['title'],
+            "===\n",
+        ];
+
+        $this->app->helper('fs')->write($pagepath, implode("\n", $content));
+
+        $url = str_replace(copi::path('site:'),'',$pagepath);
+
+        return json_encode(copi::page($pagepath)->toArray());
+    }
+
+    public function deletePage() {
+
+        $path = $this->app->param('path');
+
+        if ($page = copi::page($path)) {
+            return json_encode(["success" => $page->delete()]);
+        }
+
+        return false;
+    }
+
+    public function getPageResources() {
+
+        $path    = $this->app->param('path');
+        $asarray = $this->app->param('asarray', false);
+
+        $page = copi::page($path);
+
+        if (!$page) {
+            return [];
+        }
+
+        return $asarray ? $page->files()->sorted()->toArray(): $page->files()->sorted();
+    }
+
+    public function renameResource() {
+
+        $path = $this->app->param('path');
+        $name = $this->app->param('name');
+
+        if ($res = copi::resource($path)) {
+            return json_encode($res->rename($name)->toArray());
+        }
+
+        return false;
+    }
+
+    public function deleteResource() {
+
+        $path = $this->app->param('path');
+
+        if ($res = copi::resource($path)) {
+            return json_encode(["success" => $res->delete()]);
+        }
+
+        return false;
     }
 }

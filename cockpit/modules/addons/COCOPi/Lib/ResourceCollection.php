@@ -1,6 +1,6 @@
 <?php
 
-namespace Copilot;
+namespace COCOPi\Lib;
 
 /**
  * Class ResourceClass

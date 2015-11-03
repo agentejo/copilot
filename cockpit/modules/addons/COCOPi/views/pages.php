@@ -141,7 +141,7 @@
 
             App.ui.confirm("Are you sure?", function() {
 
-                App.callmodule('cocopi', 'deletePage', [path]).then(function(data) {
+                App.request('/cocopi/utils/deletePage', {path:path}).then(function(data) {
 
                     $this.children.splice(e.item.idx, 1);
                     $this.update();

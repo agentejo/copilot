@@ -39,7 +39,7 @@ class copi {
      * @return mixed
      */
     public static function run() {
-        return self::$app->trigger('copilot.init')->run();
+        return self::$app->trigger('site.init')->run();
     }
 
     /**
@@ -73,7 +73,7 @@ class copi {
         ] as $p) {
 
             if ($page = self::$app->path($p)) {
-                $page = \Copilot\Page::fromCache($page);
+                $page = COCOPi\Lib\Page::fromCache($page);
                 break;
             }
         }
@@ -93,7 +93,7 @@ class copi {
 
         if ($page = self::$app->path($path)) {
 
-            $page = \Copilot\Page::fromCache($page);
+            $page = COCOPi\Lib\Page::fromCache($page);
 
             return $page;
         }
@@ -104,7 +104,7 @@ class copi {
 
     /**
      * @param $folder
-     * @return \Copilot\PageCollection
+     * @return COCOPi\Lib\PageCollection
      */
     public static function pages($folder) {
 
@@ -114,7 +114,7 @@ class copi {
             $path = $folder;
         }
 
-        return \Copilot\PageCollection::fromFolder($path);
+        return COCOPi\Lib\PageCollection::fromFolder($path);
     }
 
     /**
@@ -129,7 +129,7 @@ class copi {
 
         if ($path = self::$app->path($path)) {
 
-            $resource = new \Copilot\Resource($path);
+            $resource = new COCOPi\Lib\Resource($path);
 
             return $resource;
         }
@@ -140,7 +140,7 @@ class copi {
     /**
      * @param $folder
      * @param null $criteria
-     * @return \Copilot\PageCollection
+     * @return COCOPi\Lib\PageCollection
      */
     public static function find($folder, $criteria = null) {
 
@@ -148,7 +148,7 @@ class copi {
             $path = self::$app->path('content:'.$folder);
         }
 
-        return \Copilot\PageCollection::find($path, $criteria);
+        return COCOPi\Lib\PageCollection::find($path, $criteria);
     }
 
     /**
@@ -175,7 +175,7 @@ class copi {
 
 
         if (strpos($menu, ':') === false && !self::$app->isAbsolutePath($menu)) {
-            $path = "config:menu/{$menu}.yaml";
+            $path = "menu:{$menu}.yaml";
         } else {
             $path = $menu;
         }
@@ -192,38 +192,6 @@ class copi {
                 return self::snippet('menu/default', ['data' => $data, 'options' => $options]);
             }
         }
-    }
-
-    /**
-     * @param $store
-     * @return array|DataCollection
-     */
-    public static function data($store) {
-
-        static $cache_datastore;
-
-        if (isset($cache_datastore[$store])) {
-            return $cache_datastore[$store];
-        }
-
-        if (strpos($store, ':') === false && !self::$app->isAbsolutePath($store)) {
-            $path = "data:{$store}.yaml";
-        } else {
-            $path = $store;
-        }
-
-        if ($file = self::$app->path($path)) {
-
-            if (is_null($cache_datastore)) {
-                $cache_datastore = [];
-            }
-
-            $cache_datastore[$store] = self::$app->helper('yaml')->fromFile($file);
-
-            return DataCollection::create($cache_datastore[$store]);
-        }
-
-        return [];
     }
 
     /**
@@ -294,7 +262,7 @@ class copi {
             return false;
         }
 
-        $page        = new Copilot\Page($view);
+        $page        = new COCOPi\Lib\Page($view);
         $meta->page  = $page;
 
         $meta->extend($meta->page->meta());

@@ -22,7 +22,7 @@
             </div>
         </li>
         <li>
-            <span class="uk-text-primary">Files <span show="{files && files.length}">({files.length})</span></span> 
+            <span class="uk-text-primary">Files <span show="{files && files.length}">({files.length})</span></span>
             <span name="loadprogress" class="uk-hidden"><i class="uk-icon-refresh uk-icon-spin"></i></span>
         </li>
     </ul>
@@ -187,12 +187,12 @@
 
             $this.loadprogress.classList.remove('uk-hidden');
 
-            App.callmodule('cocopi', 'getPageResources', [this.page.path, true]).then(function(data) {
+            App.request('/cocopi/utils/getPageResources', {path:this.page.path, asarray:true}).then(function(data) {
 
                 setTimeout(function(){
 
                     $this.loadprogress.classList.add('uk-hidden');
-                    $this.files = data.result;
+                    $this.files = data;
                     $this.update();
 
                 }, 100);
@@ -211,7 +211,7 @@
 
                 if (name!=item.filename && name.trim()) {
 
-                    App.callmodule('cocopi', 'renameResource', [item.path, name.trim()]).then(function(data) {
+                    App.request('/cocopi/utils/renameResource', {path:item.path, name:name.trim()}).then(function(data) {
 
                         item.path = item.path.replace(item.filename, name);
                         item.url = item.url.replace(encodeURI(item.filename), encodeURI(name));
@@ -232,7 +232,7 @@
 
             App.ui.confirm("Are you sure?", function() {
 
-                App.callmodule('cocopi', 'deleteResource', [item.path]).then(function(data) {
+                App.request('/cocopi/utils/deleteResource', {path:item.path}).then(function(data) {
 
                     index = $this.files.indexOf(item);
                     $this.files.splice(index, 1);

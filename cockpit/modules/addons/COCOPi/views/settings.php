@@ -43,7 +43,7 @@
 
                 <div class="uk-panel uk-panel-box uk-panel-card">
 
-                    <div class="uk-text-large">cocopiPi</div>
+                    <div class="uk-text-large">COCOPi</div>
                     <span class="uk-badge uk-margin-small-top">{{ $info->version }}</span>
 
                     @if($license->type != 'trial')

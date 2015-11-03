@@ -150,7 +150,7 @@
 
             App.ui.confirm("Are you sure?", function() {
 
-                App.callmodule('cocopi', 'deletePage', [path]).then(function(data) {
+                App.request('/cocopi/deletePage', {path:path}).then(function(data) {
 
                     if (isHome) {
                         $this.home = null;

@@ -1,5 +1,7 @@
 <?php
 
+define('COCOPI_FRONTEND', true);
+
 /**
  *  Fix for PHP built in webserver to handle static files correctly
  *
@@ -10,9 +12,9 @@ if (PHP_SAPI == 'cli-server' && is_file(__DIR__.parse_url($_SERVER['REQUEST_URI'
 }
 
 /**
- * bootstrap copilot
+ * bootstrap Cockpit
  */
-include_once(__DIR__.'/system/bootstrap.php');
+include_once(__DIR__.'/cockpit/bootstrap.php');
 
 /**
  * start the app engine
