@@ -258,6 +258,7 @@
                 var subpages = Array.isArray(this.type.subpages) ? this.type.subpages : [this.type.subpages];
 
                 options.types = {};
+                options.parent = this.page.type;
 
                 subpages.forEach(function(type) {
                     if (COCOPI_PAGE_TYPES[type]) {

@@ -15,11 +15,24 @@
 
             options  = App.$.extend({
                 'root': root || '/',
+                'parent': 'html',
                 'types': App.$.extend({
                     'html': {label: 'Html'},
                     'markdown': {label: 'Markdown', ext: 'md'}
                 }, COCOPI_PAGE_TYPES)
-            }, options)
+            }, options);
+
+            Object.keys(options.types).forEach(function(type){
+
+                if (COCOPI_PAGE_TYPES[type].parents) {
+
+                    var allowed = Array.isArray(COCOPI_PAGE_TYPES[type].parents) ? COCOPI_PAGE_TYPES[type].parents:[COCOPI_PAGE_TYPES[type].parents];
+
+                    if (allowed.indexOf(options.parent) == -1) {
+                        delete options.types[type];
+                    }
+                }
+            });
 
             var dialog = UIkit.modal.dialog(App.Utils.multiline(function() {/*
 
@@ -35,7 +48,7 @@
                         </div>
                         <div class="uk-form-row" if="{opts.root!='home'}">
                             <label class="uk-text-small">Slug</label>
-                            <input name="slug" type="text" class="uk-width-1-1 uk-form-large" placeholder="{ slugpreview }">
+                            <input name="slug" type="text" class="uk-width-1-1 uk-form-large" placeholder="{ slugpreview }"  onkeyup="{ updateSlugPreview }">
                         </div>
                         <div class="uk-form-row">
                             <label class="uk-text-small">Type</label>

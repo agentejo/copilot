@@ -833,7 +833,7 @@ class Page {
 
         $this->ext         = pathinfo($this->path, \PATHINFO_EXTENSION);
         $this->dir         = dirname($this->path);
-        $this->contentdir  = str_replace(CP_CONTENT_DIR, '/', $this->dir);
+        $this->contentdir  = str_replace(CP_CONTENT_DIR, '', $this->dir);
         $this->contentpath = str_replace(CP_CONTENT_DIR, '/', $this->path);
         $this->filename    = basename($this->path);
         $this->basename    = basename($this->path, '.'.$this->ext);
