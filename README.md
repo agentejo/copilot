@@ -15,7 +15,7 @@ You can purchase your COCOPi license by contacting artur@agentejo.com
 
 ## Starterkit
 
-COCOPi's Starterkit comes with small demo content (powered by Copilot) and an
+COCOPi's Starterkit comes with small demo content and an
 admin panel (powered by Cockpit).
 
 ## Installation
