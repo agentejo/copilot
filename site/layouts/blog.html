@@ -1,0 +1,27 @@
+@extend('theme:layout.html')
+
+{%
+    $articles = $page->children()->visible()->sort('$p->meta("created")', 'desc');
+%}
+
+@foreach($articles as $article)
+<article class="uk-article">
+
+    <h1 class="uk-article-title"><a href="{{ $article->url() }}">{{ $article->meta('title') }}</a></h1>
+
+    <div class="uk-article-meta">
+        {{ date('F d, Y', strtotime($article->meta('created'))) }}
+    </div>
+
+    @if($article->meta('teaser'))
+    <div class="uk-margin">
+        {{ $article->meta('teaser') }}
+    </div>
+    @endif
+
+    <div class="uk-margin">
+        {{ $article->content() }}
+    </div>
+
+</article>
+@endforeach

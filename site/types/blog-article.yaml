@@ -1,0 +1,12 @@
+label: Blog Article
+subpages: false
+parents: blog
+layout: blog-article
+ext: md
+content:
+    type: markdown
+
+meta:
+    teaser:
+        type: wysiwyg
+        label: Teaser

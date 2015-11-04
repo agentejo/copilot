@@ -1,0 +1,12 @@
+{%
+    $parents = $page->parents()->reverse();
+%}
+
+
+<ul class="uk-breadcrumb">
+    @foreach($parents as $parent)
+    @if($parent->meta('title') && !$parent->isRootIndex())
+    <li><a href="{{ $parent->url() }}">{{ $parent->meta('title') }}</a></li>
+    @endif
+    @endforeach
+</ul>

@@ -1,0 +1,23 @@
+@extend('theme:layout.html')
+
+@snippet('breadcrumbs', ['page' => $page])
+
+<article class="uk-article">
+
+    <h1 class="uk-article-title">{{ $page->meta('title') }}</h1>
+
+    <div class="uk-article-meta">
+        {{ date('F d, Y', strtotime($page->meta('created'))) }}
+    </div>
+
+    @if($page->meta('teaser'))
+    <div class="uk-margin">
+        {{ $page->meta('teaser') }}
+    </div>
+    @endif
+
+    <div class="uk-margin">
+        {{ $page->content() }}
+    </div>
+
+</article>
