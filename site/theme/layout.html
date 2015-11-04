@@ -21,18 +21,18 @@
     </head>
     <body>
 
-        <div class="uk-container uk-container-center uk-text-center">
+        <div class="uk-container uk-container-center">
 
-            <div>
-                <a class="uk-text-large uk-text-bold uk-link-muted" href="@route('/')" title="Get me home"> <img src="@url('theme:media/logo.svg')" alt="Logo"></a>
+            <a class="uk-navbar-brand" href="@url('/')">COCOPi</a>
+
+            <div class="uk-navbar-flip">
+                <nav class="uk-navbar">
+                    @menu('main', ['class'=>'uk-navbar-nav', 'activeClass' => 'uk-active'])
+                </nav>
             </div>
-
-            <nav class="uk-navbar uk-display-inline-block">
-                @menu('main', ['class'=>'uk-navbar-nav', 'activeClass' => 'uk-active'])
-            </nav>
         </div>
 
-        <main class="site-main">
+        <main class="site-main uk-margin-large-top">
 
             <div class="uk-container uk-container-center">
                 {{ $content_for_layout }}
@@ -43,7 +43,7 @@
         <footer class="site-footer uk-margin-large-top">
 
             <div class="uk-container uk-container-center">
-                <strong>Built with the lovely <a href="http://cocopi.co">COCOPi</a></strong>
+                <strong>Built with <a href="http://cocopi.co"><i class="uk-icon-heart uk-text-danger"></i> COCOPi</a></strong>
             </div>
 
         </footer>
