@@ -142,14 +142,11 @@ $site->service('renderer', function() use($site) {
             'menu'     => '<?php echo copi::menu(expr); ?>',
             'snippet'  => '<?php copi::snippet(expr); ?>',
             'load'     => '<?php copi::$meta->assets->append(expr); ?>',
+
+            // cockpit related macros
+            'form'     => '<?php cockpit("forms")->form(expr); ?>',
+            'region'   => '<?php echo cockpit("regions")->render(expr); ?>'
         ];
-
-        // add macros for cockpit api
-        if (function_exists('cockpit')) {
-
-            $replace['form']   = '<?php cockpit("forms")->form(expr); ?>';
-            $replace['region'] = '<?php echo cockpit("regions")->render(expr); ?>';
-        }
 
         $content = preg_replace_callback('/\B@(\w+)([ \t]*)(\( ( (?>[^()]+) | (?3) )* \))?/x', function($match) use($replace) {
 
