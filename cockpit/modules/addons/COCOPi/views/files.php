@@ -54,8 +54,9 @@
         <div class="uk-grid-margin" each="{file in files}" show="{ parent.infilter(file) }" data-path="{ file.path }">
             <div class="uk-panel uk-panel-box uk-panel-card">
 
-                <div class="uk-cover-background uk-position-relative" style="background-image: { cocopi.getFileIconCls(file.filename) == 'image' ? 'url('+file.url+')': 'none' }">
-                    <canvas class="uk-responsive-width uk-display-block" width="400" height="200"></canvas>
+                <div class="uk-cover-background uk-position-relative">
+                    <canvas class="uk-responsive-width uk-display-block" width="400" height="300" if="{!file.isImage}"></canvas>
+                    <cp-thumbnail src="{file.url}" width="400" height="300" if="{file.isImage}"></cp-thumbnail>
                     <a class="uk-position-cover uk-text-muted uk-flex uk-flex-middle uk-flex-center" href="@route('/cocopi/file'){ file.relpath }">
                         <div class="uk-text-large uk-text-center" if="{!file.isImage}">
                             <p>{ file.ext.toUpperCase() }</p>

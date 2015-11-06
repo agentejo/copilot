@@ -11,13 +11,13 @@
             <ul class="uk-list">
 
                 @if($home)
-                <li>
+                <li class="uk-text-truncate">
                     <a class="uk-display-block" href="@route('/cocopi/page'.$home->relpath())"><i class="uk-icon-justify uk-icon-home"></i> {{ $home->meta('title') }}</a>
                 </li>
                 @endif
 
                 @foreach($pages as $page)
-                <li>
+                <li class="uk-text-truncate">
                     <a class="uk-display-block uk-margin-small-top" href="@route('/cocopi/page'.$page->relpath())"><i class="uk-icon-justify uk-icon-file-text-o"></i> {{ $page->meta('title') }}</a>
                 </li>
                 @endforeach

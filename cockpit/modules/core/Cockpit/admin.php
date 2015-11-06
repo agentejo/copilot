@@ -111,6 +111,7 @@ $app->bind('/', function(){
     return $this->invoke('Cockpit\\Controller\\Base', 'dashboard');
 });
 
+$app->bindClass('Cockpit\\Controller\\Utils', 'cockpit/utils');
 $app->bindClass('Cockpit\\Controller\\Base', 'cockpit');
 $app->bindClass('Cockpit\\Controller\\Settings', 'settings');
 $app->bindClass('Cockpit\\Controller\\Accounts', 'accounts');

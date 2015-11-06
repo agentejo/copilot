@@ -66,19 +66,18 @@ class PageCollection implements \Iterator {
 
         if (file_exists($folder)) {
 
-            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($folder), \RecursiveIteratorIterator::SELF_FIRST);
+            $directory = new \RecursiveDirectoryIterator($folder);
+            $flattened = new \RecursiveIteratorIterator($directory);
+            $files     = new \RegexIterator($flattened, '#(?<!/)\.(html|md)$|^[^\.]*$#i');
 
             foreach($files as $filename => $file){
 
-                if ($file->isFile() && in_array($file->getExtension(), ['md','html'])) {
+                $page = Page::fromCache($file->getRealPath());
 
-                    $page = Page::fromCache($file->getRealPath());
-
-                    if ($criteria && $criteria($page)) {
-                        $pages[] = $page;
-                    } else {
-                        $pages[] = $page;
-                    }
+                if ($criteria && $criteria($page)) {
+                    $pages[] = $page;
+                } else {
+                    $pages[] = $page;
                 }
             }
         }
