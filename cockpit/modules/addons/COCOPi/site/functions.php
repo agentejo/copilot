@@ -59,12 +59,15 @@ function thumb_url($image, $width = null, $height = null, $options=array()) {
     }
 
     $options = array_merge(array(
-        "rebuild"     => false,
-        "cachefolder" => "cockpit:storage/thumbs",
-        "quality"     => 100,
-        "base64"      => false,
-        "mode"        => "crop",
-        "domain"      => false
+        "rebuild"       => false,
+        "cachefolder"   => "cockpit:storage/thumbs",
+        "quality"       => 100,
+        "base64"        => false,
+        "mode"          => "crop",
+        "domain"        => false,
+        "overlay"       => false,
+        "overlay_pos"   => "center",
+        "overlay_alpha" => 1
     ), $options);
 
     extract($options);
@@ -94,7 +97,15 @@ function thumb_url($image, $width = null, $height = null, $options=array()) {
     if ($base64) {
 
         try {
-            $data = copi::helper("image")->take($path)->{$method}($width, $height)->base64data(null, $quality);
+
+            $img = copi::helper("image")->take($path)->{$method}($width, $height);
+
+            if ($overlay && $overlay = copi::$app->path($overlay)) {
+                $img->overlay($overlay, $overlay_pos, $overlay_alpha);
+            }
+
+            $data = $img->base64data(null, $quality);
+
         } catch(Exception $e) {
             return $url;
         }
@@ -104,12 +115,20 @@ function thumb_url($image, $width = null, $height = null, $options=array()) {
     } else {
 
         $filetime = filemtime($path);
-        $savepath = copi::$app->path($cachefolder)."/".md5($path)."_{$width}x{$height}_{$quality}_{$filetime}_{$mode}.{$ext}";
+        $savepath = copi::$app->path($cachefolder)."/".md5($path.json_encode($options))."_{$width}x{$height}_{$quality}_{$filetime}_{$mode}.{$ext}";
 
         if ($rebuild || !file_exists($savepath)) {
 
             try {
-                copi::helper("image")->take($path)->{$method}($width, $height)->save($savepath, $quality);
+
+                $img = copi::helper("image")->take($path)->{$method}($width, $height);
+
+                if ($overlay && $overlay = copi::$app->path($overlay)) {
+                    $img->overlay($overlay, $overlay_pos, $overlay_alpha);
+                }
+
+                $img->save($savepath, $quality);
+
             } catch(Exception $e) {
                 return $url;
             }
