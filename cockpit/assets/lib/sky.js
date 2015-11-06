@@ -1,108 +1,170 @@
-/**
- * http://codepen.io/Mobilpadde/pen/QjMYeL
- */
+
 (function(){
 
-    var Stars = function(c, color) {
+    function Stars(c, color) {
 
-        var ctx = c.getContext("2d");
+        color = color || '#222';
 
-        var background = function(){
-            var grdnt = ctx.createLinearGradient(0, 0, 0, c.height);
-            //grdnt.addColorStop(0, "#000");
-            //grdnt.addColorStop(.5, "#135288");
-            //grdnt.addColorStop(1, "#0C5663");
-            //grdnt.addColorStop(1, "#039be5");
-            grdnt.addColorStop(1, color);
-            ctx.fillStyle = grdnt;
-            ctx.fillRect(0, 0, c.width, c.height);
+        var $ = c.getContext("2d");
+
+        var w = c.width = window.innerWidth;
+        var h = c.height = window.innerHeight;
+
+        var arr = [];
+        var u = 0;
+        var dep = w;
+        var dp = 0.70;
+        var ms = {
+            x: 0,
+            y: 0
+        };
+        var msd = {
+            x: 0,
+            y: 0
         };
 
-        var num = (Math.min(window.innerWidth, window.innerHeight) / Math.max(c.width, c.height)) * 750,
-            makeStar = function(){
-                return {
-                    radius: Math.random() * (3 - .5) + .5,
-                    pos: {
-                        x: Math.random() * c.width,
-                        y: Math.random() * c.height
-                    },
-                    moveTo: {
-                        x: Math.random() * c.width,
-                        y: Math.random() * c.height
-                    },
-                    bigger: ~~(Math.random() * 2),
-                    speed: Math.random() * (c.width / c.height / 40)
-                }
-            },
-            stars = [],
-            draw = function(star){
-                ctx.fillStyle = "#fff";
-                ctx.beginPath();
-                ctx.arc(star.pos.x, star.pos.y, star.radius, 0, Math.PI * 2);
-                ctx.fill();
-                if(star.bigger){
-                    star.radius += .01;
-                    if(star.radius >= 3) star.bigger = false;
-                }else{
-                    star.radius -= .01;
-                    if(star.radius <= .3) star.bigger = true;
-                }
-                if(
-                    star.moveTo.x >= star.pos.x - 5 &&
-                    star.moveTo.x <= star.pos.x + 5
-                ){
-                    star.moveTo.x = Math.random() * c.width;
-                }
-                else if(star.moveTo.x < star.pos.x) star.pos.x -= star.speed;
-                else if(star.moveTo.x > star.pos.x) star.pos.x += star.speed;
-                if(
-                    star.moveTo.y >= star.pos.y - 5 &&
-                    star.moveTo.y <= star.pos.y + 5
-                ){
-                    star.moveTo.y = Math.random() * c.height;
-                }
-                else if(star.moveTo.y < star.pos.y) star.pos.y -= star.speed;
-                else if(star.moveTo.y > star.pos.y) star.pos.y += star.speed;
+        function Obj(x, y, z) {
+            this.set(x, y, z);
+        }
 
-                for(var i = 0; i < stars.length; i++){
-                    if(
-                        star != stars[i] &&
-                        Math.sqrt(
-                            (star.pos.x - stars[i].pos.x) * (star.pos.x - stars[i].pos.x) +
-                            (star.pos.y - stars[i].pos.y) * (star.pos.y - stars[i].pos.y)
-                        ) < 50
-                    ){
-                        ctx.beginPath();
-                        ctx.moveTo(star.pos.x, star.pos.y);
-                        ctx.lineTo(stars[i].pos.x, stars[i].pos.y);
-                        ctx.closePath();
-                        ctx.strokeStyle = "#fff";
-                        ctx.lineWidth = .025;
-                        ctx.stroke();
-                    }
-                }
+        Obj.prototype = {
+            set: function(x, y, z) {
+                this.x = x || 0;
+                this.y = y || 0;
+                this.z = z || 0;
+            },
+            rotX: function(ang) {
+                var y = this.y;
+                var z = this.z;
+                this.y = y * Math.cos(ang) - z * Math.sin(ang);
+                this.z = z * Math.cos(ang) + y * Math.sin(ang);
+            },
+            rotY: function(ang) {
+                var x = this.x;
+                var z = this.z;
+                this.x = x * Math.cos(ang) - z * Math.sin(ang);
+                this.z = z * Math.cos(ang) + x * Math.sin(ang);
+            },
+            rotZ: function(ang) {
+                var x = this.x;
+                var y = this.y;
+                this.x = x * Math.cos(ang) - y * Math.sin(ang);
+                this.y = y * Math.cos(ang) + x * Math.sin(ang);
             }
-        return {
-            init: function(){
-                for(var i = 0; i < num; i++){
-                    stars.push(new makeStar());
-                }
+        };
 
-                background();
-            },
-            move: function(){
-                setInterval(function(){
-                    ctx.clearRect(0, 0, c.width, c.height);
-                    background();
-                    for(var i = 0; i < stars.length; i++){
-                        draw(stars[i]);
-                    }
-                }, 1);
+        function Part(x, y, z) {
+            this.op = new Obj(x, y, z);
+            this.rp = new Obj(x, y, z);
+            this.rot = new Obj();
+            this.vel = new Obj();
+            this.col = 'hsla(216,95%,85%,'+rnd(0.5, 1)+')';
+        }
+
+        function upd(rot) {
+            var pos;
+            var rot;
+            var vel;
+            var op;
+            var rp;
+            var col;
+            var size;
+            for (var i in arr) {
+                op = arr[i].op;
+                rp = arr[i].rp;
+                rot = arr[i].rot;
+                vel = arr[i].vel;
+                col = arr[i].col;
+                vel.x += msd.x * 0.15;
+                vel.y += msd.y * 0.15;
+                rp.set(op.x, op.y, op.z);
+
+                rot.x += vel.x;
+                rot.y += vel.y;
+                rot.z += vel.z;
+
+                rot.x = rot.x > Math.PI * 2 ? 0 : rot.x;
+                rot.y = rot.y > Math.PI * 2 ? 0 : rot.y;
+
+                rp.rotY(rot.y);
+                rp.rotX(rot.x);
+
+                vel.set(
+                  vel.x * dp,
+                  vel.y * dp,
+                  0
+                );
+            }
+            msd.x = 0.0005;
+            msd.y = 0.0005;
+        }
+
+        function draw() {
+
+            var p, dth;
+            for (var i in arr) {
+                p = arr[i];
+                dth = ((p.rp.z / dep) + 1);
+                $.fillStyle = p.col;
+                $.fillRect(w + p.rp.x, h + p.rp.y, rnd(dth/0.8, dth/2),  dth/0.9);
             }
         }
-    };
 
+        function rnd(min, max) {
+            return Math.random() * (max - min) + min;
+        }
 
+        function go() {
+            for (var i = 0; i < 6800; i++) {
+            var d = new Part(
+              rnd(-w, h),
+              rnd(-w, h),
+              rnd(-dep, dep)
+            );
+            d.vel.set(0, 0, 0);
+            arr.push(d);
+            }
+        }
+
+        window.addEventListener('mousemove', function(e) {
+            msd.x = (e.clientY - ms.y) / w;
+            msd.y = (e.clientX - ms.x) / h;
+            ms.x = e.clientX;
+            ms.y = e.clientY;
+        }, false);
+
+        window.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            msd.x = (e.touches[0].clientY - ms.y) / w;
+            msd.y = (e.touches[0].clientX - ms.x) / h;
+            ms.x = e.touches[0].clientX;
+            ms.y = e.touches[0].clientY;
+        }, false);
+
+        window.addEventListener('resize', function(e) {
+            c.width = w = window.innerWidth;
+            c.height = h = window.innerHeight;
+        }, false);
+
+        function run() {
+            $.clearRect(0, 0, w, h);
+            var g_ = $.createLinearGradient(c.width + c.width,
+            c.height + c.height * 1.5,
+            c.width + c.width, 1);
+            g_.addColorStop(1, color);
+            $.globalCompositeOperation = 'normal';
+            $.fillStyle = g_;
+            $.fillRect(0, 0, w, h);
+            $.globalCompositeOperation = 'lighter';
+            upd();
+            draw();
+            window.requestAnimationFrame(run);
+        }
+
+        go();
+        run();
+
+    }
 
     window.SKY = function(ele, color) {
 
@@ -117,20 +179,9 @@
         c.width  = $(ele).width();
         c.height = $(ele).height();
 
-        var sky = new Stars(c, color),
-            ctx = c.getContext("2d");
-
-        sky.init(c);
-        sky.move();
-        window.addEventListener("resize", function(){
-            c.width = window.innerWidth;
-            c.height = window.innerHeight;
-        }, true);
+        var sky = new Stars(c, color);
 
         return canvas;
     };
 
-    SKY(document.body);
-
-
-}());
+})();

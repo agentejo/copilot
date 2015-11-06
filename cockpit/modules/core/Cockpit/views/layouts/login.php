@@ -11,7 +11,7 @@
 
 </head>
 <body class="uk-height-viewport uk-flex uk-flex-middle uk-bg-light">
-
+    <canvas id='canv' style="position:absolute;top:0;left:0;"></canvas>
     <div class="uk-width-medium-1-2 uk-width-large-1-3 uk-container-center uk-position-relative" riot-view>
 
         <div class="uk-container uk-container-center">
