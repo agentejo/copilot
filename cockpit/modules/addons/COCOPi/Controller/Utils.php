@@ -123,7 +123,7 @@ class Utils extends \Cockpit\AuthController {
             'ext' => 'html',
             'content' => [
                 'visible' => true,
-                'type'    => isset($typedef) && $typedef['ext'] == 'md' ? 'markdown':'html'
+                'type'    => isset($typedef, $typedef['ext']) && $typedef['ext'] == 'md' ? 'markdown':'html'
             ],
             'meta' => []
         ], (array)$typedef);

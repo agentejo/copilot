@@ -18,7 +18,8 @@
                 'parent': 'html',
                 'types': App.$.extend({
                     'html': {label: 'Html'},
-                    'markdown': {label: 'Markdown', ext: 'md'}
+                    'markdown': {label: 'Markdown', ext: 'md'},
+                    'wysiwyg': {label: 'WYSIWYG'}
                 }, COCOPI_PAGE_TYPES)
             }, options);
 
