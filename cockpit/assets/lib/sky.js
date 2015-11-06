@@ -1,5 +1,8 @@
-
 (function(){
+
+    /**
+     * source: http://codepen.io/tmrDevelops/pen/MavRdZ
+     */
 
     function Stars(c, color) {
 
