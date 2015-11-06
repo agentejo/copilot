@@ -1,4 +1,13 @@
 {%
+
+    if (!isset($page)) {
+        $page = copi::$meta->page;
+    }
+
+    if (!$page) {
+        return;
+    }
+
     $parents = $page->parents()->reverse();
 %}
 
