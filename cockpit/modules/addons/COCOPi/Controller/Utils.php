@@ -60,7 +60,7 @@ class Utils extends \Cockpit\AuthController {
 
             file_put_contents($p->path(), implode("\n===\n\n", [$meta, $page['rawcontent']]));
 
-            return $p->relpath();
+            return $p->toArray();
         }
 
         return false;

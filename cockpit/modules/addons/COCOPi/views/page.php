@@ -281,13 +281,13 @@
 
         save() {
 
-            App.request('/cocopi/utils/updatePage', {page: this.page, updates: this.updates}, 'text').then(function(res) {
+            App.request('/cocopi/utils/updatePage', {page: this.page, updates: this.updates}).then(function(page) {
 
                 App.ui.notify("Page updated", "success");
 
-                setTimeout(function(){
-                    location.href= App.route('/cocopi/page'+res);
-                }, 1000);
+                $this.page    = page;
+                $this.updates = { slug: '' };
+                $this.update();
             });
         }
 
