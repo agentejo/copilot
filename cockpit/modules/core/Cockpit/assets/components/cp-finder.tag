@@ -394,9 +394,7 @@
 
                 this.selected.count = Object.keys(this.selected.paths).length;
 
-                if (opts.onChangeSelect) {
-                    opts.onChangeSelect(this.selected);
-                }
+                App.$(this.root).trigger('selectionchange', [this.selected]);
             }
         }
 
@@ -522,6 +520,7 @@
                         crumbs  = [];
 
                     for(var i=0;i<parts.length;i++){
+                        if(!parts[i]) continue;
                         tmppath.push(parts[i]);
                         crumbs.push({'name':parts[i],'path':tmppath.join("/")});
                     }

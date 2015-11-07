@@ -546,9 +546,7 @@ riot.tag2('cp-finder', '<div show="{data}"> <div class="uk-clearfix" data-uk-mar
 
                 this.selected.count = Object.keys(this.selected.paths).length;
 
-                if (opts.onChangeSelect) {
-                    opts.onChangeSelect(this.selected);
-                }
+                App.$(this.root).trigger('selectionchange', [this.selected]);
             }
         }.bind(this)
 
@@ -673,6 +671,7 @@ riot.tag2('cp-finder', '<div show="{data}"> <div class="uk-clearfix" data-uk-mar
                         crumbs  = [];
 
                     for(var i=0;i<parts.length;i++){
+                        if(!parts[i]) continue;
                         tmppath.push(parts[i]);
                         crumbs.push({'name':parts[i],'path':tmppath.join("/")});
                     }
