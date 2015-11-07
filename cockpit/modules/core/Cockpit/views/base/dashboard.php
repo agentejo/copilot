@@ -6,6 +6,10 @@
 
 <div id="dashboard">
 
+    <div class="uk-margin">
+        @trigger('admin.dashboard.top')
+    </div>
+
     <div class="uk-grid uk-margin" data-uk-grid-margin>
         <div class="uk-width-medium-1-2" data-area="main">
             <div class="uk-sortable uk-grid uk-grid-gutter uk-grid-width-1-1" data-uk-sortable="{group:'dashboard',animation:false}">
@@ -40,9 +44,15 @@
         @trigger('admin.dashboard.bottom')
     </div>
 
-
-
 </div>
+
+<style>
+
+    #dashboard .uk-grid.uk-sortable {
+        min-height: 30vh;
+    }
+
+</style>
 
 <script>
 
