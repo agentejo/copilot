@@ -1393,7 +1393,9 @@ riot.tag2('field-password', '<div class="uk-form-password uk-width-1-1"> <input 
 
 }, '{ }');
 
-riot.tag2('field-repeater', '<div class="uk-alert" show="{!items.length}"> {App.i18n.get(\'No items\')}. </div> <div class="uk-margin uk-panel-box uk-panel-card" each="{item,idx in items}"> <cp-field class="uk-width-1-1" field="{parent.field}" options="{opts.options}" bind="items[{idx}].value"></cp-field> <div class="uk-panel-box-footer uk-bg-light"> <a onclick="{parent.remove}"><i class="uk-icon-trash-o"></i></a> </div> </div> <a class="uk-button" onclick="{add}"><i class="uk-icon-plus-circle"></i> {App.i18n.get(\'Add item\')}</a>', '', '', function(opts) {
+riot.tag2('field-repeater', '<div class="uk-alert" show="{!items.length}"> {App.i18n.get(\'No items\')}. </div> <div name="itemscontainer" class="uk-sortable" show="{items.length}"> <div class="uk-margin uk-panel-box uk-panel-card" each="{item,idx in items}" data-idx="{idx}"> <cp-field class="uk-width-1-1" field="{parent.field}" options="{opts.options}" bind="items[{idx}].value"></cp-field> <div class="uk-panel-box-footer uk-bg-light"> <a onclick="{parent.remove}"><i class="uk-icon-trash-o"></i></a> </div> </div> </div> <div class="uk-margin"> <a class="uk-button" onclick="{add}"><i class="uk-icon-plus-circle"></i> {App.i18n.get(\'Add item\')}</a> </div>', '', '', function(opts) {
+
+        var $this = this;
 
         riot.util.bind(this);
 
@@ -1419,6 +1421,36 @@ riot.tag2('field-repeater', '<div class="uk-alert" show="{!items.length}"> {App.
 
         this.on('bindingupdated', function() {
             this.$setValue(this.items);
+        });
+
+        this.on('mount', function() {
+
+            UIkit.sortable(this.itemscontainer, {
+
+                animation: false,
+                handleClass: 'uk-panel-box-footer'
+
+            }).element.on("change.uk.sortable", function(e, sortable, ele) {
+
+                ele = App.$(ele);
+
+                var items  = $this.items,
+                    cidx   = ele.index(),
+                    oidx   = ele.data('idx');
+
+                items.splice(cidx, 0, items.splice(oidx, 1)[0]);
+
+                $this.items = [];
+                $this.update();
+
+                setTimeout(function() {
+                    $this.items = items;
+                    $this.$setValue(items);
+                    $this.update();
+                }, 10);
+
+            });
+
         });
 
         this.add = function() {
