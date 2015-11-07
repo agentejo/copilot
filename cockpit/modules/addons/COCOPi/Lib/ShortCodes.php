@@ -9,12 +9,21 @@
 
 namespace COCOPi\Lib;
 
-use copi;
-
+/**
+ * Class ShortCodes
+ * @package COCOPi\Lib
+ */
 class ShortCodes {
 
+    /**
+     * @var array
+     */
     protected $tags = [];
 
+    /**
+     * @param $tag
+     * @param $fn
+     */
     public function add($tag, $fn) {
 
         // fn($atts,$content)
@@ -24,18 +33,33 @@ class ShortCodes {
         }
     }
 
+    /**
+     * @param $tag
+     */
     public function remove($tag) {
         unset($this->tags[$tag]);
     }
 
+    /**
+     *
+     */
     public function removeAll() {
         $this->tags = [];
     }
 
+    /**
+     * @param $tag
+     * @return bool
+     */
     public function exists($tag) {
         return isset($this->tags[$tag]);
     }
 
+    /**
+     * @param $content
+     * @param $tag
+     * @return bool
+     */
     public function has($content, $tag) {
 
         if (false === strpos($content, '[')) {
@@ -62,6 +86,10 @@ class ShortCodes {
         return false;
     }
 
+    /**
+     * @param $content
+     * @return mixed
+     */
     public function parse($content) {
 
         if (false === strpos( $content, '[' )) {
@@ -77,6 +105,10 @@ class ShortCodes {
         return preg_replace_callback( "/$pattern/s", [$this, 'do_tag'], $content);
     }
 
+    /**
+     * @param $m
+     * @return string
+     */
     public function do_tag($m) {
 
         // allow [[foo]] syntax for escaping a tag
@@ -96,6 +128,10 @@ class ShortCodes {
         }
     }
 
+    /**
+     * @param $text
+     * @return array|string
+     */
     protected function shortcode_parse_atts($text) {
 
         $atts    = array();
@@ -124,6 +160,11 @@ class ShortCodes {
         return $atts;
     }
 
+    /**
+     * @param $pairs
+     * @param $atts
+     * @return array
+     */
     protected function shortcode_atts($pairs, $atts) {
 
         $atts = (array)$atts;
@@ -139,6 +180,10 @@ class ShortCodes {
         return $out;
     }
 
+    /**
+     * @param $content
+     * @return mixed
+     */
     public function strips($content) {
 
         if (false === strpos( $content, '[' )) {
@@ -154,6 +199,10 @@ class ShortCodes {
         return preg_replace_callback( "/$pattern/s", [$this, 'strip_tag'], $content );
     }
 
+    /**
+     * @param $m
+     * @return string
+     */
     public function strip_tag($m) {
 
         // allow [[foo]] syntax for escaping a tag
@@ -164,6 +213,9 @@ class ShortCodes {
         return $m[1] . $m[6];
     }
 
+    /**
+     * @return string
+     */
     protected function get_regex() {
 
         $tagnames = array_keys($this->tags);
@@ -201,5 +253,4 @@ class ShortCodes {
             . ')'
             . '(\\]?)';                          // 6: Optional second closing brocket for escaping shortcodes: [[tag]]
     }
-
 }
