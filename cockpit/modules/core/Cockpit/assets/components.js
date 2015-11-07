@@ -1393,7 +1393,7 @@ riot.tag2('field-password', '<div class="uk-form-password uk-width-1-1"> <input 
 
 }, '{ }');
 
-riot.tag2('field-repeater', '<div class="uk-alert" show="{!items.length}"> {App.i18n.get(\'No items\')}. </div> <div name="itemscontainer" class="uk-sortable" show="{items.length}"> <div class="uk-margin uk-panel-box uk-panel-card" each="{item,idx in items}" data-idx="{idx}"> <cp-field class="uk-width-1-1" field="{parent.field}" options="{opts.options}" bind="items[{idx}].value"></cp-field> <div class="uk-panel-box-footer uk-bg-light"> <a onclick="{parent.remove}"><i class="uk-icon-trash-o"></i></a> </div> </div> </div> <div class="uk-margin"> <a class="uk-button" onclick="{add}"><i class="uk-icon-plus-circle"></i> {App.i18n.get(\'Add item\')}</a> </div>', '', '', function(opts) {
+riot.tag2('field-repeater', '<div class="uk-alert" show="{!items.length}"> {App.i18n.get(\'No items\')}. </div> <div show="{mode==\'edit\' && items.length}"> <div class="uk-margin uk-panel-box uk-panel-card" each="{item,idx in items}" data-idx="{idx}"> <cp-field class="uk-width-1-1" field="{parent.field}" options="{opts.options}" bind="items[{idx}].value"></cp-field> <div class="uk-panel-box-footer uk-bg-light"> <a onclick="{parent.remove}"><i class="uk-icon-trash-o"></i></a> </div> </div> </div> <div name="itemscontainer" class="uk-sortable" show="{mode==\'reorder\' && items.length}"> <div class="uk-margin uk-panel-box uk-panel-card" each="{item,idx in items}" data-idx="{idx}"> <i class="uk-icon-bars"></i> Item {(idx+1)} </div> </div> <div class="uk-margin"> <a class="uk-button" onclick="{add}" show="{mode==\'edit\'}"><i class="uk-icon-plus-circle"></i> {App.i18n.get(\'Add item\')}</a> <a class="uk-button" onclick="{updateorder}" show="{mode==\'reorder\'}"><i class="uk-icon-plus-circle"></i> {App.i18n.get(\'Update order\')}</a> <a class="uk-button" onclick="{switchreorder}" show="{items.length > 1}"> <span show="{mode==\'edit\'}"><i class="uk-icon-arrows"></i> {App.i18n.get(\'Reorder\')}</span> <span show="{mode==\'reorder\'}">{App.i18n.get(\'Cancel\')}</span> </a> </div>', '', '', function(opts) {
 
         var $this = this;
 
@@ -1401,6 +1401,7 @@ riot.tag2('field-repeater', '<div class="uk-alert" show="{!items.length}"> {App.
 
         this.items = [];
         this.field = opts.field || {type:'text'};
+        this.mode  = 'edit';
 
         this.$initBind = function() {
             this.root.$value = this.items;
@@ -1426,29 +1427,7 @@ riot.tag2('field-repeater', '<div class="uk-alert" show="{!items.length}"> {App.
         this.on('mount', function() {
 
             UIkit.sortable(this.itemscontainer, {
-
-                animation: false,
-                handleClass: 'uk-panel-box-footer'
-
-            }).element.on("change.uk.sortable", function(e, sortable, ele) {
-
-                ele = App.$(ele);
-
-                var items  = $this.items,
-                    cidx   = ele.index(),
-                    oidx   = ele.data('idx');
-
-                items.splice(cidx, 0, items.splice(oidx, 1)[0]);
-
-                $this.items = [];
-                $this.update();
-
-                setTimeout(function() {
-                    $this.items = items;
-                    $this.$setValue(items);
-                    $this.update();
-                }, 10);
-
+                animation: false
             });
 
         });
@@ -1459,6 +1438,29 @@ riot.tag2('field-repeater', '<div class="uk-alert" show="{!items.length}"> {App.
 
         this.remove = function(e) {
             this.items.splice(e.item.idx, 1);
+        }.bind(this)
+
+        this.switchreorder = function() {
+            $this.mode = $this.mode == 'edit' ? 'reorder':'edit';
+        }.bind(this)
+
+        this.updateorder = function() {
+
+            var items = [];
+
+            App.$(this.itemscontainer).children().each(function(){
+                items.push($this.items[Number(this.getAttribute('data-idx'))]);
+            });
+
+            $this.items = [];
+            $this.update();
+
+            setTimeout(function() {
+                $this.mode = 'edit'
+                $this.items = items;
+                $this.$setValue(items);
+                $this.update();
+            }, 10);
         }.bind(this)
 
 }, '{ }');
