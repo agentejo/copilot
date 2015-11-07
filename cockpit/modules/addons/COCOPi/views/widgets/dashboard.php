@@ -1,4 +1,4 @@
-<div class="uk-grid-margin" data-widget="pages">
+<div>
 
     <div class="uk-panel-box uk-panel-card">
 

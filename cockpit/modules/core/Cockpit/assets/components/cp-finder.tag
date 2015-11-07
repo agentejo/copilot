@@ -25,7 +25,7 @@
 
                 <span class="uk-button-group uk-margin-small-right">
 
-                    <span class="uk-position-relative uk-button" data-uk-dropdown="{\mode:'click'\}">
+                    <span class="uk-position-relative uk-button" data-uk-dropdown="\{mode:'click'\}">
 
                         <i class="uk-icon-magic"></i>
 
@@ -212,7 +212,7 @@
                 'audio'     : /\.(mp3|weba|ogg|wav|flac)$/i,
                 'archive'   : /\.(zip|rar|7zip|gz)$/i,
                 'documents' : /\.(htm|html|pdf)$/i,
-                'text'      : /\.(txt|htm|html|php|css|less|js|json|md|markdown|yaml|xml)$/i
+                'text'      : /\.(txt|htm|html|php|css|less|js|json|md|markdown|yaml|xml|htaccess)$/i
             };
 
         opts.root = opts.root || '/';

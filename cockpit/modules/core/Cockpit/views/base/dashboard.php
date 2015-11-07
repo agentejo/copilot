@@ -9,17 +9,29 @@
     <div class="uk-grid uk-margin" data-uk-grid-margin>
         <div class="uk-width-medium-1-2" data-area="main">
             <div class="uk-sortable uk-grid uk-grid-gutter uk-grid-width-1-1" data-uk-sortable="{group:'dashboard',animation:false}">
-            @trigger('admin.dashboard.main')
+                @foreach($areas['main'] as $widget)
+                <div class="uk-grid-margin" data-widget="{{ $widget['name'] }}">
+                    {{ $widget['content'] }}
+                </div>
+                @endforeach
             </div>
         </div>
         <div class="uk-width-medium-1-4" data-area="aside-left">
             <div class="uk-sortable uk-grid uk-grid-gutter uk-grid-width-medium-1-1" data-uk-sortable="{group:'dashboard',animation:false}">
-                @trigger('admin.dashboard.aside-left')
+                @foreach($areas['aside-left'] as $widget)
+                <div class="uk-grid-margin" data-widget="{{ $widget['name'] }}">
+                    {{ $widget['content'] }}
+                </div>
+                @endforeach
             </div>
         </div>
         <div class="uk-width-medium-1-4" data-area="aside-right">
             <div class="uk-sortable uk-grid uk-grid-gutter uk-grid-width-medium-1-1" data-uk-sortable="{group:'dashboard',animation:false}">
-                @trigger('admin.dashboard.aside-right')
+                @foreach($areas['aside-right'] as $widget)
+                <div class="uk-grid-margin" data-widget="{{ $widget['name'] }}">
+                    {{ $widget['content'] }}
+                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -36,7 +48,7 @@
 
     App.$(function($){
 
-        var data, dashboard = $('#dashboard').on('stop.uk.sortable', function(){
+        var data, dashboard = App.$('#dashboard').on('stop.uk.sortable', function(){
 
             data = {};
 
@@ -48,12 +60,14 @@
                 widgets.each(function(prio){
                     data[this.getAttribute('data-widget')] = {
                         area: area,
-                        prio: prio
+                        prio: prio + 1
                     };
                 });
             });
 
-            //console.log(data);
+            App.request('/cockpit/savedashboard',{widgets:data}).then(function(){
+
+            });
         });
     });
 

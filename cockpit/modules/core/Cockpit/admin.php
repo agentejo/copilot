@@ -141,9 +141,18 @@ $app->on('cockpit.search', function($search, $list) {
 });
 
 // dashboard widgets
-$app->on("admin.dashboard.main", function() {
-    $title = $this("i18n")->get("Today");
-    $this->renderView("cockpit:views/widgets/datetime.php", compact('title'));
+
+
+$app->on("admin.dashboard.widgets", function($widgets) {
+
+    $title   = $this("i18n")->get("Today");
+
+    $widgets[] = [
+        "name"    => "time",
+        "content" => $this->view("cockpit:views/widgets/datetime.php", compact('title')),
+        "area"    => 'main'
+    ];
+
 }, 100);
 
 /**

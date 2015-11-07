@@ -22,7 +22,7 @@
 
                     <div name="header" class="uk-panel-box-header uk-text-bold uk-text-center">
 
-                        <h2 class="uk-text-bold">{{ $app['app.name'] }}</h2>
+                        <h2 class="uk-text-bold uk-text-truncate">{{ $app['app.name'] }}</h2>
 
                         <div class="uk-animation-shake uk-margin-top" if="{ error }">
                             <strong>{ error }</strong>

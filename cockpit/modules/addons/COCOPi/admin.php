@@ -70,11 +70,16 @@ $app->on('admin.init', function() use($app) {
 
 
     // dashboard widgets
-    $this->on("admin.dashboard.main", function() {
+    $app->on("admin.dashboard.widgets", function($widgets) {
 
         $home  = copi::home();
         $pages = copi::pages('content:')->sorted();
 
-        $this->renderView("cocopi:views/widgets/dashboard.php", compact('pages', 'home'));
+        $widgets[] = [
+            "name"   => "pages",
+            "content" => $this->view("cocopi:views/widgets/dashboard.php", compact('pages', 'home')),
+            "area"    => 'main'
+        ];
+
     }, 100);
 });
