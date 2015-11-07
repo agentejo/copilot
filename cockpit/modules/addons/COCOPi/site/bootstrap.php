@@ -164,6 +164,21 @@ $site->service('renderer', function() use($site) {
     return $renderer;
 });
 
+
+#shortcodes service
+$site->service('shortcodes', function() use($site) {
+
+    include_once(__DIR__.'/../Lib/ShortCodes.php');
+
+    $shortcodes = new COCOPi\Lib\ShortCodes();
+
+    $site->on('cocopi.page.content', function($page, $content) use($shortcodes) {
+        $page->setContent($shortcodes->parse($content));
+    });
+
+    return $shortcodes;
+});
+
 /**
  * return page in offline mode
  */

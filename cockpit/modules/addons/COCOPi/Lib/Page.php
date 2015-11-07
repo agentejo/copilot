@@ -592,7 +592,7 @@ class Page {
             // try to fix relative urls
             $this->content = copi::helper('utils')->fixRelativeUrls($content, $this->absUrl.'/');
 
-            copi::$app->trigger('cocopi.page.content', [$this]);
+            copi::$app->trigger('cocopi.page.content', [$this, $this->content]);
         }
 
         return $part ? $this->parts($part) : $this->content;
