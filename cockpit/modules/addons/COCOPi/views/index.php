@@ -100,13 +100,18 @@
 
         </div>
         <div class="uk-grid-margin uk-width-medium-1-4">
-            <div class="uk-panel">
+            <div class="uk-panel uk-panel-box uk-panel-card">
                 <h4>@lang('Site')</h4>
 
                 <div class="uk-text-truncate">
-                    <a href="{{ $app->pathToUrl('site:') }}" target="_blank">
-                        <i class="uk-icon-home"></i> {{ str_replace(['http://', 'https://'],'', $app->getSiteUrl()) }}
-                    </a>
+                    <ul class="uk-list uk-list-space">
+                        <li>
+                            <a href="{{ $app->pathToUrl('site:') }}" target="_blank">
+                                <i class="uk-icon-globe uk-icon-justify"></i> {{ str_replace(['http://', 'https://'],'', $app->getSiteUrl()) }}
+                            </a>
+                        </li>
+                        <li><a href="@route('/cocopi/settings')"><i class="uk-icon-cogs uk-icon-justify"></i> @lang('Settings')</a></li>
+                    </ul>
                 </div>
             </div>
         </div>

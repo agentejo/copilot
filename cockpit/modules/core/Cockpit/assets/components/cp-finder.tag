@@ -217,7 +217,7 @@
 
         opts.root = opts.root || '/';
 
-        this.currentpath = opts.root;
+        this.currentpath = opts.path || App.session.get('app.finder.path', opts.root);
 
         this.data;
         this.breadcrumbs = [];
@@ -528,6 +528,8 @@
 
                     $this.breadcrumbs = crumbs;
                 }
+
+                App.session.set('app.finder.path', path);
 
                 defer.resolve(data);
 

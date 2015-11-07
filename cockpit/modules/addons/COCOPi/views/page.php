@@ -229,6 +229,8 @@
 
         this.on('mount', function() {
 
+            App.session.set('app.finder.path', App.Utils.dirname(this.page.relpath));
+
             this.tabs = [];
 
             App.$(this.root).find('[tab]').each(function() {

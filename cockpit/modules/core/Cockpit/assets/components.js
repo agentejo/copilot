@@ -372,7 +372,7 @@ riot.tag2('cp-finder', '<div show="{data}"> <div class="uk-clearfix" data-uk-mar
 
         opts.root = opts.root || '/';
 
-        this.currentpath = opts.root;
+        this.currentpath = opts.path || App.session.get('app.finder.path', opts.root);
 
         this.data;
         this.breadcrumbs = [];
@@ -679,6 +679,8 @@ riot.tag2('cp-finder', '<div show="{data}"> <div class="uk-clearfix" data-uk-mar
 
                     $this.breadcrumbs = crumbs;
                 }
+
+                App.session.set('app.finder.path', path);
 
                 defer.resolve(data);
 
