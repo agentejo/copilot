@@ -17,17 +17,17 @@
 
     <ul id="finders" class="uk-switcher uk-margin-large-top">
         <li>
-            <cp-finder root="/site"></cp-finder>
+            <cp-finder path="site"></cp-finder>
         </li>
         <li>
-            <cp-finder root="/content"></cp-finder>
+            <cp-finder path="content"></cp-finder>
         </li>
         </li>
         <li>
-            <cp-finder root="/site/theme"></cp-finder>
+            <cp-finder path="site/theme"></cp-finder>
         </li>
         <li>
-            <cp-finder root="/site/menu"></cp-finder>
+            <cp-finder path="site/menu"></cp-finder>
         </li>
     </ul>
 
