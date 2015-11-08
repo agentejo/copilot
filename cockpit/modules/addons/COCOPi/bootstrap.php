@@ -30,7 +30,7 @@ $this->module("cocopi")->extend([
         $data    = [];
 
         try {
-            $data = (array)JWT::decode($code, 'cocopi', ['HS256']);
+            $data = (array)Firebase\JWT\JWT::decode($code, 'cocopi', ['HS256']);
         } catch(Exception $e) {}
 
         if (isset($data['name'], $data['company'], $data['created'], $data['email'], $data['type'])) {
