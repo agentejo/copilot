@@ -335,11 +335,11 @@ class Resource {
         $page      = null;
         $indexfile = $this->dir.'/index';
 
-        if (file_exists("{$indexfile}.html")) {
+        if (is_file("{$indexfile}.html")) {
 
             $page = Page::fromCache("{$indexfile}.html");
 
-        } elseif(file_exists("{$indexfile}.md")) {
+        } elseif(is_file("{$indexfile}.md")) {
 
             $page = Page::fromCache("{$indexfile}.md");
         }
@@ -353,7 +353,7 @@ class Resource {
     public function delete() {
 
         // delete meta
-        if (file_exists($this->path.'.yaml')) {
+        if (is_file($this->path.'.yaml')) {
             unlink($this->path.'.yaml');
         }
 
@@ -422,7 +422,7 @@ class Resource {
         $this->dir      = dirname($this->path);
         $this->url      = copi::pathToUrl($this->path);
         $this->ext      = pathinfo($this->path, \PATHINFO_EXTENSION);
-        $this->exists   = file_exists($this->path);
+        $this->exists   = is_file($this->path);
         $this->mime     = null;
 
         // get mime

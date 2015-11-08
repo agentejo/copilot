@@ -217,7 +217,7 @@ class copi {
             $layout = $from;
         };
 
-        if (!file_exists($template)) {
+        if (!is_file($template)) {
             return "Couldn't resolve {$template}.";
         }
 
@@ -229,7 +229,7 @@ class copi {
                 $layout = $file;
             }
 
-            if(!file_exists($layout)) {
+            if(!is_file($layout)) {
                 return "Couldn't resolve {$layout}.";
             }
 

@@ -76,7 +76,7 @@ function thumb_url($image, $width = null, $height = null, $options=array()) {
     $ext   = pathinfo($path, PATHINFO_EXTENSION);
     $url   = "data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEHAAIALAAAAAABAAEAAAICVAEAOw=="; // transparent 1px gif
 
-    if (!file_exists($path) || is_dir($path)) {
+    if (!is_file($path) || is_dir($path)) {
         return $url;
     }
 
@@ -117,7 +117,7 @@ function thumb_url($image, $width = null, $height = null, $options=array()) {
         $filetime = filemtime($path);
         $savepath = copi::$app->path($cachefolder)."/".md5($path.json_encode($options))."_{$width}x{$height}_{$quality}_{$filetime}_{$mode}.{$ext}";
 
-        if ($rebuild || !file_exists($savepath)) {
+        if ($rebuild || !is_file($savepath)) {
 
             try {
 

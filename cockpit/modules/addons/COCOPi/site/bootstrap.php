@@ -203,7 +203,7 @@ $site->loadModules([CP_ROOT_DIR.'/site/modules']);
 include(CP_ROOT_DIR.'/site/bootstrap.php');
 
 // bootstrap from theme
-if (file_exists(CP_ROOT_DIR.'/site/theme/bootstrap.php')) {
+if (is_file(CP_ROOT_DIR.'/site/theme/bootstrap.php')) {
     include(CP_ROOT_DIR.'/site/theme/bootstrap.php');
 }
 
