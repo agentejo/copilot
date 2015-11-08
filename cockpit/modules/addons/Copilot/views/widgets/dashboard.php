@@ -5,6 +5,9 @@
         <div class="uk-panel-box-header uk-flex">
             <strong class="uk-flex-item-1">@lang('Pages')</strong>
             <span class="uk-badge {{ (strtolower($license)=='trial') ? 'uk-badge-danger':'' }} uk-flex uk-flex-middle uk-text-uppercase"><span>{{ $license }}</span></span>
+            @if(strtolower($license)=='trial')
+            <a class="uk-button uk-button-primary uk-button-small uk-margin-small-left" href="http://cocopi.co" target="_blank">@lang('Buy a license')</a>
+            @endif
         </div>
 
         <div class="uk-margin">

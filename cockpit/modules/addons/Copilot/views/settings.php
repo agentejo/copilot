@@ -43,9 +43,10 @@
 
                 <div class="uk-panel uk-panel-box uk-panel-card">
 
-                    <div class="uk-text-large">Copilot</div>
-                    <span class="uk-badge uk-margin-small-top">{{ $info->version }}</span>
-
+                    <div class="uk-margin uk-flex">
+                        <span class="uk-text-large uk-flex-item-1">Copilot</span>
+                        <span class="uk-badge uk-margin-small-top uk-flex uk-flex-middle"><span>{{ $info->version }}</span></span>
+                    </div>
                     @if($license->type != 'trial')
 
                     <div class="uk-margin">
@@ -81,9 +82,11 @@
 
                     @else
 
-                    <div class="uk-alert uk-alert-warning">
+                    <div class="uk-margin uk-alert uk-alert-warning">
                         <p><i class="uk-icon-warning uk-margin-small-right"></i> @lang('Unlicensed version. Enjoy your trial.')</p>
                     </div>
+
+                    <a href="http://cocopi.co" target="_blank">@lang('Buy a license')</a>
 
                     @endif
                 </div>
