@@ -366,7 +366,7 @@ riot.tag2('cp-finder', '<div show="{data}"> <div class="uk-clearfix" data-uk-mar
                 'video'     : /\.(mp4|mov|ogv|webv|flv|avi)$/i,
                 'audio'     : /\.(mp3|weba|ogg|wav|flac)$/i,
                 'archive'   : /\.(zip|rar|7zip|gz)$/i,
-                'documents' : /\.(htm|html|pdf)$/i,
+                'documents' : /\.(htm|html|pdf|md)$/i,
                 'text'      : /\.(txt|htm|html|php|css|less|js|json|md|markdown|yaml|xml|htaccess)$/i
             };
 
