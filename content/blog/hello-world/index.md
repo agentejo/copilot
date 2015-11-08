@@ -1,5 +1,5 @@
 uid: pid-563954eb0b874
-type: blog-article
+type: blog/article
 created: 2015-11-04 00:44:27
 modified: 2015-11-04 01:02:46
 title: Hello World

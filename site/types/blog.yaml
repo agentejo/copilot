@@ -1,6 +1,20 @@
 label: Blog
 layout: blog
-subpages: blog-article
+subpages: blog/article
 ext: md
 content:
     visible: false
+
+subtypes:
+    article:
+        label: Blog Article
+        subpages: false
+        layout: blog-article
+        ext: md
+        content:
+            type: markdown
+
+        meta:
+            teaser:
+                type: wysiwyg
+                label: Teaser

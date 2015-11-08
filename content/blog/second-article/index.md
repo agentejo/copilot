@@ -1,5 +1,5 @@
 uid: pid-563956f861cd1
-type: blog-article
+type: blog/article
 created: 2015-11-04 00:53:12
 modified: 2015-11-04 01:02:59
 title: Second Article
