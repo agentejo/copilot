@@ -3,6 +3,7 @@
 namespace COCOPi\Controller;
 
 use copi;
+use COCOPi\Lib\Type;
 
 class Admin extends \Cockpit\AuthController {
 
@@ -85,11 +86,7 @@ class Admin extends \Cockpit\AuthController {
     protected function getPageType($page) {
 
         $type     = $page->type();
-        $typedef  = [];
-
-        if ($path = copi::path("types:{$type}.yaml")) {
-            $typedef = $this->app->helper('yaml')->fromFile($path);
-        }
+        $typedef  = Type::definition($type);
 
         $type = array_replace_recursive([
             'name' => $type,

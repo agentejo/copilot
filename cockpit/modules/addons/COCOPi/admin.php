@@ -29,7 +29,16 @@ $app->on('admin.init', function() use($app) {
             if (!$fol) continue;
 
             foreach($this->helper('fs')->ls('*.yaml', $fol) as $file) {
-                $types[$file->getBasename('.yaml')] = $this->helper('yaml')->fromFile($file->getRealPath());
+                $type = $file->getBasename('.yaml');
+                $types[$type] = $this->helper('yaml')->fromFile($file->getRealPath());
+
+                if (isset($types[$type]['subtypes'])) {
+
+                    foreach($types[$type]['subtypes'] as $subtype => $def) {
+                        $def['parents'] = $type;
+                        $types["{$type}/{$subtype}"] = $def;
+                    }
+                }
             }
         }
 

@@ -53,7 +53,8 @@
                         </div>
                         <div class="uk-form-row">
                             <label class="uk-text-small">Type</label>
-                            <div class="uk-margin-small-top" data-uk-dropdown="\{mode:'click'\}">
+                            <div class="uk-margin-small-top">
+                            <div class="uk-display-inline-block" data-uk-dropdown="\{mode:'click'\}">
                                 <a>{ (opts.types[type] && opts.types[type].label) || type }</a>
                                 <div class="uk-dropdown">
                                     <ul class="uk-nav uk-nav-dropdown">
@@ -63,6 +64,7 @@
                                         </li>
                                     </ul>
                                 </div>
+                            </div>
                             </div>
                         </div>
                     </form>

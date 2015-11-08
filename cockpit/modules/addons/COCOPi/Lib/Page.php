@@ -618,15 +618,7 @@ class Page {
     public function layout() {
 
         if (!$this->layout) {
-
-            $type    = $this->type();
-            $typedef = [];
-
-            if ($typepath = copi::path("types:{$type}.yaml")) {
-                $typedef = copi::$app->helper('yaml')->fromFile($typepath);
-            }
-
-            $typedef       = array_merge(['layout'=>'raw'], $typedef);
+            $typedef       = Type::definition($this->type());
             $this->layout  = $this->meta('layout', $typedef['layout']);
         }
 
