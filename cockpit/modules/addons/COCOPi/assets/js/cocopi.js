@@ -55,8 +55,8 @@
                             <label class="uk-text-small">Type</label>
                             <div class="uk-margin-small-top">
                             <div class="uk-display-inline-block" data-uk-dropdown="\{mode:'click'\}">
-                                <a>{ (opts.types[type] && opts.types[type].label) || type }</a>
-                                <div class="uk-dropdown">
+                                <a class="{ Object.keys(opts.types).length > 1 ? '':'uk-link-muted' }">{ (opts.types[type] && opts.types[type].label) || type }</a>
+                                <div class="uk-dropdown" if="{ Object.keys(opts.types).length > 1 }">
                                     <ul class="uk-nav uk-nav-dropdown">
                                         <li class="uk-nav-header">Select a type</li>
                                         <li each="{key,val in opts.types}">
