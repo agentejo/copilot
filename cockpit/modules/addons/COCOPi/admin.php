@@ -81,12 +81,13 @@ $app->on('admin.init', function() use($app) {
     // dashboard widgets
     $app->on("admin.dashboard.widgets", function($widgets) {
 
-        $home  = copi::home();
-        $pages = copi::pages('content:')->sorted();
+        $home    = copi::home();
+        $pages   = copi::pages('content:')->sorted();
+        $license = $this->module("cocopi")->getLicense()->type;
 
         $widgets[] = [
             "name"   => "pages",
-            "content" => $this->view("cocopi:views/widgets/dashboard.php", compact('pages', 'home')),
+            "content" => $this->view("cocopi:views/widgets/dashboard.php", compact('pages', 'home', 'license')),
             "area"    => 'main'
         ];
 

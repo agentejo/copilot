@@ -2,8 +2,9 @@
 
     <div class="uk-panel-box uk-panel-card">
 
-        <div class="uk-panel-box-header">
-            <strong>@lang('Pages')</strong>
+        <div class="uk-panel-box-header uk-flex">
+            <strong class="uk-flex-item-1">@lang('Pages')</strong>
+            <span class="uk-badge {{ (strtolower($license)=='trial') ? 'uk-badge-danger':'' }} uk-flex uk-flex-middle uk-text-uppercase"><span>{{ $license }}</span></span>
         </div>
 
         <div class="uk-margin">

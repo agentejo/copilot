@@ -2,10 +2,10 @@
 
     <div class="uk-panel-box uk-panel-card">
 
-        <div class="uk-panel-box-header">
-            <strong>@lang('Regions')</strong>
+        <div class="uk-panel-box-header uk-flex">
+            <strong class="uk-flex-item-1">@lang('Regions')</strong>
             @if(count($regions))
-            <span class="uk-badge">{{ count($regions) }}</span>
+            <span class="uk-badge uk-flex uk-flex-middle"><span>{{ count($regions) }}</span></span>
             @endif
         </div>
 
