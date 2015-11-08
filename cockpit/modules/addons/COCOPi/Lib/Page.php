@@ -340,11 +340,11 @@ class Page {
         $page      = null;
         $indexfile = ($this->isIndex() ? dirname($this->dir) : $this->dir).'/index';
 
-        if (file_exists("{$indexfile}.html")) {
+        if (is_file("{$indexfile}.html")) {
 
             $page = self::fromCache("{$indexfile}.html");
 
-        } elseif(file_exists("{$indexfile}.md")) {
+        } elseif(is_file("{$indexfile}.md")) {
 
             $page = self::fromCache("{$indexfile}.md");
         }
@@ -662,7 +662,7 @@ class Page {
         // try to fix relative urls
         $content = copi::helper('utils')->fixRelativeUrls($content, $this->absUrl.'/');
 
-        copi::trigger('cocopi.page.render', [&$content]);
+        copi::trigger('cocopi.page.render', [&$content, $this]);
 
         return $content;
     }
@@ -753,7 +753,7 @@ class Page {
 
             if (!isset(self::$metaCache[$metafile])) {
 
-                self::$metaCache[$metafile] = file_exists($metafile) ? copi::$app->helper('yaml')->fromFile($metafile) : false;
+                self::$metaCache[$metafile] = is_file($metafile) ? copi::$app->helper('yaml')->fromFile($metafile) : false;
             }
 
             if (self::$metaCache[$metafile]) {
@@ -773,7 +773,7 @@ class Page {
 
         $cachedfile = copi::path('tmp:').'/'.basename($this->path).'.meta.'.md5($this->path).'.php';
 
-        if (!file_exists($cachedfile)) {
+        if (!is_file($cachedfile)) {
             $cachedfile = $this->cache_meta($cachedfile, null);
         }
 

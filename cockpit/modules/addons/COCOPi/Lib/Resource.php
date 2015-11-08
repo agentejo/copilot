@@ -46,7 +46,7 @@ class Resource {
 
             $meta = [];
 
-            if (file_exists($this->path.'.yaml')) {
+            if (is_file($this->path.'.yaml')) {
                 $meta = copi::$app->helper('yaml')->fromFile($this->path.'.yaml');
             }
 

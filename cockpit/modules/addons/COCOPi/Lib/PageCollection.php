@@ -31,9 +31,9 @@ class PageCollection implements \Iterator {
                 $page      = null;
                 $indexfile = $file->getRealPath().'/index';
 
-                if (file_exists("{$indexfile}.html")) {
+                if (is_file("{$indexfile}.html")) {
                     $page = "{$indexfile}.html";
-                } elseif(file_exists("{$indexfile}.md")) {
+                } elseif(is_file("{$indexfile}.md")) {
                     $page = "{$indexfile}.md";
                 }
 
