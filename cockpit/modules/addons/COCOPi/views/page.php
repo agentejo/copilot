@@ -56,7 +56,7 @@
                     <div class="uk-alert">{ type.description }</div>
                 </div>
 
-                <ul class="uk-tab uk-margin">
+                <ul class="uk-tab uk-margin"  if="{ tabs.length }">
                     <li class="{ t == parent.tab ? 'uk-active':'' }" each="{t in tabs}">
                         <a onclick="{ parent.selectTab }" select="{t}">{t}</a>
                     </li>
@@ -90,6 +90,10 @@
 
                     <cp-field field="{ contentType }" bind="page.rawcontent" cls="uk-form-large"></cp-field>
 
+                </div>
+
+                <div class="uk-margin">
+                    <button class="uk-button uk-button-large uk-button-primary uk-width-1-1 uk-width-medium-1-4">@lang('Save')</button>
                 </div>
 
             </div>
@@ -206,9 +210,6 @@
             </div>
         </div>
 
-        <div class="uk-margin">
-            <button class="uk-button uk-button-large uk-button-primary uk-width-1-1 uk-width-medium-1-4">@lang('Save')</button>
-        </div>
     </form>
 
     <script type="view/script">
