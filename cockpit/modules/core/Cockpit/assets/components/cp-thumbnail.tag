@@ -11,7 +11,7 @@
 
         this.on('mount', function(){
 
-            opts.src = opts.src || opts['riot-src'];
+            opts.src = opts.src || opts['riot-src'] || opts['riotSrc'];
 
             App.request('/cockpit/utils/thumb_url', {src:opts.src,w:opts.width,h:opts.height}, 'text').then(function(url){
 
