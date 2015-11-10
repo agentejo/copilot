@@ -22,7 +22,7 @@
             </div>
         </li>
         <li>
-            <span class="uk-text-primary">Files <span show="{files && files.length}">({files.length})</span></span>
+            <span class="uk-text-primary">Files <span class="uk-badge" show="{files && files.length}">{files.length}</span></span>
             <span name="loadprogress" class="uk-hidden"><i class="uk-icon-refresh uk-icon-spin"></i></span>
         </li>
     </ul>
