@@ -74,11 +74,11 @@
                     <ul class="uk-nav uk-nav-side">
                         <li class="uk-nav-header">Display</li>
                         <li class="{ !typefilter ? 'uk-active':'' }"><a data-type="" onclick="{ settypefilter }"><i class="uk-icon-circle-o uk-icon-justify"></i> All</a></li>
-                        <li class="{ typefilter=='images' ? 'uk-active':'' }"><a data-type="images" onclick="{ settypefilter }"><i class="uk-icon-image uk-icon-justify"></i> Images</a></li>
+                        <li class="{ typefilter=='image' ? 'uk-active':'' }"><a data-type="image" onclick="{ settypefilter }"><i class="uk-icon-image uk-icon-justify"></i> Images</a></li>
                         <li class="{ typefilter=='video' ? 'uk-active':'' }"><a data-type="video" onclick="{ settypefilter }"><i class="uk-icon-video-camera uk-icon-justify"></i> Video</a></li>
                         <li class="{ typefilter=='audio' ? 'uk-active':'' }"><a data-type="audio" onclick="{ settypefilter }"><i class="uk-icon-volume-up uk-icon-justify"></i> Audio</a></li>
-                        <li class="{ typefilter=='documents' ? 'uk-active':'' }"><a data-type="documents" onclick="{ settypefilter }"><i class="uk-icon-paper-plane uk-icon-justify"></i> Documents</a></li>
-                        <li class="{ typefilter=='archive' ? 'uk-active':'' }"><a data-type="archive" onclick="{ settypefilter }"><i class="uk-icon-archive uk-icon-justify"></i> Archive</a></li>
+                        <li class="{ typefilter=='document' ? 'uk-active':'' }"><a data-type="document" onclick="{ settypefilter }"><i class="uk-icon-paper-plane uk-icon-justify"></i> Documents</a></li>
+                        <li class="{ typefilter=='archive' ? 'uk-active':'' }"><a data-type="archive" onclick="{ settypefilter }"><i class="uk-icon-archive uk-icon-justify"></i> Archives</a></li>
                     </ul>
                 </div>
 
@@ -207,12 +207,12 @@
 
         var $this = this,
             typefilters = {
-                'images'    : /\.(jpg|jpeg|png|gif|svg)$/i,
-                'video'     : /\.(mp4|mov|ogv|webv|flv|avi)$/i,
-                'audio'     : /\.(mp3|weba|ogg|wav|flac)$/i,
-                'archive'   : /\.(zip|rar|7zip|gz)$/i,
-                'documents' : /\.(htm|html|pdf|md)$/i,
-                'text'      : /\.(txt|htm|html|php|css|less|js|json|md|markdown|yaml|xml|htaccess)$/i
+                'image'    : /\.(jpg|jpeg|png|gif|svg)$/i,
+                'video'    : /\.(mp4|mov|ogv|webv|flv|avi)$/i,
+                'audio'    : /\.(mp3|weba|ogg|wav|flac)$/i,
+                'archive'  : /\.(zip|rar|7zip|gz)$/i,
+                'document' : /\.(htm|html|pdf|md)$/i,
+                'text'     : /\.(txt|htm|html|php|css|less|js|json|md|markdown|yaml|xml|htaccess)$/i
             };
 
         opts.root = opts.root || '/';
@@ -224,7 +224,7 @@
         this.selected    = {count:0, paths:{}};
         this.bookmarks   = {"folders":[], "files":[]};
 
-        this.viewfilter = 'all';
+        this.typefilter = opts.typefilter || '';
         this.namefilter = '';
 
         this.mode       = 'table';
@@ -313,7 +313,7 @@
             var file = evt.item.file,
                 name = file.name.toLowerCase();
 
-            if (name.match(typefilters.images)) {
+            if (name.match(typefilters.image)) {
 
                 UIkit.lightbox.create([
                     {'source': file.url, 'type':'image'}
@@ -584,7 +584,7 @@
 
             var name = file.name.toLowerCase();
 
-            if (name.match(typefilters.images)) {
+            if (name.match(typefilters.image)) {
 
                 return 'image';
 
