@@ -22,7 +22,7 @@ class Utils extends \Cockpit\AuthController {
                 "cachefolder" => "#storage:thumbs",
                 "quality"     => 100,
                 "base64"      => false,
-                "mode"        => "crop",
+                "mode"        => "best_fit",
                 "domain"      => false
             );
 
