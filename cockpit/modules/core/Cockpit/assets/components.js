@@ -1755,7 +1755,7 @@ riot.tag2('field-wysiwyg', '<textarea name="input" class="uk-width-1-1" rows="5"
 
                             $this.image.insert('<img src="' + SITE_URL+'/'+selected + '" alt="">');
 
-                        }, { pattern: '*.jpg|*.png|*.gif|*.svg' });
+                        }, { typefilter:'image', pattern: '*.jpg|*.png|*.gif|*.svg' });
 
         			},
         			insert: function(e) {

@@ -106,7 +106,7 @@
 
                             $this.image.insert('<img src="' + SITE_URL+'/'+selected + '" alt="">');
 
-                        }, { pattern: '*.jpg|*.png|*.gif|*.svg' });
+                        }, { typefilter:'image', pattern: '*.jpg|*.png|*.gif|*.svg' });
         				//$(img).click($.proxy(this.imagemanager.insert, this));
 
 
