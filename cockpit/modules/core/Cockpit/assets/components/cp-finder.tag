@@ -11,6 +11,11 @@
             padding-right: 15px;
         }
 
+        .uk-modal .uk-panel-box.finder-folder,
+        .uk-modal .uk-panel-box.finder-file {
+            border: 1px rgba(0,0,0,0.1) solid;
+        }
+
     </style>
 
     <div show="{ data }">
@@ -116,7 +121,7 @@
                         <ul class="uk-grid uk-grid-small uk-grid-match uk-grid-width-1-2 uk-grid-width-medium-1-4">
 
                             <li class="uk-grid-margin" each="{folder, idx in data.folders}" onclick="{ parent.select }" if="{ parent.infilter(folder) }">
-                                <div class="uk-panel uk-panel-box { folder.selected ? 'uk-selected':'' }">
+                                <div class="uk-panel uk-panel-box finder-folder { folder.selected ? 'uk-selected':'' }">
                                     <div class="uk-flex">
                                         <div>
                                             <span class="uk-margin-small-right" data-uk-dropdown="\{mode:'click'\}">
@@ -148,7 +153,7 @@
                         <ul class="uk-grid uk-grid-small uk-grid-match uk-grid-width-1-2 uk-grid-width-medium-1-4">
 
                             <li class="uk-grid-margin" each="{file, idx in data.files}" onclick="{ parent.select }" if="{ parent.infilter(file) }">
-                                <div class="uk-panel uk-panel-box { file.selected ? 'uk-selected':'' }">
+                                <div class="uk-panel uk-panel-box finder-file { file.selected ? 'uk-selected':'' }">
 
                                     <div class="uk-panel-teaser uk-cover-background uk-position-relative">
 
