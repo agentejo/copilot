@@ -150,7 +150,7 @@
                             <li class="uk-grid-margin" each="{file, idx in data.files}" onclick="{ parent.select }" if="{ parent.infilter(file) }">
                                 <div class="uk-panel uk-panel-box { file.selected ? 'uk-selected':'' }">
 
-                                    <div class="uk-panel-teaser uk-cover-background uk-position-relative" style="background-image: { parent.getIconCls(file) == 'image' ? 'url('+file.url+')': 'none' }">
+                                    <div class="uk-panel-teaser uk-cover-background uk-position-relative">
 
                                         <div class="uk-position-cover">
 
@@ -171,7 +171,8 @@
                                             </div>
 
                                         </div>
-                                        <canvas class="uk-responsive-width uk-display-block" width="400" height="200"></canvas>
+                                        <canvas class="uk-responsive-width uk-display-block" width="400" height="200" if="{ parent.getIconCls(file) != 'image' }"></canvas>
+                                        <cp-thumbnail src="{file.url}" width="400" height="200" if="{ parent.getIconCls(file) == 'image' }"></cp-thumbnail>
                                     </div>
 
                                     <div class="uk-flex-item-1 uk-text-truncate">
