@@ -353,13 +353,14 @@ class Page {
     }
 
     /**
+     * @param null $filter
      * @return $this|PageCollection
      */
-    public function children() {
+    public function children($filter = null) {
 
         if ($this->isIndex())  {
 
-            $collection = PageCollection::fromFolder($this->dir)->not($this);
+            $collection = PageCollection::fromFolder($this->dir, $filter)->not($this);
 
         } else {
 

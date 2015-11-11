@@ -20,7 +20,11 @@ class PageCollection implements \Iterator {
      * @param $folder
      * @return PageCollection
      */
-    public static function fromFolder($folder) {
+    public static function fromFolder($folder, $criteria = null) {
+
+        if ($criteria && is_string($criteria)) {
+            $criteria = create_function('$p', "return ({$criteria});");
+        }
 
         $pages = [];
 
@@ -38,11 +42,21 @@ class PageCollection implements \Iterator {
                 }
 
                 if ($page) {
-                    $pages[] = Page::fromCache($page);
+
+                    if ($criteria && $criteria($page)) {
+                        $pages[] = Page::fromCache($page);
+                    } else {
+                        $pages[] = Page::fromCache($page);
+                    }
                 }
 
             } elseif (in_array($file->getExtension(), ['html', 'md']) && $file->getBasename('.'.$file->getExtension()) != 'index') {
-                $pages[] = Page::fromCache($file->getRealPath());
+
+                if ($criteria && $criteria($page)) {
+                    $pages[] = Page::fromCache($file->getRealPath());
+                } else {
+                    $pages[] = Page::fromCache($file->getRealPath());
+                }
             }
         }
 
