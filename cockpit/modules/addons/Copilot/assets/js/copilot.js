@@ -231,8 +231,9 @@
 
     App.$.extend(true, App, copilot);
 
+    // register page picker
     App.$(document).on('init-html-editor', function(e, editor){
-        console.log(editor);
+        //console.log(editor);
     });
 
     App.$(document).on('init-wysiwyg-editor', function(e, editor){
