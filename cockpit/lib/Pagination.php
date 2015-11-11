@@ -26,7 +26,13 @@ class Pagination {
         return $this->pages;
     }
 
-    public function current() {
+    public function current($page = null) {
+
+        if ($current && intval($current) && $current <= $this->pages) {
+            $this->current = intval($current);
+            $this->offset  = ($this->current-1) * $this->limit;
+        }
+
         return $this->current;
     }
 
