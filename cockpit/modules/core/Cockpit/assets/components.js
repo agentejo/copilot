@@ -224,7 +224,7 @@ riot.tag2('cp-field', '', '', '', function(opts) {
 
         this.on('update', function() {
 
-            if (opts.bind != this._field) {
+            if (opts.bind && opts.bind != this._field) {
 
                 App.$(this.root).children('div').remove();
 
@@ -1085,6 +1085,8 @@ riot.tag2('field-html', '<textarea name="input" class="uk-visibility-hidden"></t
 
                 });
 
+                App.$(document).trigger('init-html-editor', [editor]);
+
             }.bind(this));
         });
 
@@ -1720,9 +1722,11 @@ riot.tag2('field-wysiwyg', '<textarea name="input" class="uk-width-1-1" rows="5"
                         plugins: opts.plugins ||  ['table','textdirection','fontcolor','fontsize','video','fullscreen','imagepicker'],
                         initCallback: function() {
                             redactor = this;
+                            App.$(document).trigger('init-wysiwyg-editor', [redactor]);
                         },
                         changeCallback: function() {
-                            $this.$setValue(this.code.get());
+                            $this.$setValue(this.code.get(), true);
+                            App.$($this.input).trigger('wysiwyg-change', [redactor]);
                         }
                     });
 

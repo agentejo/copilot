@@ -120,7 +120,7 @@
         selectUrl: function(release, options) {
 
             options  = App.$.extend({
-                release: release || function(url) {}
+                release: release || function(data) {}
             }, options);
 
 
@@ -149,6 +149,10 @@
                             <div class="uk-alert" show="{ pages && !pages.length }">No pages found</div>
                         </div>
                         <div class="uk-form-row">
+                            <label class="uk-text-small">Title</label>
+                            <input name="title" type="text" class="uk-width-1-1 uk-form-large" required>
+                        </div>
+                        <div class="uk-form-row">
                             <label class="uk-text-small">Url</label>
                             <input name="url" type="text" class="uk-width-1-1 uk-form-large" required>
                         </div>
@@ -170,11 +174,12 @@
                         });
 
                         apply(e) {
-                            this.url.value = e.item.page.url;
+                            this.url.value   = e.item.page.url;
+                            this.title.value = e.item.page.meta.title;
                         }
 
                         select() {
-                            opts.release(this.url.value);
+                            opts.release({url:this.url.value, title:this.title.value});
                             opts.dialog.hide();
                         };
 
@@ -225,6 +230,23 @@
     };
 
     App.$.extend(true, App, copilot);
+
+    App.$(document).on('init-html-editor', function(e, editor){
+        console.log(editor);
+    });
+
+    App.$(document).on('init-wysiwyg-editor', function(e, editor){
+        /*
+        var button = editor.button.add('link', 'Page Link');
+
+        editor.button.addCallback(button, function(){
+
+            copilot.selectUrl(function(data){
+
+            }, editor.observe.isCurrent('a') ? {url:'',title:''} : {url:'',title:''});
+        });
+        */
+    });
 
     window.copilot = copilot;
 

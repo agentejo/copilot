@@ -53,10 +53,11 @@
                             editor['replaceSelection']('<img src="'+SITE_URL+'/'+selected[0]+'">');
                         }
 
-
                     }, { pattern: '*.jpg|*.png|*.gif|*.svg' });
 
                 });
+
+                App.$(document).trigger('init-html-editor', [editor]);
 
             }.bind(this));
         });

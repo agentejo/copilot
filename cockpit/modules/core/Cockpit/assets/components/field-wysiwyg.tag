@@ -68,9 +68,11 @@
                         plugins: opts.plugins ||  ['table','textdirection','fontcolor','fontsize','video','fullscreen','imagepicker'],
                         initCallback: function() {
                             redactor = this;
+                            App.$(document).trigger('init-wysiwyg-editor', [redactor]);
                         },
                         changeCallback: function() {
-                            $this.$setValue(this.code.get());
+                            $this.$setValue(this.code.get(), true);
+                            App.$($this.input).trigger('wysiwyg-change', [redactor]);
                         }
                     });
 
