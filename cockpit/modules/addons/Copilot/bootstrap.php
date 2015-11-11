@@ -8,6 +8,13 @@ include(__DIR__.'/site/copi.php');
 
 $this->module("copilot")->extend([
 
+    '__call' => function($method = null, $args = []) {
+        return call_user_func_array(['copi', $method], $args);
+    },
+
+    'find' => function() {
+        return call_user_func_array(['copi', 'find'], func_get_args())->sort('$p->dir()')->toArray();
+    },
 
     'getLicense' => function() {
 

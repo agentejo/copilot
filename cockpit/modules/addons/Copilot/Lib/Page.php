@@ -422,7 +422,7 @@ class Page {
      * @return PageCollection
      */
     public function find($criteria = null) {
-        return PageCollection::find($this->dir, $criteria);
+        return PageCollection::find($criteria, $this->dir);
     }
 
     /**
@@ -451,10 +451,6 @@ class Page {
      * @return int|null
      */
     public function depth() {
-
-        if (is_null($this->depth)) {
-            $this->depth = count(explode('/', str_replace(CP_ROOT_DIR.'/content', '', $this->dir))) - ($this->isIndex() ? 2 : 1);
-        }
 
         return $this->depth;
     }
@@ -825,6 +821,7 @@ class Page {
         $this->relpath     = str_replace(CP_ROOT_DIR, '', $this->path);
         $this->slug        = preg_replace('/^_/', '', ($this->basename == 'index') ? basename($this->dir) : $this->basename);
         $this->files       = []; // files cache
+        $this->depth       = count(explode('/', str_replace(CP_ROOT_DIR.'/content', '', $this->dir))) - ($this->isIndex() ? 2 : 1);
 
         if ($this->isRootIndex()) {
             $this->url = copi::$app->routeUrl('/');

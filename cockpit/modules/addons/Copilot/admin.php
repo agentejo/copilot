@@ -64,7 +64,7 @@ $app->on('admin.init', function() use($app) {
      */
     $this->on('cockpit.search', function($search, $list) {
 
-        copi::find(null, function($page) use($search, $list) {
+        copi::find(function($page) use($search, $list) {
 
             if (stripos($page->meta('title', ''), $search) !== false) {
 

@@ -138,17 +138,19 @@ class copi {
     }
 
     /**
-     * @param $folder
      * @param null $criteria
+     * @param null $folder
      * @return Copilot\Lib\PageCollection
      */
-    public static function find($folder, $criteria = null) {
+    public static function find($criteria = null, $folder = null) {
 
-        if (!self::$app->isAbsolutePath($folder)) {
-            $path = self::$app->path('content:'.$folder);
+        $path = $folder ? $folder : self::$app->path('content:'.$folder);
+
+        if (!self::$app->isAbsolutePath($path)) {
+            $path = "content:{$path}";
         }
 
-        return Copilot\Lib\PageCollection::find($path, $criteria);
+        return Copilot\Lib\PageCollection::find($criteria, $path);
     }
 
     /**

@@ -117,6 +117,85 @@
             }, 100);
         },
 
+        selectUrl: function(release, options) {
+
+            options  = App.$.extend({
+                release: release || function(url) {}
+            }, options);
+
+
+            var dialog = UIkit.modal.dialog(App.Utils.multiline(function() {/*
+
+                <div riot-view>
+                    <div class="uk-modal-header uk-text-large">
+                        Select Url
+                    </div>
+                    <form id="frmSelectLink" class="uk-form" onsubmit="{select}">
+                        <div class="uk-form-row">
+                            <label class="uk-text-small">Pages</label>
+
+                            <div class="uk-margin-top uk-text-large" show="{ !pages }">
+                                <i class="uk-icon-spinner uk-icon-spin"></i>
+                            </div>
+
+                            <div class="uk-scrollable-box" show="{ pages && pages.length }">
+                                <ul class="uk-list">
+                                <li class="uk-margin-small-top uk-text-truncate" each="{page in pages}" style="padding-left: {(page.depth * 16)}px">
+                                    <a onclick="{ parent.apply }"><i class="uk-icon-file-text-o"></i> { page.meta.title }</a>
+                                </li>
+                                </ul>
+                            </div>
+
+                            <div class="uk-alert" show="{ pages && !pages.length }">No pages found</div>
+                        </div>
+                        <div class="uk-form-row">
+                            <label class="uk-text-small">Url</label>
+                            <input name="url" type="text" class="uk-width-1-1 uk-form-large" required>
+                        </div>
+                    </form>
+                    <div class="uk-modal-footer uk-text-right">
+                        <button class="uk-button uk-button-primary uk-margin-right uk-button-large js-create-button" onclick="jQuery('#frmSelectLink').submit()" show="{url.value}">Select</button>
+                        <button class="uk-button uk-button-link uk-button-large uk-modal-close">Cancel</button>
+                    </div>
+
+                    <script type="view/script">
+
+                        var $this = this;
+
+                        this.pages = null;
+
+                        App.callmodule('copilot:find').then(function(data) {
+                            $this.pages = data.result;
+                            $this.update();
+                        });
+
+                        apply(e) {
+                            this.url.value = e.item.page.url;
+                        }
+
+                        select() {
+                            opts.release(this.url.value);
+                            opts.dialog.hide();
+                        };
+
+                    </script>
+
+                </div>
+
+            */}), {modal:false});
+
+            options.dialog = dialog;
+
+            riot.util.initViews(dialog.element[0], options);
+
+            dialog.show();
+
+            setTimeout(function(){
+                dialog.element.find(':input:first').focus();
+            }, 100);
+
+        },
+
         getFileIconCls: function(filename) {
 
             if (filename.match(typefilters.images)) {

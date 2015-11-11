@@ -66,11 +66,15 @@ class PageCollection implements \Iterator {
     }
 
     /**
-     * @param $folder
      * @param null $criteria
+     * @param $folder
      * @return PageCollection
      */
-    public static function find($folder, $criteria = null) {
+    public static function find($criteria = null, $folder = null) {
+
+        if (!$folder) {
+            $folder = copi::$app->path('content:');
+        }
 
         if ($criteria && is_string($criteria)) {
             $criteria = create_function('$p', "return ({$criteria});");
