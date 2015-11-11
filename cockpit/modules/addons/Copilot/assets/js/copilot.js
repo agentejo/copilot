@@ -233,20 +233,40 @@
 
     // register page picker
     App.$(document).on('init-html-editor', function(e, editor){
-        //console.log(editor);
+
+        editor.off('action.link').on('action.link', function() {
+
+            copilot.selectUrl(function(data){
+
+                if (editor.getCursorMode() == 'markdown') {
+                    editor['replaceSelection']('['+data.title+']('+data.url+')');
+                } else {
+                    editor['replaceSelection']('<a href="'+data.url+'">'+data.title+'</a>');
+                }
+
+            }, {url:'',title:''});
+
+        });
     });
 
     App.$(document).on('init-wysiwyg-editor', function(e, editor){
-        /*
+
         var button = editor.button.add('link', 'Page Link');
 
         editor.button.addCallback(button, function(){
 
+            editor.selection.save();
+
             copilot.selectUrl(function(data){
+
+                editor.link.$inputUrl  = {val:function(){ return data.url; }};
+                editor.link.$inputText = {val:function(){ return data.title; }};
+
+                editor.link.insert();
 
             }, editor.observe.isCurrent('a') ? {url:'',title:''} : {url:'',title:''});
         });
-        */
+
     });
 
     window.copilot = copilot;

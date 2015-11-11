@@ -1081,7 +1081,7 @@ riot.tag2('field-html', '<textarea name="input" class="uk-visibility-hidden"></t
                             editor['replaceSelection']('<img src="'+SITE_URL+'/'+selected[0]+'">');
                         }
 
-                    }, { pattern: '*.jpg|*.png|*.gif|*.svg' });
+                    }, { typefilter:'image', pattern: '*.jpg|*.png|*.gif|*.svg' });
 
                 });
 
