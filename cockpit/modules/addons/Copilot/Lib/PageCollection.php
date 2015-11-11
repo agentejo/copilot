@@ -190,6 +190,31 @@ class PageCollection implements \Iterator {
     }
 
     /**
+     * @param $obj
+     * @return bool|int
+     */
+    public function index($obj) {
+
+        $uid = (string)$obj;
+
+        foreach ($this->pages as $index => $page) {
+            if ((string)$page === $uid) {
+                return $index;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $index
+     * @return bool
+     */
+    public function eq($index) {
+        return isset($this->pages[$index]) ? $this->pages[$index] : null;
+    }
+
+    /**
      * @return PageCollection
      */
     public function visible() {
@@ -305,7 +330,6 @@ class PageCollection implements \Iterator {
      * @return null
      */
     public function end() {
-
         return $this->chain;
     }
 

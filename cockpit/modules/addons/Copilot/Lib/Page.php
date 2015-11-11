@@ -359,11 +359,8 @@ class Page {
     public function children($filter = null) {
 
         if ($this->isIndex())  {
-
             $collection = PageCollection::fromFolder($this->dir, $filter)->not($this);
-
         } else {
-
             $collection = new PageCollection([]);
         }
 
@@ -379,11 +376,8 @@ class Page {
         if ($this->isIndex())  {
 
             if ($this->isRootIndex()) {
-
                 $collection = new PageCollection([]);
-
             } else {
-
                 $collection = PageCollection::fromFolder(dirname($this->dir))->not($this);
             }
 
@@ -413,11 +407,8 @@ class Page {
         $dir = false;
 
         if (strpos($path, ':') !== false) {
-
             $dir = copi::$app->path($path);
-
         } else {
-
             $dir = $this->dir.'/'.trim($path, '/');
         }
 

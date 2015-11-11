@@ -158,8 +158,10 @@ class DataCollection implements \Iterator {
      */
     public function index($obj) {
 
+        $uid = (string)$obj;
+
         foreach ($this->items as $index => $item) {
-            if ((string)$item === (string)$obj) {
+            if ((string)$item === $uid) {
                 return $index;
             }
         }
@@ -172,7 +174,7 @@ class DataCollection implements \Iterator {
      * @return bool
      */
     public function eq($index) {
-        return isset($this->items[$index]) ? $this->items[$index] : false;
+        return isset($this->items[$index]) ? $this->items[$index] : null;
     }
 
     /**
