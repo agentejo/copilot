@@ -64,7 +64,7 @@
 
                 <div class="uk-margin" show="{tab == 'Fields'}" tab="Fields" if="{ App.Utils.count(type.meta) }">
 
-                    <div class="uk-margin" each="{name, field in type.meta}">
+                    <div class="uk-margin" each="{name, field in type.meta}" no-reorder>
 
                         <div class="uk-panel">
 

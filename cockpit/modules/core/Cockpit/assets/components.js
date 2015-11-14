@@ -1046,7 +1046,7 @@ riot.tag2('field-html', '<textarea name="input" class="uk-visibility-hidden"></t
                 this.value = value;
 
                 if (editor && this._field != field) {
-                    editor.editor.setValue(value || '');
+                    editor.editor.setValue(value || '', true);
                 }
             }
 

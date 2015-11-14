@@ -17,7 +17,7 @@
                 this.value = value;
 
                 if (editor && this._field != field) {
-                    editor.editor.setValue(value || '');
+                    editor.editor.setValue(value || '', true);
                 }
             }
 
