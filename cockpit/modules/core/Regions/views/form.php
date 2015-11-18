@@ -126,6 +126,21 @@
                 }
             });
 
+            this.on('mount', function(){
+
+                // bind clobal command + save
+                Mousetrap.bindGlobal(['command+s', 'ctrl+s'], function(e) {
+
+                    if (e.preventDefault) {
+                        e.preventDefault();
+                    } else {
+                        e.returnValue = false; // ie
+                    }
+                    $this.submit();
+                    return false;
+                });
+            });
+
             submit() {
 
                 App.callmodule('regions:updateRegion',[this.region.name, {data:this.data}]).then(function(data) {

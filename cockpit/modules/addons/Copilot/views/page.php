@@ -288,6 +288,18 @@
                 $this.update();
             });
 
+            // bind clobal command + save
+            Mousetrap.bindGlobal(['command+s', 'ctrl+s'], function(e) {
+
+                if (e.preventDefault) {
+                    e.preventDefault();
+                } else {
+                    e.returnValue = false; // ie
+                }
+                $this.save();
+                return false;
+            });
+
         });
 
         selectTab(e) {

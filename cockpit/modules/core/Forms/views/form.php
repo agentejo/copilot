@@ -77,6 +77,21 @@
 
         this.form = {{ json_encode($form) }};
 
+        this.on('mount', function(){
+
+            // bind clobal command + save
+            Mousetrap.bindGlobal(['command+s', 'ctrl+s'], function(e) {
+
+                if (e.preventDefault) {
+                    e.preventDefault();
+                } else {
+                    e.returnValue = false; // ie
+                }
+                $this.submit();
+                return false;
+            });
+        });
+
         this.on('update', function(){
 
             // lock name if saved
