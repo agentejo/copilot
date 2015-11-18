@@ -49,7 +49,7 @@ If you prefer Git, clone COCOPi's Starterkit repository.
 
 ## Documentation
 
-@TODO
+https://github.com/COCOPi/cocopi-docs (in progress)
 
 ## Issues and feedback
 
