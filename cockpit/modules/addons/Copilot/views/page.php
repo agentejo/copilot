@@ -240,7 +240,54 @@
 
             this.tab = this.tabs[0] || '';
 
-            this.update();
+            // handle uploads
+            App.assets.require(['/assets/lib/uikit/js/components/upload.js'], function() {
+
+                var uploadSettings = {
+                    action: App.route('/media/api'),
+                    params: {"cmd":"upload"},
+                    type: 'json',
+                    before: function(options) {
+                        options.params.path = App.Utils.dirname($this.page.relpath);
+                    },
+                    loadstart: function() {
+                        this.doctitle = document.title;
+                    },
+                    progress: function(percent) {
+                        document.title = 'Upload:'+Math.ceil(percent)+'%';
+                    },
+                    allcomplete: function(response) {
+
+                        document.title = this.doctitle;
+
+                        if (response && response.failed && response.failed.length) {
+                            App.ui.notify("File(s) failed to uploaded.", "danger");
+                        }
+
+                        if (response && response.uploaded && response.uploaded.length) {
+                            App.ui.notify("File(s) uploaded.", "success");
+                        }
+
+                        if (!response) {
+                            App.ui.notify("Something went wrong.", "danger");
+                        }
+
+                        App.request('/copilot/utils/getPageResources', {path:$this.page.path}).then(function(data) {
+
+                            setTimeout(function(){
+                                $this.files = data || [];
+                                $this.update();
+                            }, 100);
+                        });
+                    }
+                };
+
+                UIkit.uploadDrop('body', uploadSettings);
+                UIkit.init(this.root);
+
+                $this.update();
+            });
+
         });
 
         selectTab(e) {
