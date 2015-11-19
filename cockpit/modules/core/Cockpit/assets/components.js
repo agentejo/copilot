@@ -799,10 +799,33 @@ riot.tag2('cp-search', '<div name="autocomplete" class="uk-autocomplete uk-form-
 
         this.on('mount', function(){
 
+            var txtSearch = App.$("input[type='text']", this.autocomplete);
+
             UIkit.autocomplete(this.autocomplete, {
                 source: App.route('/cockpit/search'),
                 template: '<ul class="uk-nav uk-nav-autocomplete uk-autocomplete-results">{{~items}}<li data-value="" data-url="{{$item.url}}"><a><i class="uk-icon-{{ ($item.icon || "cube") }}"></i> {{$item.title}}</a></li>{{/items}}</ul>'
             });
+
+            UIkit.$doc.on("keydown", function(e) {
+
+                if (e.ctrlKey || e.altKey || e.metaKey) return;
+
+                if (e.target.tagName && e.target.tagName.toLowerCase()=='body' && (e.keyCode>=65 && e.keyCode<=90)) {
+                    txtSearch.focus();
+                }
+            });
+
+            Mousetrap.bindGlobal(['alt+f'], function(e) {
+
+                if (e.preventDefault) {
+                    e.preventDefault();
+                } else {
+                    e.returnValue = false;
+                }
+                txtSearch.focus();
+                return false;
+            });
+
         });
 
         App.$(this.root).on("selectitem.uk.autocomplete", function(e, data) {

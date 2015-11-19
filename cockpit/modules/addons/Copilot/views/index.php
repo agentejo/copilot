@@ -1,4 +1,4 @@
-<ul  class="uk-breadcrumb">
+<ul class="uk-breadcrumb uk-flex uk-flex-middle">
     @render('copilot:views/partials/subnav.php')
     <li><span class="uk-text-primary">@lang('Pages')</span></li>
 </ul>
@@ -58,7 +58,7 @@
                     <div class="uk-grid">
                         <div>
                             <span class="uk-margin-small-right" data-uk-dropdown>
-                                <i class="uk-icon-file-text-o uk-text-{ page.visible ? 'success':'danger' }"></i>
+                                <i class="uk-icon-cog uk-text-{ page.visible ? 'success':'danger' }"></i>
                                 <div class="uk-dropdown">
                                     <ul class="uk-nav uk-nav-dropdown">
                                         <li class="uk-nav-header">@lang('Browse')</li>
@@ -100,7 +100,7 @@
 
         </div>
         <div class="uk-grid-margin uk-width-medium-1-4">
-            <div class="uk-panel uk-panel-box uk-panel-card">
+            <div class="uk-panel">
                 <h4>@lang('Site')</h4>
 
                 <div class="uk-text-truncate">
