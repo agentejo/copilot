@@ -5,3 +5,11 @@
 .project
 .settings
 .idea
+
+/tests/*
+/cockpit/storage/*
+
+!.gitignore
+!.gitkeep
+!/cockpit/storage/*/index.html
+!/cockpit/storage/*/.htaccess
