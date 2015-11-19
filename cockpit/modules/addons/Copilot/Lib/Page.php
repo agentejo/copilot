@@ -41,10 +41,11 @@ class Page {
      */
     public static function fromCache($path) {
 
+        $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
+
         if (strpos($path, CP_CONTENT_DIR)!==0) {
             return null;
         }
-
 
         if (!isset(self::$pagesCache[$path])) {
             self::$pagesCache[$path] = new self($path);
@@ -809,7 +810,7 @@ class Page {
      */
     protected function _initPaths() {
 
-        $this->path = str_replace(DIRECTORY_SEPARATOR, '/', $this->path);
+        $this->path        = str_replace(DIRECTORY_SEPARATOR, '/', $this->path);
 
         $this->ext         = pathinfo($this->path, \PATHINFO_EXTENSION);
         $this->dir         = dirname($this->path);
