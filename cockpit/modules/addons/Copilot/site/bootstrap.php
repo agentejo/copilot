@@ -144,7 +144,7 @@ $site->service('renderer', function() use($site) {
             'load'     => '<?php copi::$meta->assets->append(expr); ?>',
 
             // cockpit related macros
-            'form'     => '<?php cockpit("forms")->form(expr); ?>',
+            'form'     => '<?php echo cockpit("forms")->open(expr); ?>',
             'region'   => '<?php echo cockpit("regions")->render(expr); ?>'
         ];
 
