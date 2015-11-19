@@ -53,7 +53,7 @@
                     </div>
 
                     <div>
-                        <div data-uk-dropdown="\{mode:'click'\}">
+                        <div data-uk-dropdown="{ '{pos:\'bottom-right\'}' }">
 
                             <a class="uk-icon-bars"></a>
 

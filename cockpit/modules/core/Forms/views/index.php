@@ -48,7 +48,7 @@
 
                     <div class="uk-grid uk-grid-small">
 
-                        <div data-uk-dropdown="\{mode:'click'\}">
+                        <div data-uk-dropdown>
 
                             <a class="uk-icon-bars"></a>
 
