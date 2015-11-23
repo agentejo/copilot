@@ -4,7 +4,7 @@
 
         <div name="autocomplete" class="uk-autocomplete uk-form-icon uk-form">
             <i class="uk-icon-tag"></i>
-            <input name="input" class="uk-width-1-1 uk-form-blank" type="text" placeholder="{ App.i18n.get('Add Tag...') }">
+            <input name="input" class="uk-width-1-1 uk-form-blank" type="text" placeholder="{ App.i18n.get(opts.placeholder || 'Add Tag...') }">
         </div>
 
         <div class="uk-margin uk-panel uk-panel-box" show="{ tags && tags.length }">
