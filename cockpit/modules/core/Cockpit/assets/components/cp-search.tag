@@ -1,6 +1,6 @@
 <cp-search>
 
-    <div name="autocomplete" class="uk-autocomplete uk-form-icon uk-form app-search">
+    <div name="autocomplete" class="uk-autocomplete uk-form app-search">
 
         <style>
             cp-search .uk-dropdown {
@@ -8,7 +8,6 @@
             }
         </style>
 
-        <i class="uk-icon-search"></i>
         <input class="uk-width-1-1 uk-form-blank" type="text" placeholder="{ App.i18n.get('Search...') }">
 
     </div>
