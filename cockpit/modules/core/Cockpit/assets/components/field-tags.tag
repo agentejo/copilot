@@ -7,11 +7,10 @@
             <input name="input" class="uk-width-1-1 uk-form-blank" type="text" placeholder="{ App.i18n.get('Add Tag...') }">
         </div>
 
-        <div class="uk-margin uk-panel uk-panel-box" if="{ tags && tags.length }">
-            <span class="uk-margin-small-right uk-margin-small-top" each="{tag,idx in tags}">
-                <a onclick="{ parent.remove }"><i class="uk-icon-close"></i></a>
-                {{ tag }}
-            </span>
+        <div class="uk-margin uk-panel uk-panel-box" show="{ tags && tags.length }">
+            <div class="uk-margin-small-right uk-margin-small-top" each="{ tag,idx in tags }">
+                <a onclick="{ parent.remove }"><i class="uk-icon-close"></i></a> { tag }
+            </div>
         </div>
 
     </div>
@@ -39,10 +38,9 @@
 
                     e.stopImmediatePropagation();
                     e.stopPropagation();
-
                     $this.tags.push($this.input.value);
                     $this.input.value = "";
-                    $this.$setValue($this.tags)
+                    $this.$setValue($this.tags);
                     $this.update();
 
                     return false;
