@@ -6,7 +6,7 @@
             <li><a href="@route('/copilot/settings')">@lang('Settings')</a></li>
             <li class="uk-nav-divider"></li>
             <li><a href="@route('/copilot/finder')">@lang('Finder')</a></li>
-            <li><a href="@route('/copilot/update')">@lang('Update')</a></li>
+            <!--<li><a href="@route('/copilot/update')">@lang('Update')</a></li> -->
         </ul>
     </div>
 </li>

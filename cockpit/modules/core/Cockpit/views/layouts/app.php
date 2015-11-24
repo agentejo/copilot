@@ -45,13 +45,12 @@
 
                     <div  class="uk-flex-item-1">
 
-                        <div class="uk-position-inline-block" data-uk-dropdown>
+                        <div class="uk-display-inline-block" data-uk-dropdown>
 
                             <a href="#" class="uk-link-muted uk-text-bold">
                                 <i class="uk-icon-bars"></i>
                                 <span>{{ $app['app.name'] }}</span>
                             </a>
-
 
                             <div class="uk-dropdown app-panel-dropdown">
 

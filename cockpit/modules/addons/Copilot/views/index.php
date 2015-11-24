@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="uk-panel uk-panel-box uk-panel-card uk-margin" if="{home}">
-                    <div class="uk-grid">
+                    <div class="uk-grid uk-grid-small">
                         <div class="">
                             <span class="uk-margin-small-right" data-uk-dropdown>
                                 <i class="uk-icon-home uk-text-{ home.visible ? 'success':'danger' }"></i>
@@ -55,7 +55,7 @@
 
                 <div class="uk-panel uk-panel-box uk-panel-card uk-margin" each="{ page,idx in pages }" if="{ !page.isRoot }"  data-path="{ page.path }">
 
-                    <div class="uk-grid">
+                    <div class="uk-grid uk-grid-small">
                         <div>
                             <span class="uk-margin-small-right" data-uk-dropdown>
                                 <i class="uk-icon-cog uk-text-{ page.visible ? 'success':'danger' }"></i>

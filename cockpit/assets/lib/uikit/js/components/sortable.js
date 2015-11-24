@@ -21,7 +21,7 @@
     "use strict";
 
     var supportsTouch       = ('ontouchstart' in window) || (window.DocumentTouch && document instanceof DocumentTouch),
-        draggingPlaceholder, currentlyDraggingElement, currentlyDraggingTarget, dragging, moving, clickedlink, delayIdle, touchedlists, moved, overElement;
+        draggingPlaceholder, currentlyDraggingElement, currentlyDraggingTarget, dragging, moving, clickedlink, delayIdle, touchedlists, moved;
 
     function closestSortable(ele) {
 
@@ -106,7 +106,7 @@
                     draggingPlaceholder.css({'left': left, 'top': top });
 
                     // adjust document scrolling
-
+                    
                     if (top + (draggingPlaceholder.height()/3) > document.body.offsetHeight) {
                         return;
                     }
@@ -155,10 +155,6 @@
 
             var handleDragStart = delegate(function(e) {
 
-                if (e.data && e.data.sortable) {
-                    return;
-                }
-
                 var $target = UI.$(e.target),
                     $link   = $target.is('a[href]') ? $target:$target.parents('a[href]');
 
@@ -176,10 +172,6 @@
                         if(!moved) $link.trigger('click');
                     });
                 }
-
-                e.data = e.data || {};
-
-                e.data.sortable = element;
 
                 return $this.dragStart(e, this);
             });
@@ -279,8 +271,6 @@
                         if (supportsTouch && document.elementFromPoint) {
                             target = document.elementFromPoint(e.pageX - document.body.scrollLeft, e.pageY - document.body.scrollTop);
                         }
-
-                        overElement = UI.$(target);
                     }
 
                     if (UI.$(target).hasClass($this.options.childClass)) {
@@ -385,10 +375,8 @@
         },
 
         dragMove: function(e, elem) {
-
-            overElement = UI.$(document.elementFromPoint(e.pageX - document.body.scrollLeft, e.pageY - document.body.scrollTop));
-
-            var overRoot     = overElement.closest('.'+this.options.baseClass),
+            var overEl       = UI.$(document.elementFromPoint(e.pageX - document.body.scrollLeft, e.pageY - (window.pageYOffset || document.documentElement.scrollTop))),
+                overRoot     = overEl.closest('.'+this.options.baseClass),
                 groupOver    = overRoot.data("sortable-group"),
                 $current     = UI.$(currentlyDraggingElement),
                 currentRoot  = $current.parent(),
@@ -404,7 +392,7 @@
 
                 // swap root
                 if (overRoot.children().length > 0) {
-                    overChild = overElement.closest('.'+this.options.childClass);
+                    overChild = overEl.closest('.'+this.options.childClass);
 
                     if (overChild.length) {
                         overChild.before($current);
@@ -413,7 +401,7 @@
                     }
 
                 } else { // empty list
-                    overElement.append($current);
+                    overEl.append($current);
                 }
 
                 UIkit.$doc.trigger('mouseover');
@@ -436,14 +424,8 @@
 
             if (previousCounter === 0) {
 
-                var groupOver    = UI.$(elem).parent().data('sortable-group'),
-                    groupCurrent = UI.$(currentlyDraggingElement).data("sortable-group")
-
-                if ((groupOver ||  groupCurrent) && (groupOver != groupCurrent)) {
-                    return false;
-                }
-
                 UI.$(elem).addClass(this.options.overClass);
+
                 this.moveElementNextTo(currentlyDraggingElement, elem);
             }
 
