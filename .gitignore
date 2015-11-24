@@ -7,9 +7,9 @@
 .idea
 
 /tests/*
-/cockpit/storage/*
+storage/*
 
 !.gitignore
 !.gitkeep
-!/cockpit/storage/*/index.html
-!/cockpit/storage/*/.htaccess
+!storage/*/index.html
+!storage/*/.htaccess

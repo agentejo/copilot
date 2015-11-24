@@ -39,8 +39,8 @@ if (!defined('COCKPIT_DIR'))         define('COCKPIT_DIR'        , $COCKPIT_DIR)
 if (!defined('COCKPIT_DOCS_ROOT'))   define('COCKPIT_DOCS_ROOT'  , $COCKPIT_DOCS_ROOT);
 if (!defined('COCKPIT_BASE_URL'))    define('COCKPIT_BASE_URL'   , $COCKPIT_BASE_URL);
 if (!defined('COCKPIT_BASE_ROUTE'))  define('COCKPIT_BASE_ROUTE' , $COCKPIT_BASE_ROUTE);
-if (!defined('COCKPIT_STORAGE_FOLDER'))  define('COCKPIT_STORAGE_FOLDER' , COCKPIT_DIR . '/storage');
-if (!defined('COCKPIT_CONFIG_PATH')) define('COCKPIT_CONFIG_PATH', COCKPIT_DIR . '/config/config.yaml');
+if (!defined('COCKPIT_STORAGE_FOLDER'))  define('COCKPIT_STORAGE_FOLDER' , dirname(COCKPIT_DIR) . '/storage');
+if (!defined('COCKPIT_CONFIG_PATH')) define('COCKPIT_CONFIG_PATH', dirname(COCKPIT_DIR) . '/config/config.yaml');
 
 function cockpit($module = null) {
 
@@ -65,8 +65,8 @@ function cockpit($module = null) {
             'session.name' => md5(__DIR__),
             'sec-key'      => 'c3b40c4c-db44-s5h7-a814-b4931a15e5e1',
             'i18n'         => 'en',
-            'database'     => [ "server" => "mongolite://".(COCKPIT_DIR."/storage/data"), "options" => ["db" => "cockpitdb"] ],
-            'memory'       => [ "server" => "redislite://".(COCKPIT_DIR."/storage/data/cockpit.memory.sqlite"), "options" => [] ],
+            'database'     => [ "server" => "mongolite://".(COCKPIT_STORAGE_FOLDER."/data"), "options" => ["db" => "cockpitdb"] ],
+            'memory'       => [ "server" => "redislite://".(COCKPIT_STORAGE_FOLDER."/data/cockpit.memory.sqlite"), "options" => [] ],
 
             'paths'        => [
                 '#root'    => COCKPIT_DIR,
