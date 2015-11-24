@@ -6,7 +6,7 @@
 .settings
 .idea
 
-/tests/*
+tests/*
 storage/*
 
 !.gitignore
