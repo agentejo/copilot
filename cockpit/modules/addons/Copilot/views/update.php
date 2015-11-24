@@ -39,51 +39,43 @@
 
         start() {
 
-            $this.status.unshift('Generating a backup');
+            $this.status.unshift('Downloading latest version');
+            $this.update();
 
-            App.request('/copilot/update/update/0', {nc:Math.random()}).then(function(data){
+            App.request('/copilot/update/update/1', {nc:Math.random()}).then(function(data){
 
                 if (data && data.error) {
                     return App.ui.alert(data.message || 'Uuups, something went wrong!');
                 }
 
-                $this.status.unshift('Downloading latest version');
+                $this.status.unshift('Extracting zip file');
                 $this.update();
 
-                App.request('/copilot/update/update/1', {nc:Math.random()}).then(function(data){
+                App.request('/copilot/update/update/2', {nc:Math.random()}).then(function(data){
 
                     if (data && data.error) {
                         return App.ui.alert(data.message || 'Uuups, something went wrong!');
                     }
 
-                    $this.status.unshift('Extracting zip file');
+                    $this.status.unshift('Swapping files');
                     $this.update();
 
-                    App.request('/copilot/update/update/2', {nc:Math.random()}).then(function(data){
+                    App.request('/copilot/update/update/3', {nc:Math.random()}).then(function(data){
 
                         if (data && data.error) {
                             return App.ui.alert(data.message || 'Uuups, something went wrong!');
                         }
 
-                        $this.status.unshift('Swapping files');
+                        $this.status.unshift('Cleaning up');
                         $this.update();
 
-                        App.request('/copilot/update/update/3', {nc:Math.random()}).then(function(data){
-
-                            if (data && data.error) {
-                                return App.ui.alert(data.message || 'Uuups, something went wrong!');
-                            }
-
-                            $this.status.unshift('Cleaning up');
-                            $this.update();
-
-                            App.request('/copilot/update/update/4', {nc:Math.random()}).then(function(data){
-                                location.href = App.route('/copilot');
-                            });
+                        App.request('/copilot/update/update/4', {nc:Math.random()}).then(function(data){
+                            location.href = App.route('/copilot');
                         });
                     });
                 });
             });
+
         };
 
     </script>

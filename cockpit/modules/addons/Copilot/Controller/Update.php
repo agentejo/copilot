@@ -41,45 +41,6 @@ class Update extends \Cockpit\AuthController {
     }
 
     /**
-     * Create backup zip
-     */
-    protected function step0() {
-
-        $sourcefolder = $this->app->path('site:');
-        $target       = $sourcefolder.date('Y-m-d.H-m').'.'.uniqid().'.backup.zip';
-        $zip          = new \ZipArchive();
-
-        if (!$zip->open($target, \ZIPARCHIVE::CREATE)) {
-            return false;
-        }
-
-        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($sourcefolder), \RecursiveIteratorIterator::SELF_FIRST);
-
-        foreach ($files as $file) {
-
-            $file = str_replace(DIRECTORY_SEPARATOR, '/', $file);
-
-            // Ignore "." and ".." folders
-            if (in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) ) continue;
-            if (preg_match('/\.git/', $file)) continue;
-            if (preg_match('/\.DS_Store/', $file)) continue;
-            if (preg_match('/\.backup\.zip$/', $file)) continue;
-
-            $file = realpath($file);
-
-            if (is_dir($file) === true) {
-                $zip->addEmptyDir(str_replace($sourcefolder, '', $file . '/'));
-            }else if (is_file($file) === true){
-                $zip->addFromString(str_replace($sourcefolder, '', $file), file_get_contents($file));
-            }
-        }
-
-        $zip->close();
-
-        return $this->app->pathToUrl($target);
-    }
-
-    /**
      * Download latest zip
      */
     protected function step1() {
@@ -143,13 +104,13 @@ class Update extends \Cockpit\AuthController {
         if ($folder = $this->app->path("#tmp:copilotpi-latest")) {
 
             $fs       = $this->app->helper("fs");
-            $root     = $this->app->path('site:');
+            $root     = $this->app->path('#root:');
             $distroot = false;
 
             // find cockpit dist root
             foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($folder)) as $file) {
                 if ($file->getFilename() == 'favicon.png') {
-                    $distroot = dirname($file->getRealPath());
+                    $distroot = dirname($file->getRealPath()).'/cockpit';
                     break;
                 }
             }
@@ -169,10 +130,6 @@ class Update extends \Cockpit\AuthController {
                 }
 
                 $fs->removeEmptySubFolders($root);
-
-                $fs->delete($distroot.'/content');
-                $fs->delete($distroot.'/site');
-                $fs->delete($distroot.'/cockpit/config');
 
                 $fs->copy($distroot, $root);
             }
