@@ -37,7 +37,7 @@
 </head>
 <body>
 
-    <div class="app-header">
+    <div class="app-header" data-uk-sticky="{top:-100, animation: 'uk-animation-slide-top', showup:true}">
 
         <div class="app-header-topbar">
 
