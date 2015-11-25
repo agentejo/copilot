@@ -214,7 +214,7 @@
 
     <div id="modal-preview" class="uk-modal">
         <div class="uk-modal-dialog uk-modal-dialog-blank uk-height-viewport uk-flex uk-flex-column">
-            <div class="uk-panel-body">
+            <div class="uk-panel-body uk-bg-primary uk-contrast">
                 <ul class="uk-subnav uk-text-large uk-flex-center uk-margin-remove">
                     <li><a href="{ page.url }?nc=s" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 360)"><i class="uk-icon-mobile-phone"></i></a></li>
                     <li><a href="{ page.url }?nc=m" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 768)"><i class="uk-icon-tablet"></i></a></li>
