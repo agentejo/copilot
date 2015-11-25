@@ -15,7 +15,7 @@
             </div>
         </li>
         <li>
-            <a class="{ page.visible ? 'uk-text-primary':'uk-text-danger'}" href="{ page.url }" target="_blank">
+            <a class="{ page.visible ? 'uk-text-primary':'uk-text-danger'}" onclick="UIkit.modal('#modal-preview').show()">
                 <i class="uk-icon-home" if="{page.isRoot}"></i>
                 <i class="uk-icon-eye{ page.visible ? '':'-slash'}" if="{!page.isRoot}"></i>
                 { page.meta.title }
@@ -211,6 +211,22 @@
         </div>
 
     </form>
+
+    <div id="modal-preview" class="uk-modal">
+        <div class="uk-modal-dialog uk-modal-dialog-blank uk-height-viewport uk-flex uk-flex-column">
+            <div class="uk-panel-body">
+                <ul class="uk-subnav uk-text-large uk-flex-center uk-margin-remove">
+                    <li><a href="{ page.url }?nc=s" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 360)"><i class="uk-icon-mobile-phone"></i></a></li>
+                    <li><a href="{ page.url }?nc=m" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 768)"><i class="uk-icon-tablet"></i></a></li>
+                    <li><a href="{ page.url }?nc=l" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', '')"><i class="uk-icon-desktop"></i></a></li>
+                    <li><a class="uk-modal-close">@lang('Close')</a></li>
+                </ul>
+            </div>
+            <div class="uk-position-relative uk-flex-item-1 uk-block-secondary">
+                <iframe id="preview-frame" name="preview-frame" class="uk-position-top uk-container-center" src="{ page.url }" width="100%" height="100%"></iframe>
+            </div>
+        </div>
+    </div>
 
     <script type="view/script">
 
