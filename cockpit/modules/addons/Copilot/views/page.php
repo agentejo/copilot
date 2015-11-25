@@ -216,14 +216,14 @@
         <div class="uk-modal-dialog uk-modal-dialog-blank uk-height-viewport uk-flex uk-flex-column">
             <div class="uk-panel-body uk-bg-primary uk-contrast">
                 <ul class="uk-subnav uk-flex-center uk-margin-remove">
-                    <li class="uk-text-large"><a href="{ page.url }?nc=s" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 360)"><i class="uk-icon-mobile-phone"></i></a></li>
-                    <li class="uk-text-large"><a href="{ page.url }?nc=m" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 768)"><i class="uk-icon-tablet"></i></a></li>
-                    <li class="uk-text-large uk-margin-right"><a href="{ page.url }?nc=l" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', '')"><i class="uk-icon-desktop"></i></a></li>
+                    <li class="uk-text-large"><a href="{ page.url }?nc=s&_m={page.meta.modified}" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 360)"><i class="uk-icon-mobile-phone"></i></a></li>
+                    <li class="uk-text-large"><a href="{ page.url }?nc=m&_m={page.meta.modified}" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 768)"><i class="uk-icon-tablet"></i></a></li>
+                    <li class="uk-text-large uk-margin-right"><a href="{ page.url }?nc=l&_m={page.meta.modified}" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', '')"><i class="uk-icon-desktop"></i></a></li>
                     <li><a class="uk-modal-close">@lang('Close')</a></li>
                 </ul>
             </div>
             <div class="uk-position-relative uk-flex-item-1 uk-block-secondary">
-                <iframe id="preview-frame" name="preview-frame" class="uk-position-top uk-container-center" src="{ page.url }" width="100%" height="100%"></iframe>
+                <iframe id="preview-frame" name="preview-frame" class="uk-position-top uk-container-center" src="{ page.url }?_m={page.meta.modified}" width="100%" height="100%"></iframe>
             </div>
         </div>
     </div>
