@@ -76,8 +76,8 @@ function cockpit($module = null) {
                 '#tmp'     => COCKPIT_STORAGE_FOLDER.'/tmp',
                 '#modules' => COCKPIT_DIR.'/modules',
                 '#uploads' => COCKPIT_DIR.'/uploads',
+                '#config'  => dirname(COCKPIT_CONFIG_PATH),
                 'assets'   => COCKPIT_DIR.'/assets',
-                'config'   => COCKPIT_DIR.'/config',
                 'site'     => COCKPIT_DIR == COCKPIT_DOCS_ROOT ? COCKPIT_DIR : dirname(COCKPIT_DIR)
             ]
 

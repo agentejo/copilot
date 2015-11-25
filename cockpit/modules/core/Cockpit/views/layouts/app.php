@@ -25,6 +25,8 @@
 
     {{ $app->assets($app('admin')->data->get('assets'), $app['cockpit/version']) }}
 
+    <script src="@route('/cockpit.i18n.data')"></script>
+
     <script>
         App.$data = {{ json_encode($app('admin')->data->get('extract')) }};
     </script>

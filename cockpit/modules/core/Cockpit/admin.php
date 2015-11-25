@@ -1,7 +1,15 @@
 <?php
 
+
+/**
+ * Helpers
+ */
+
 // because auto-load not ready yet
 include(__DIR__.'/Helper/Admin.php');
+
+$app->helpers['admin']  = 'Cockpit\\Helper\\Admin';
+
 
 // ACL
 $app('acl')->addResource('cockpit', [
@@ -10,15 +18,7 @@ $app('acl')->addResource('cockpit', [
 ]);
 
 
-/**
- * Helpers
- */
-
-$app->helpers['admin']  = 'Cockpit\\Helper\\Admin';
-
-
 // init acl groups + permissions + settings
-// -----------------------------------------------------------------------------
 $app('acl')->addGroup('admin', true);
 
 if ($user = $app->module('cockpit')->getUser()) {
@@ -44,21 +44,21 @@ if ($user = $app->module('cockpit')->getUser()) {
     }
 }
 
-// -----------------------------------------------------------------------------
+// init + load i18n
 
+$locale = 'en';
 
-$app->on('admin.init', function() {
+if ($user = $app->module('cockpit')->getUser()) {
+    $locale = isset($user['i18n']) ? $user['i18n'] : $locale;
+}
 
-    // bind finder
-    $this->bind('/finder', function() {
+$app('i18n')->load("#config:cockpit/i18n/{$locale}.php", $locale);
 
-        $this->layout = 'cockpit:views/layouts/app.php';
-        $this["user"] = $this->module('cockpit')->getUser();
-        return $this->view('cockpit:views/base/finder.php');
-
-    }, $this->module("cockpit")->hasaccess('cockpit', 'manage.media'));
-
-}, 0);
+$app->bind('/cockpit.i18n.data', function() use($locale){
+    $this->response->mime = 'js';
+    $data = $this('i18n')->data($locale);
+    return 'if (i18n) { i18n.register('.(count($data) ? json_encode($data):'{}').'); }';
+});
 
 
 /**
@@ -118,6 +118,24 @@ $app->bindClass('Cockpit\\Controller\\Settings', 'settings');
 $app->bindClass('Cockpit\\Controller\\Accounts', 'accounts');
 $app->bindClass('Cockpit\\Controller\\Auth', 'auth');
 $app->bindClass('Cockpit\\Controller\\Media', 'media');
+
+
+/**
+ * on admint init
+ */
+$app->on('admin.init', function() {
+
+    // bind finder
+    $this->bind('/finder', function() {
+
+        $this->layout = 'cockpit:views/layouts/app.php';
+        $this["user"] = $this->module('cockpit')->getUser();
+        return $this->view('cockpit:views/base/finder.php');
+
+    }, $this->module("cockpit")->hasaccess('cockpit', 'manage.media'));
+
+}, 0);
+
 
 /**
  * listen to app search to filter accounts
