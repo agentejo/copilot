@@ -15,7 +15,7 @@
             </div>
         </li>
         <li>
-            <a class="{ page.visible ? 'uk-text-primary':'uk-text-danger'}" onclick="UIkit.modal('#modal-preview').show()">
+            <a class="{ page.visible ? 'uk-text-primary':'uk-text-danger'}" onclick="{ showPreview }">
                 <i class="uk-icon-home" if="{page.isRoot}"></i>
                 <i class="uk-icon-eye{ page.visible ? '':'-slash'}" if="{!page.isRoot}"></i>
                 { page.meta.title }
@@ -214,16 +214,21 @@
 
     <div id="modal-preview" class="uk-modal">
         <div class="uk-modal-dialog uk-modal-dialog-blank uk-height-viewport uk-flex uk-flex-column">
-            <div class="uk-panel-body uk-bg-primary uk-contrast">
-                <ul class="uk-subnav uk-flex-center uk-margin-remove">
-                    <li class="uk-text-large"><a href="{ page.url }?nc=s&_m={page.meta.modified}" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 360)"><i class="uk-icon-mobile-phone"></i></a></li>
-                    <li class="uk-text-large"><a href="{ page.url }?nc=m&_m={page.meta.modified}" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 768)"><i class="uk-icon-tablet"></i></a></li>
-                    <li class="uk-text-large uk-margin-right"><a href="{ page.url }?nc=l&_m={page.meta.modified}" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', '')"><i class="uk-icon-desktop"></i></a></li>
-                    <li><a class="uk-modal-close">@lang('Close')</a></li>
+            <div class="uk-panel-body uk-bg-primary uk-contrast uk-flex uk-flex-middle">
+
+                <strong class="uk-hidden-small">@lang('Preview')</strong>
+
+                <ul class="uk-subnav uk-text-large uk-flex-center uk-flex-item-1 uk-margin-small-top">
+                    <li><a href="{ page.url }?nc=s&_m={page.meta.modified}" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 360)"><i class="uk-icon-mobile-phone"></i></a></li>
+                    <li><a href="{ page.url }?nc=m&_m={page.meta.modified}" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 768)"><i class="uk-icon-tablet"></i></a></li>
+                    <li><a href="{ page.url }?nc=l&_m={page.meta.modified}" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', '')"><i class="uk-icon-desktop"></i></a></li>
                 </ul>
+
+                <a class="uk-modal-close uk-text-contrast"><i class="uk-icon-close"></i></a>
+
             </div>
             <div class="uk-position-relative uk-flex-item-1 uk-block-secondary">
-                <iframe id="preview-frame" name="preview-frame" class="uk-position-top uk-container-center" src="{ page.url }?_m={page.meta.modified}" width="100%" height="100%"></iframe>
+                <iframe id="preview-frame" name="preview-frame" class="uk-position-top uk-container-center" src="" width="100%" height="100%"></iframe>
             </div>
         </div>
     </div>
@@ -353,6 +358,11 @@
             if (this.page.rawmeta.title) {
                 this.updates.slug = this.page.rawmeta.title.toLowerCase().replace(/\s/g, '-');
             }
+        }
+
+        showPreview() {
+            App.$('#preview-frame').attr('src', [this.page.url, '?_m=', this.page.meta.modified, '&nc=', Math.random()].join(''));
+            UIkit.modal('#modal-preview').show();
         }
 
         save() {
