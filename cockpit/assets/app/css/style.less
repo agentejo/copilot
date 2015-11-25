@@ -17,16 +17,9 @@
 }
 
 .app-header {
-
     background-color: @global-background;
-    box-shadow: 0 2px 4px rgba(0,0,0,.2);
-
-    .uk-navbar {
-
-        & > div > *:first-child {
-            margin-left: -(@navbar-nav-padding-horizontal);
-        }
-    }
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-bottom: 2.5rem;
 }
 
 .app-header-topbar {
@@ -37,10 +30,6 @@
     box-sizing: border-box;
 
     a { text-decoration: none !important; }
-
-    .uk-contrast * {
-        color: @global-contrast-color;
-    }
 }
 
 .app-panel-dropdown {

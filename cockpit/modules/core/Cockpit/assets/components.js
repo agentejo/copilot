@@ -795,7 +795,7 @@ riot.tag2('cp-gravatar', '<img name="image" class="uk-border-circle" riot-src="{
 
 }, '{ }');
 
-riot.tag2('cp-search', '<div name="autocomplete" class="uk-autocomplete uk-form app-search"> <input class="uk-width-1-1 uk-form-blank" type="text" placeholder="{App.i18n.get(\'Search...\')}"> </div>', 'cp-search .uk-dropdown { min-width: 25vw; }', '', function(opts) {
+riot.tag2('cp-search', '<div name="autocomplete" class="uk-autocomplete uk-form uk-form-icon app-search"> <i class="uk-icon-search"></i> <input class="uk-width-1-1 uk-form-blank" type="text" placeholder="{App.i18n.get(\'Search...\')}"> </div>', 'cp-search .uk-dropdown { min-width: 25vw; }', '', function(opts) {
 
         this.on('mount', function(){
 
