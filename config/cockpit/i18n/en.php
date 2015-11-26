@@ -183,7 +183,7 @@
     'Save' => 'Save',
     'Save form data' => 'Save form data',
     'Saving failed.' => 'Saving failed.',
-    'Saving successfull' => 'Saving successfull',
+    'Saving successful' => 'Saving successful',
     'Search...' => 'Search...',
     'See all' => 'See all',
     'Select image' => 'Select image',
