@@ -127,7 +127,7 @@
     'Form' => 'Form',
     'Form removed' => 'Form removed',
     'Form submission failed.' => 'Form submission failed.',
-    'Form submission was successfull.' => 'Form submission was successfull.',
+    'Form submission was successful.' => 'Form submission was successful.',
     'Forms' => 'Forms',
     'Gallery is empty' => 'Gallery is empty',
     'General' => 'General',
