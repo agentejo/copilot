@@ -55,7 +55,7 @@
                     <div>
                         <div data-uk-dropdown="{ '{pos:\'bottom-right\'}' }">
 
-                            <a class="uk-icon-bars"></a>
+                            <a class="uk-icon-cog"></a>
 
                             <div class="uk-dropdown">
                                 <ul class="uk-nav uk-nav-dropdown">
