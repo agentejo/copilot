@@ -223,4 +223,4 @@
     'You can\'t delete yourself' => 'You can\'t delete yourself',
     'info' => 'info',
     'label' => 'label'
-]
+];
