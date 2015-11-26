@@ -45,18 +45,21 @@ if ($user = $app->module('cockpit')->getUser()) {
 }
 
 // init + load i18n
-
-$locale = 'en';
+$app('i18n')->locale = 'en';
 
 if ($user = $app->module('cockpit')->getUser()) {
-    $locale = isset($user['i18n']) ? $user['i18n'] : $locale;
+
+    $locale = isset($user['i18n']) ? $user['i18n'] : $app->retrieve('i18n', 'en');
+
+    if ($translationspath = $app->path("#config:cockpit/i18n/{$locale}.php")) {
+        $app('i18n')->locale = $locale;
+        $app('i18n')->load($translationspath, $locale);
+    }
 }
 
-$app('i18n')->load("#config:cockpit/i18n/{$locale}.php", $locale);
-
-$app->bind('/cockpit.i18n.data', function() use($locale){
+$app->bind('/cockpit.i18n.data', function() {
     $this->response->mime = 'js';
-    $data = $this('i18n')->data($locale);
+    $data = $this('i18n')->data($this('i18n')->locale);
     return 'if (i18n) { i18n.register('.(count($data) ? json_encode($data):'{}').'); }';
 });
 
