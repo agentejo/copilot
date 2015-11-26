@@ -137,7 +137,7 @@
 
                 if (data.result) {
 
-                    App.ui.notify("Saving successfull", "success");
+                    App.ui.notify("Saving successful", "success");
 
                     $this.entry = data.result;
 

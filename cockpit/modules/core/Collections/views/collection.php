@@ -113,7 +113,7 @@
 
                 if (data.result) {
 
-                    App.ui.notify("Saving successfull", "success");
+                    App.ui.notify("Saving successful", "success");
                     $this.collection = data.result;
                     $this.update();
 

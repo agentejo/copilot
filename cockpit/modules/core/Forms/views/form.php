@@ -108,7 +108,7 @@
 
                 if (data.result) {
 
-                    App.ui.notify("Saving successfull", "success");
+                    App.ui.notify("Saving successful", "success");
                     $this.form = data.result;
 
                     stringifyOptionsField();
