@@ -765,7 +765,7 @@ riot.tag2('cp-finder', '<div show="{data}"> <div class="uk-clearfix" data-uk-mar
 
 }, '{ }');
 
-riot.tag2('cp-gravatar', '<img name="image" class="uk-border-circle" riot-src="{url}" width="{size}" height="{size}" alt="{opts.alt}">', '', '', function(opts) {
+riot.tag2('cp-gravatar', '<canvas name="image" class="uk-responsive-width uk-border-circle" width="{size}" height="{size}"></canvas>', '', '', function(opts) {
 
         this.url = '';
 
@@ -779,16 +779,14 @@ riot.tag2('cp-gravatar', '<img name="image" class="uk-border-circle" riot-src="{
             url = '//www.gravatar.com/avatar/'+md5(this.email)+'?d=404&s='+this.size;
 
             img.onload = function() {
-                this.image.src = url;
-                this.image.style.visibility = '';
+                this.image.getContext("2d").drawImage(img,0,0);
             }.bind(this);
 
             img.onerror = function() {
-                this.image.src = App.Utils.letterAvatar(opts.alt || '', this.size);
-                this.image.style.visibility = '';
+                img.src = App.Utils.letterAvatar(opts.alt || '', this.size);
+                this.image.getContext("2d").drawImage(img,0,0);
             }.bind(this);
 
-            this.image.style.visibility = 'hidden';
             img.src = url;
 
         });
