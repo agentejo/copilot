@@ -62,9 +62,9 @@
                     </li>
                 </ul>
 
-                <div class="uk-margin" show="{tab == 'Fields'}" tab="Fields" if="{ App.Utils.count(type.meta) }">
+                <div class="uk-grid uk-grid-small" show="{tab == 'Fields'}" tab="Fields" if="{ App.Utils.count(type.meta) }">
 
-                    <div class="uk-margin" each="{name, field in type.meta}" no-reorder>
+                    <div class="uk-width-medium-{field.width || '1-1'} uk-grid-margin" each="{name, field in type.meta}" no-reorder>
 
                         <div class="uk-panel">
 
