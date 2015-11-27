@@ -354,7 +354,7 @@
         generateSlugFromTitle() {
 
             if (this.page.rawmeta.title) {
-                this.updates.slug = this.page.rawmeta.title.toLowerCase().replace(/\s/g, '-');
+                this.updates.slug = App.Utils.sluggify(this.page.rawmeta.title.toLowerCase());
             }
         }
 

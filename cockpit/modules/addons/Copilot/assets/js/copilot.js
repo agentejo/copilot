@@ -79,14 +79,14 @@
                         this.type = Object.keys(opts.types)[0] || 'html';
 
                         updateSlugPreview() {
-                            this.slugpreview = this.title.value.toLowerCase().replace(/\s/g, '-');
+                            this.slugpreview = App.Utils.sluggify(this.title.value);
                         };
 
                         create() {
 
                             App.request('/copilot/utils/createPage', {root: opts.root, meta: {
                                 title: this.title.value,
-                                slug: this.slug ? this.slug.value :'',
+                                slug: this.slug ? this.slug.value : App.Utils.sluggify(this.title.value),
                                 type : this.type
                             }}).then(function(data) {
 
