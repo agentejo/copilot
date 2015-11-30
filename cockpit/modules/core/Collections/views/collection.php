@@ -32,13 +32,11 @@
                </div>
 
                 <div class="uk-margin">
-                    <field-boolean bind="collection.sortable" title="@lang('Sortable entries')" cls="uk-form-small"></field-boolean>
-                    <strong>@lang('Sortable entries')</strong>
+                    <field-boolean bind="collection.sortable" title="@lang('Sortable entries')" cls="uk-form-small uk-button-large uk-width-1-1" label="@lang('Sortable entries')"></field-boolean>
                 </div>
 
                 <div class="uk-margin">
-                    <field-boolean bind="collection.in_menu" title="@lang('Show in system menu')" cls="uk-form-small"></field-boolean>
-                    <strong>@lang('Show in system menu')</strong>
+                    <field-boolean bind="collection.in_menu" title="@lang('Show in system menu')" cls="uk-form-small uk-button-large uk-width-1-1" label="@lang('Show in system menu')"></field-boolean>
                 </div>
 
             </div>
