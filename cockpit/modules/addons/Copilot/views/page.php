@@ -62,9 +62,9 @@
                     </li>
                 </ul>
 
-                <div class="uk-grid uk-grid-small" show="{tab == 'Fields'}" tab="Fields" if="{ App.Utils.count(type.meta) }">
+                <div class="uk-grid uk-grid-small" show="{parent.tab == name}" tab="{name}" each="{name, group in meta}">
 
-                    <div class="uk-width-medium-{field.width || '1-1'} uk-grid-margin" each="{name, field in type.meta}" no-reorder>
+                    <div class="uk-width-medium-{field.width || '1-1'} uk-grid-margin" each="{name, field in group}" no-reorder>
 
                         <div class="uk-panel">
 
@@ -244,8 +244,23 @@
         this.type      = {{ json_encode($type) }};
         this.updates   = { slug: '' };
 
+
         this.contentType = this.type.content.type ?  this.type.content.type : this.type.ext == 'md' ? 'markdown':'html';
         this.view = App.Utils.count(this.type.meta) ? 'fields':'content';
+
+        this.meta      = {};
+
+        Object.keys(this.type.meta || {}).forEach(function(key, group){
+
+            group = $this.type.meta[key].group || 'Fields';
+
+            if (!$this.meta[group]) {
+                $this.meta[group] = {};
+            }
+
+            $this.meta[group][key] = $this.type.meta[key];
+        });
+
 
         this.on('mount', function() {
 
