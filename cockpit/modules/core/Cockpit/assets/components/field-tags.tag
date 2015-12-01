@@ -28,22 +28,30 @@
                 UIkit.autocomplete(this.autocomplete, {source: opts.autocomplete});
             }
 
-            App.$(this.input).on('keydown change', function(e) {
+            App.$(this.root).on({
 
-                if (e.type=='keydown' && e.keyCode != 13) {
-                    return;
-                }
+                'selectitem.uk.autocomplete keydown': function(e, data) {
 
-                if ($this.input.value.trim()) {
+                    var value = e.type=='keydown' ? $this.input.value : data.value;
 
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                    $this.tags.push($this.input.value);
-                    $this.input.value = "";
-                    $this.$setValue($this.tags);
-                    $this.update();
+                    if (e.type=='keydown' && e.keyCode != 13) {
+                        return;
+                    }
 
-                    return false;
+                    if (value.trim()) {
+
+                        $this.input.value = value;
+
+                        e.stopImmediatePropagation();
+                        e.stopPropagation();
+                        e.preventDefault();
+                        $this.tags.push($this.input.value);
+                        $this.input.value = "";
+                        $this.$setValue(_.uniq($this.tags));
+                        $this.update();
+
+                        return false;
+                    }
                 }
             });
         });

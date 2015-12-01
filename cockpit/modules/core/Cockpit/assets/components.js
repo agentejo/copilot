@@ -934,7 +934,7 @@ riot.tag2('field-code', '<codemirror name="codemirror" syntx="{opts.syntax || \'
 
 }, '{ }');
 
-riot.tag2('field-date', '<input name="input" class="uk-width-1-1" bind="{opts.bind}" type="text">', '', '', function(opts) {
+riot.tag2('field-date', '<input name="input" class="uk-width-1-1" bind="{opts.bind}" type="text" placeholder="{opts.placeholder}">', '', '', function(opts) {
 
         var $this = this;
 
@@ -959,7 +959,7 @@ riot.tag2('field-date', '<input name="input" class="uk-width-1-1" bind="{opts.bi
 
 }, '{ }');
 
-riot.tag2('field-file', '<div class="uk-flex"> <input class="uk-flex-item-1 uk-margin-small-right" type="text" name="input" bind="{opts.bind}" placeholder="{App.i18n.get(\'No file selected...\')}" disabled> <button type="button" class="uk-button" name="picker"><i class="uk-icon-paperclip"></i></button> </div>', '', '', function(opts) {
+riot.tag2('field-file', '<div class="uk-flex"> <input class="uk-flex-item-1 uk-margin-small-right" type="text" name="input" bind="{opts.bind}" placeholder="{opts.placeholder || App.i18n.get(\'No file selected...\')}" disabled> <button type="button" class="uk-button" name="picker"><i class="uk-icon-paperclip"></i></button> </div>', '', '', function(opts) {
 
         var $this = this, $input = App.$(this.input);
 
@@ -1344,7 +1344,7 @@ riot.tag2('field-multipleselect', '<div class="uk-grid-gutter"> <div name="conta
 
 }, '{ }');
 
-riot.tag2('field-object', '<textarea name="input" class="uk-width-1-1" onchange="{change}">{}</textarea>', '', '', function(opts) {
+riot.tag2('field-object', '<textarea name="input" class="uk-width-1-1" onchange="{change}" placeholder="{opts.placeholder}">{}</textarea>', '', '', function(opts) {
 
         var $this = this, editor;
 
@@ -1575,22 +1575,30 @@ riot.tag2('field-tags', '<div> <div name="autocomplete" class="uk-autocomplete u
                 UIkit.autocomplete(this.autocomplete, {source: opts.autocomplete});
             }
 
-            App.$(this.input).on('keydown change', function(e) {
+            App.$(this.root).on({
 
-                if (e.type=='keydown' && e.keyCode != 13) {
-                    return;
-                }
+                'selectitem.uk.autocomplete keydown': function(e, data) {
 
-                if ($this.input.value.trim()) {
+                    var value = e.type=='keydown' ? $this.input.value : data.value;
 
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                    $this.tags.push($this.input.value);
-                    $this.input.value = "";
-                    $this.$setValue($this.tags);
-                    $this.update();
+                    if (e.type=='keydown' && e.keyCode != 13) {
+                        return;
+                    }
 
-                    return false;
+                    if (value.trim()) {
+
+                        $this.input.value = value;
+
+                        e.stopImmediatePropagation();
+                        e.stopPropagation();
+                        e.preventDefault();
+                        $this.tags.push($this.input.value);
+                        $this.input.value = "";
+                        $this.$setValue(_.uniq($this.tags));
+                        $this.update();
+
+                        return false;
+                    }
                 }
             });
         });
@@ -1615,7 +1623,7 @@ riot.tag2('field-tags', '<div> <div name="autocomplete" class="uk-autocomplete u
 
 }, '{ }');
 
-riot.tag2('field-text', '<input name="input" class="uk-width-1-1" bind="{opts.bind}" type="{opts.type || \'text\'}">', '', '', function(opts) {
+riot.tag2('field-text', '<input name="input" class="uk-width-1-1" bind="{opts.bind}" type="{opts.type || \'text\'}" placeholder="{opts.placeholder}">', '', '', function(opts) {
 
         if (opts.cls) {
             App.$(this.input).addClass(opts.cls);
@@ -1627,7 +1635,7 @@ riot.tag2('field-text', '<input name="input" class="uk-width-1-1" bind="{opts.bi
 
 }, '{ }');
 
-riot.tag2('field-textarea', '<textarea name="input" class="uk-width-1-1" bind="{opts.bind}"></textarea>', '', '', function(opts) {
+riot.tag2('field-textarea', '<textarea name="input" class="uk-width-1-1" bind="{opts.bind}" placeholder="{opts.placeholder}"></textarea>', '', '', function(opts) {
 
         if (opts.cls) {
             App.$(this.input).addClass(opts.cls);

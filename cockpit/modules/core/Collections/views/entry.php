@@ -22,14 +22,15 @@
 
                 <h3>{ entry._id ? 'Edit':'Add' } @lang('Entry')</h3>
 
+                <br>
+
                 <div class="uk-grid uk-grid-match uk-grid-gutter">
 
                     <div class="uk-width-medium-{field.width} uk-grid-margin" each="{field,idx in fields}" no-reorder>
 
                         <div class="uk-panel">
 
-                            <label>
-                                <i class="uk-icon-ellipsis-v"></i>
+                            <label class="uk-text-bold">
                                 { field.label || field.name }
                                 <span if="{ field.localize }" class="uk-icon-globe" title="@lang('Localized field')" data-uk-tooltip="\{pos:'right'\}"></span>
                             </label>

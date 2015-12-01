@@ -62,31 +62,26 @@
                     </li>
                 </ul>
 
-                <div class="uk-grid uk-grid-small" show="{parent.tab == name}" tab="{name}" each="{name, group in meta}">
+                <div class="uk-grid" show="{parent.tab == name}" tab="{name}" each="{name, group in meta}">
 
                     <div class="uk-width-medium-{field.width || '1-1'} uk-grid-margin" each="{name, field in group}" no-reorder>
 
-                        <div class="uk-panel">
+                        <label class="uk-text-bold">
+                            { field.label || name }
+                        </label>
 
-                            <label>
-                                <i class="uk-icon-ellipsis-v"></i>
-                                { field.label || name }
-                            </label>
+                        <div class="uk-margin uk-text-small uk-text-muted">
+                            { field.info || ' ' }
+                        </div>
 
-                            <div class="uk-margin uk-text-small uk-text-muted">
-                                { field.info || ' ' }
-                            </div>
-
-                            <div class="uk-margin">
-                                <cp-field field="{ field }" bind="page.rawmeta.{name}" cls="uk-form-large"></cp-field>
-                            </div>
-
+                        <div class="uk-margin">
+                            <cp-field field="{ field }" bind="page.rawmeta.{name}" cls="uk-form-large"></cp-field>
                         </div>
 
                     </div>
                 </div>
 
-                <div class="uk-margin" show="{tab == 'Content'}" tab="Content" if="{ type.content.visible!==false }">
+                <div class="uk-grid-margin" show="{tab == 'Content'}" tab="Content" if="{ type.content.visible!==false }">
 
                     <cp-field field="{ contentType }" bind="page.rawcontent" cls="uk-form-large"></cp-field>
 
