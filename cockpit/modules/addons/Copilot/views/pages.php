@@ -48,7 +48,7 @@
                 <div class="uk-flex">
                     <span class="uk-margin-small-right" data-uk-dropdown>
                         <i class="uk-icon-cog uk-text-{ child.visible ? 'success':'danger' }"></i>
-                        <div class="uk-dropdown">
+                        <div class="uk-dropdown uk-dropdown-close">
                             <ul class="uk-nav uk-nav-dropdown">
                                 <li class="uk-nav-header">@lang('Browse')</li>
                                 <li><a href="@route('/copilot/pages'){child.relpath}">@lang('Sub Pages')</a></li>

@@ -68,7 +68,7 @@
 
                     <span class="uk-margin-small-right" data-uk-dropdown>
                         <a><i class="uk-icon-{ copilot.getFileIconCls(file.filename) }"></i></a>
-                        <div class="uk-dropdown">
+                        <div class="uk-dropdown uk-dropdown-close">
                             <ul class="uk-nav uk-nav-dropdown">
                                 <li><a onclick="{ parent.rename }">Rename</a></li>
                                 <li class="uk-nav-divider"></li>
