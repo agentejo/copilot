@@ -1690,7 +1690,7 @@ riot.tag2('field-time', '<input name="input" class="uk-width-1-1" bind="{opts.bi
 
 }, '{ }');
 
-riot.tag2('field-wysiwyg', '<textarea name="input" class="uk-width-1-1" rows="5" style="height:350px;"></textarea>', '', '', function(opts) {
+riot.tag2('field-wysiwyg', '<textarea name="input" class="uk-width-1-1" rows="5" style="height:350px;visibility:hidden;"></textarea>', '', '', function(opts) {
 
         var $this     = this,
             lang      = document.documentElement.getAttribute('lang') || 'en',

@@ -1,6 +1,6 @@
 <field-wysiwyg>
 
-    <textarea name="input" class="uk-width-1-1" rows="5" style="height:350px;"></textarea>
+    <textarea name="input" class="uk-width-1-1" rows="5" style="height:350px;visibility:hidden;"></textarea>
 
     <script>
 
