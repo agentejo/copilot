@@ -112,7 +112,7 @@
 
                 editor.addMenuItem('mediapath', {
                     icon: 'image',
-                    text: 'Insert media',
+                    text: 'Insert image (Finder)',
                     onclick: function(){
 
                         App.media.select(function(selected) {

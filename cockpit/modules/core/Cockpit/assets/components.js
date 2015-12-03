@@ -1796,7 +1796,7 @@ riot.tag2('field-wysiwyg', '<textarea name="input" class="uk-width-1-1" rows="5"
 
                 editor.addMenuItem('mediapath', {
                     icon: 'image',
-                    text: 'Insert media',
+                    text: 'Insert image (Finder)',
                     onclick: function(){
 
                         App.media.select(function(selected) {
