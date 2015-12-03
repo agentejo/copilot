@@ -1690,12 +1690,12 @@ riot.tag2('field-time', '<input name="input" class="uk-width-1-1" bind="{opts.bi
 
 }, '{ }');
 
-riot.tag2('field-wysiwyg', '<textarea name="input" class="uk-width-1-1" rows="5"></textarea>', '', '', function(opts) {
+riot.tag2('field-wysiwyg', '<textarea name="input" class="uk-width-1-1" rows="5" style="height:350px;"></textarea>', '', '', function(opts) {
 
         var $this     = this,
             lang      = document.documentElement.getAttribute('lang') || 'en',
             languages = ['ar','az','ba','bg','by','ca','cs','da','de','el','eo','es_ar','es','fa','fi','fr','ge','he','hr','hu','id','it','ja','ko','lt','lv','mk','nl','no_NB','pl','pt_br','pt_pt','ro','ru','sl','sq','sr-cir','sr-lat','sv','th','tr','ua','vi','zh_cn','zh_tw'],
-            redactor;
+            editor;
 
         if (opts.cls) {
             App.$(this.input).addClass(opts.cls);
@@ -1714,8 +1714,8 @@ riot.tag2('field-wysiwyg', '<textarea name="input" class="uk-width-1-1" rows="5"
 
                 this.value = value;
 
-                if (redactor && this._field != field) {
-                    redactor.code.set(this.value || '');
+                if (editor && this._field != field) {
+                    editor.setContent(this.value || '');
                 }
             }
 
@@ -1725,23 +1725,15 @@ riot.tag2('field-wysiwyg', '<textarea name="input" class="uk-width-1-1" rows="5"
 
         this.on('mount', function(){
 
-            var assets = [
-                    '/assets/lib/redactor/redactor.min.js',
-                    '/assets/lib/redactor/redactor.css',
-                ];
+            if (!this.input.id) {
+                this.input.id = 'wysiwyg-'+parseInt(Math.random()*10000000, 10);
+            }
 
-            var plugins = [
-                '/assets/lib/redactor/plugins/fullscreen/fullscreen.js',
-                '/assets/lib/redactor/plugins/fontcolor/fontcolor.js',
-                '/assets/lib/redactor/plugins/fontsize/fontsize.js',
-                '/assets/lib/redactor/plugins/textdirection/textdirection.js',
-                '/assets/lib/redactor/plugins/table/table.js',
-                '/assets/lib/redactor/plugins/video/video.js'
+            var assets = [
+                '/assets/lib/tinymce/tinymce.min.js'
             ];
 
-            if (lang != 'en' && languages.indexOf(lang) > -1) {
-                plugins.push('/assets/lib/redactor/lang/'+lang+'.js');
-            }
+            var plugins = [];
 
             App.assets.require(assets, function() {
 
@@ -1751,18 +1743,37 @@ riot.tag2('field-wysiwyg', '<textarea name="input" class="uk-width-1-1" rows="5"
 
                     this.input.value = this.value;
 
-                    App.$($this.input).redactor({
-                        lang: lang,
-                        plugins: opts.plugins ||  ['table','textdirection','fontcolor','fontsize','video','fullscreen','imagepicker'],
-                        initCallback: function() {
-                            redactor = this;
-                            App.$(document).trigger('init-wysiwyg-editor', [redactor]);
-                        },
-                        changeCallback: function() {
-                            $this.$setValue(this.code.get(), true);
-                            App.$($this.input).trigger('wysiwyg-change', [redactor]);
-                        }
-                    });
+                    tinymce.init(App.$.extend(true, {
+                        resize: true,
+                        height: 350,
+                        menubar: 'edit insert view format table tools',
+                        plugins: [
+                            "link image lists preview hr anchor",
+                            "code fullscreen media mediapath",
+                            "table contextmenu paste"
+                        ],
+                        relative_urls: false
+                    },opts.editor || {}, {
+
+                      selector: '#'+this.input.id,
+                      setup: function (ed) {
+
+                          ed.on('ExecCommand', function (e) {
+                             ed.save();
+                             $this.$setValue($this.input.value, true);
+                          });
+
+                          ed.on('KeyUp', function (e) {
+                             ed.save();
+                             $this.$setValue($this.input.value, true);
+                          });
+
+                          editor = ed;
+
+                          App.$(document).trigger('init-wysiwyg-editor', [editor]);
+                      }
+
+                    }));
 
                 }.bind(this));
 
@@ -1779,30 +1790,28 @@ riot.tag2('field-wysiwyg', '<textarea name="input" class="uk-width-1-1" rows="5"
 
         function initPlugins() {
 
-            $.Redactor.prototype.imagepicker = function() {
-                return {
-        			init: function() {
-        				var button = this.button.add('image', 'Image Picker');
-                        this.button.addCallback(button, this.imagepicker.select);
-        			},
-        			select: function() {
+            if (initPlugins.done) return;
 
-                        var $this = this;
+            tinymce.PluginManager.add('mediapath', function(editor) {
+
+                editor.addMenuItem('mediapath', {
+                    icon: 'image',
+                    text: 'Insert media',
+                    onclick: function(){
 
                         App.media.select(function(selected) {
-
-                            $this.image.insert('<img src="' + SITE_URL+'/'+selected + '" alt="">');
-
+                            editor.insertContent('<img src="' + SITE_URL+'/'+selected + '" alt="">');
                         }, { typefilter:'image', pattern: '*.jpg|*.png|*.gif|*.svg' });
+                    },
+                    context: 'insert',
+                    prependToContext: true
+                });
+            });
 
-        			},
-        			insert: function(e) {
-
-        			}
-        		};
-        	};
-
+            initPlugins.done = true;
         }
+
+        initPlugins.done = false;
 
 });
 

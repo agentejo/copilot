@@ -251,20 +251,19 @@
 
     App.$(document).on('init-wysiwyg-editor', function(e, editor){
 
-        var button = editor.button.add('link', 'Page Link');
+        editor.addMenuItem('pageurl', {
+            icon: 'link',
+            text: 'Insert Page Link',
+            onclick: function(){
 
-        editor.button.addCallback(button, function(){
+                copilot.selectUrl(function(data){
 
-            editor.selection.save();
+                    editor.insertContent('<a href="' + data.url + '" alt="">'+data.title+'</a>');
 
-            copilot.selectUrl(function(data){
-
-                editor.link.$inputUrl  = {val:function(){ return data.url; }};
-                editor.link.$inputText = {val:function(){ return data.title; }};
-
-                editor.link.insert();
-
-            }, editor.observe.isCurrent('a') ? {url:'',title:''} : {url:'',title:''});
+                }, {url:'',title:''});
+            },
+            context: 'insert',
+            prependToContext: true
         });
 
     });
