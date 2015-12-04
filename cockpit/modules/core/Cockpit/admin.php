@@ -215,6 +215,8 @@ $app->on("after", function() {
     }
 });
 
+// load package info
+$app['cockpit'] = json_decode($app('fs')->read('#root:package.json'), true);
 
 // init app helper
 $app('admin')->init();
