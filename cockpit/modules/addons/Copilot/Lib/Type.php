@@ -10,29 +10,44 @@ use copi;
  */
 class Type {
 
+    protected static $cache = [];
+
     public static function definition($type) {
 
-        $subtype = false;
-        $typedef = [];
+        $key = $type;
 
-        // is a subtype?
-        if (strpos($type, '/')) {
-            $parts   = explode('/', $type);
-            $subtype = trim($parts[1]);
-            $type    = trim($parts[0]);
-        }
+        if (!isset(self::$cache[$key])) {
 
-        if ($typepath = copi::path("types:{$type}.yaml")) {
+            $subtype = false;
+            $typedef = [];
 
-            $typedef = copi::$app->helper('yaml')->fromFile($typepath);
-
-            if ($subtype && isset($typedef['subtypes'][$subtype])) {
-                $typedef = $typedef['subtypes'][$subtype];
+            // is a subtype?
+            if (strpos($type, '/')) {
+                $parts   = explode('/', $type);
+                $subtype = trim($parts[1]);
+                $type    = trim($parts[0]);
             }
+
+            if ($typepath = copi::path("types:{$type}.yaml")) {
+
+                $typedef = copi::$app->helper('yaml')->fromFile($typepath);
+
+                if ($subtype && isset($typedef['subtypes'][$subtype])) {
+                    $typedef = $typedef['subtypes'][$subtype];
+                }
+            }
+
+            self::$cache[$key] = array_replace_recursive([
+                'layout'  => 'raw',
+                'ext'     => 'html',
+                'content' => [
+                    'visible' => true,
+                    'parse'   => false
+                ]
+            ], $typedef);
+
         }
 
-        $typedef = array_merge(['layout'=>'raw'], $typedef);
-
-        return $typedef;
+        return self::$cache[$key];
     }
 }

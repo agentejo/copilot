@@ -565,12 +565,16 @@ class Page {
 
         if (is_null($this->content)) {
 
+            $typedef       = Type::definition($this->type());
             $this->content = '';
-            $content       = $this->contents();
-            $content       = copi::view($this->path, array_merge(['page' => $this], $slots));
+
+            if (isset($typedef['content']['parse']) && $typedef['content']['parse']) {
+                $content = copi::view($this->path, array_merge(['page' => $this], $slots));
+            } else {
+                $content = $this->contents();
+            }
 
             if ($dividerpos = strpos($content, self::CONTENT_MARKER)) {
-
                 $content = substr($content, strpos($content, self::CONTENT_MARKER) + strlen(self::CONTENT_MARKER));
             }
 

@@ -2,3 +2,4 @@ label: Markdown
 ext: md
 content:
     type: markdown
+    parse: false

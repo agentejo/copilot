@@ -1,2 +1,4 @@
 label: Html
 ext: html
+content:
+    parse: true

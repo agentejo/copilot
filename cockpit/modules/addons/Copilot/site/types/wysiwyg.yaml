@@ -1,3 +1,4 @@
 label: WYSIWYG
 content:
     type: wysiwyg
+    parse: false
