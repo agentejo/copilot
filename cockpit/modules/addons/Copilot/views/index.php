@@ -71,6 +71,7 @@
                             </span>
                         </div>
                         <div class="uk-flex-item-1">
+                            <cp-pagejump page="{ page }"></cp-pagejump>
                             <a href="@route('/copilot/page'){ page.relpath }">{ page.meta.title || page.basename }</a>
                         </div>
                         <div class="uk-text-muted uk-text-small">
@@ -80,7 +81,9 @@
                             <a href="{ page.url }" target="_blank">/{ page.slug }</a>
                         </div>
                         <div>
-                            <span class="uk-badge">{ page.children }</span>
+                            <span class="uk-badge">
+                                { page.children }
+                            </span>
                         </div>
                     </div>
 
@@ -116,7 +119,6 @@
             </div>
         </div>
     </div>
-
 
     <script type="view/script">
 

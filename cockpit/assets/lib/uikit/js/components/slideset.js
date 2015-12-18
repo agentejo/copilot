@@ -1,4 +1,4 @@
-/*! UIkit 2.24.2 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
+/*! UIkit 2.24.3 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
 (function(addon) {
 
     var component;
@@ -432,13 +432,21 @@
                 next.eq(dir == 1 ? i:(next.length - i)-1).css('animation-delay', (i*delay)+'ms');
             }
 
-            next.addClass(clsIn)[dir==1 ? 'last':'first']().one(UI.support.animation.end, function() {
-
+            var finish = function() {
                 next.removeClass(''+clsIn+'').css({opacity:'', display:'', 'animation-delay':'', 'animation':''});
                 d.resolve();
                 $this.element.css('min-height', '');
+                finish = false;
+            };
 
+            next.addClass(clsIn)[dir==1 ? 'last':'first']().one(UI.support.animation.end, function(){
+                if(finish) finish();
             }).end().css('display', '');
+
+            // make sure everything resolves really
+            setTimeout(function() {
+                if(finish) finish();
+            },  next.length * delay * 2);
         };
 
         if (next.length) {

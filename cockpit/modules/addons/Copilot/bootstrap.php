@@ -16,6 +16,10 @@ $this->module("copilot")->extend([
         return call_user_func_array(['copi', 'find'], func_get_args())->sort('$p->dir()')->toArray();
     },
 
+    'pages' => function() {
+        return call_user_func_array(['copi', 'pages'], func_get_args())->sorted()->toArray();
+    },
+
     'getLicense' => function() {
 
         /**
