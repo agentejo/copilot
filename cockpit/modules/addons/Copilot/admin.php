@@ -95,6 +95,6 @@ $app->on('admin.init', function() use($app) {
 
     // load custom web components
     if (strpos($this['route'], '/copilot') === 0) {
-        $app('admin')->data->components->append('copilot:assets/components/pagejump.html');
+        $app('admin')->data->components->append('copilot:assets/components/pagejumplist.html');
     }
 });

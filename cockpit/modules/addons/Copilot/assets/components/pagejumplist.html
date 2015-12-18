@@ -1,0 +1,40 @@
+<cp-pagejumplist>
+
+    <div class="{ pages && pages.length > 10 ? 'uk-scrollable-box':''}" show="{ pages && pages.length }">
+        <ul class="uk-list">
+            <li class="uk-margin-small-top uk-text-truncate" each="{page in pages}">
+                <a href="{ App.route('/copilot/page')+page.relpath }"><i class="uk-icon-file-text-o"></i> { page.meta.title }</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="uk-text-muted" show="{ pages && !pages.length }">
+        No sub pages.
+    </div>
+
+    <div show="{ !pages }">
+        <i class="uk-icon-spin uk-icon-spinner"></i>
+    </div>
+
+    <script>
+
+        var $this = this;
+
+        this.pages = null;
+
+        this.on('mount', function() {
+
+            $this.loadpages();
+        });
+
+        loadpages() {
+
+            App.callmodule('copilot:pages', [opts.dir]).then(function(data) {
+                $this.pages = data.result;
+                $this.update();
+            });
+        }
+
+    </script>
+
+</cp-pagejumplist>

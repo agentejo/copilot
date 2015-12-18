@@ -60,6 +60,12 @@
                             <span class="uk-margin-small-right" data-uk-dropdown>
                                 <i class="uk-icon-cog uk-text-{ page.visible ? 'success':'danger' }"></i>
                                 <div class="uk-dropdown uk-dropdown-close">
+
+                                    <div class="uk-margin"  if="{ copilot.getType(page.type).subpages !== false }">
+                                        <strong class="uk-text-small">Sub pages</strong>
+                                        <cp-pagejumplist dir="{page.dir}"></cp-pagejumplist>
+                                    </div>
+
                                     <ul class="uk-nav uk-nav-dropdown">
                                         <li class="uk-nav-header">@lang('Browse')</li>
                                         <li><a href="@route('/copilot/pages'){page.relpath}">@lang('Sub Pages')</a></li>
@@ -71,7 +77,6 @@
                             </span>
                         </div>
                         <div class="uk-flex-item-1">
-                            <cp-pagejump page="{ page }" if="{ copilot.getType(page.type).subpages !== false }"></cp-pagejump>
                             <a href="@route('/copilot/page'){ page.relpath }">{ page.meta.title || page.basename }</a>
                         </div>
                         <div class="uk-text-muted uk-text-small">

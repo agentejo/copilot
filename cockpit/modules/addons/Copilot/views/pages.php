@@ -11,6 +11,12 @@
         <li each="{p in parents}" data-uk-dropdown>
             <a href="@route('/copilot/page'){ p.relpath }"><i class="uk-icon-home" if="{p.isRoot}"></i> { p.meta.title.substring(0, 15) }</a>
             <div class="uk-dropdown">
+
+                <div class="uk-margin"  if="{ copilot.getType(p.type).subpages !== false }">
+                    <strong class="uk-text-small">Sub pages</strong>
+                    <cp-pagejumplist dir="{page.dir}"></cp-pagejumplist>
+                </div>
+
                 <ul class="uk-nav uk-nav-dropdown">
                     <li class="uk-nav-header">@lang('Browse')</li>
                     <li><a href="@route('/copilot/pages'){p.relpath}">@lang('Sub Pages')</a></li>
@@ -49,6 +55,12 @@
                     <span class="uk-margin-small-right" data-uk-dropdown>
                         <i class="uk-icon-cog uk-text-{ child.visible ? 'success':'danger' }"></i>
                         <div class="uk-dropdown uk-dropdown-close">
+
+                            <div class="uk-margin" if="{ copilot.getType(child.type).subpages !== false }">
+                                <strong class="uk-text-small">Sub pages</strong>
+                                <cp-pagejumplist dir="{child.dir}"></cp-pagejumplist>
+                            </div>
+
                             <ul class="uk-nav uk-nav-dropdown">
                                 <li class="uk-nav-header">@lang('Browse')</li>
                                 <li><a href="@route('/copilot/pages'){child.relpath}">@lang('Sub Pages')</a></li>
