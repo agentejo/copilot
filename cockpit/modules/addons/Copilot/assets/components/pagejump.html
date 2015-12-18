@@ -19,6 +19,9 @@
             <div class="uk-alert" show="{ pages && !pages.length }">
                 No sub pages.
             </div>
+            <div show="{ !pages }">
+                <i class="uk-icon-spin uk-icon-spinner"></i>
+            </div>
             <hr>
 
             <a class="uk-text-small" href="{ App.route('/copilot/pages'+opts.page.relpath) }">Browse</a>

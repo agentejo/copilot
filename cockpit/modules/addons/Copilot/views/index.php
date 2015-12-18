@@ -71,7 +71,7 @@
                             </span>
                         </div>
                         <div class="uk-flex-item-1">
-                            <cp-pagejump page="{ page }"></cp-pagejump>
+                            <cp-pagejump page="{ page }" if="{ copilot.getType(page.type).subpages !== false }"></cp-pagejump>
                             <a href="@route('/copilot/page'){ page.relpath }">{ page.meta.title || page.basename }</a>
                         </div>
                         <div class="uk-text-muted uk-text-small">

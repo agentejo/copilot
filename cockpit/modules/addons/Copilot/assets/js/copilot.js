@@ -224,6 +224,10 @@
             }
         },
 
+        getType: function(type) {
+            return COPILOT_PAGE_TYPES[type] || COPILOT_PAGE_TYPES['html'] || {};
+        },
+
         getTypeLabel: function(type) {
             return COPILOT_PAGE_TYPES[type] && COPILOT_PAGE_TYPES[type].label || type;
         }
