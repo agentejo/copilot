@@ -1534,6 +1534,8 @@ riot.tag2('field-repeater', '<div class="uk-alert" show="{!items.length}"> {App.
 
             var items = [];
 
+            App.$($this.root).css('height', App.$($this.root).height());
+
             App.$(this.itemscontainer).children().each(function(){
                 items.push($this.items[Number(this.getAttribute('data-idx'))]);
             });
@@ -1546,6 +1548,10 @@ riot.tag2('field-repeater', '<div class="uk-alert" show="{!items.length}"> {App.
                 $this.items = items;
                 $this.$setValue(items);
                 $this.update();
+
+                setTimeout(function(){
+                    $this.root.style.height = '';
+                }, 30)
             }, 10);
         }.bind(this)
 
