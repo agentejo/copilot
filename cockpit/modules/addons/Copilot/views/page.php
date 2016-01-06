@@ -8,16 +8,17 @@
             </a>
             <div class="uk-dropdown">
 
-                <div class="uk-margin" if="{ copilot.getType(p.type).subpages !== false }">
-                    <strong class="uk-text-small">Sub pages</strong>
-                    <cp-pagejumplist dir="{p.dir}"></cp-pagejumplist>
-                </div>
-
                 <ul class="uk-nav uk-nav-dropdown">
                     <li class="uk-nav-header">@lang('Browse')</li>
                     <li><a href="@route('/copilot/pages'){p.relpath}">@lang('Sub Pages')</a></li>
                     <li><a href="@route('/copilot/files'){p.relpath}">@lang('Files')</a></li>
                 </ul>
+
+                <div class="uk-margin" if="{ copilot.getType(p.type).subpages !== false }">
+                    <strong class="uk-text-small">Sub pages</strong>
+                    <cp-pagejumplist dir="{p.dir}"></cp-pagejumplist>
+                </div>
+                
             </div>
         </li>
         <li>
