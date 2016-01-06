@@ -6,19 +6,19 @@
             <a href="@route('/copilot/page'){ p.relpath }">
                 <i class="uk-icon-home" if="{p.isRoot}"></i> { p.meta.title.substring(0, 15) }
             </a>
-            <div class="uk-dropdown">
+            <div class="uk-dropdown" if="{ copilot.getType(p.type).subpages !== false || copilot.getType(p.type).files !== false }">
 
                 <ul class="uk-nav uk-nav-dropdown">
                     <li class="uk-nav-header">@lang('Browse')</li>
-                    <li><a href="@route('/copilot/pages'){p.relpath}">@lang('Sub Pages')</a></li>
-                    <li><a href="@route('/copilot/files'){p.relpath}">@lang('Files')</a></li>
+                    <li><a href="@route('/copilot/pages'){p.relpath}" if="{ copilot.getType(p.type).subpages !== false }">@lang('Sub Pages')</a></li>
+                    <li><a href="@route('/copilot/files'){p.relpath}" if="{ copilot.getType(p.type).files !== false }">@lang('Files')</a></li>
                 </ul>
 
                 <div class="uk-margin" if="{ copilot.getType(p.type).subpages !== false }">
                     <strong class="uk-text-small">Sub pages</strong>
                     <cp-pagejumplist dir="{p.dir}"></cp-pagejumplist>
                 </div>
-                
+
             </div>
         </li>
         <li>
@@ -178,7 +178,7 @@
 
                 </div>
 
-                <div class="uk-panel uk-panel-box">
+                <div class="uk-panel uk-panel-box" if="{type.files !== false }">
 
                     <h5 class="uk-clearfix">@lang('Files') <span class="uk-text-muted uk-text-small uk-float-right" if="{files.length > 5}">{ files.length }</span></h5>
 
