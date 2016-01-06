@@ -328,7 +328,7 @@ class Resource {
     }
 
     /**
-     * @return null
+     * @return misc
      */
     public function parent() {
 
@@ -345,6 +345,13 @@ class Resource {
         }
 
         return $page;
+    }
+
+    /**
+     * @return misc
+     */
+    public function page() {
+        return $this->parent();
     }
 
     /**

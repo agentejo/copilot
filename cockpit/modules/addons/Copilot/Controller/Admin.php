@@ -60,9 +60,11 @@ class Admin extends \Cockpit\AuthController {
             return false;
         }
 
-        $file = copi::resource($path);
+        $file     = copi::resource($path);
+        $page     = $file->page();
+        $pagetype = $this->getPageType($page);
 
-        return $this->render('copilot:views/file.php', compact('file'));
+        return $this->render('copilot:views/file.php', compact('file', 'page', 'pagetype'));
     }
 
     public function files($path) {

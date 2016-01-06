@@ -72,14 +72,20 @@
                         <input type="text" class="uk-width-1-1" bind="file.meta.alt">
                     </div>
 
-                    <div class="uk-margin">
-                        <label class="uk-text-small">@lang('Description')</label>
-                        <textarea class="uk-width-1-1" style="min-height:150px" bind="file.meta.desc"></textarea>
-                    </div>
+                    <div class="uk-margin" each="{name, field in meta}" if="{ (!field.filter || App.Utils.fnmatch(field.filter, parent.file.filename)) }" no-reorder>
 
-                    <div class="uk-margin">
-                        <label class="uk-text-small">@lang('Tags')</label>
-                        <input type="text" class="uk-width-1-1" bind="file.meta.tags">
+                        <label class="uk-text-small">
+                            { field.label || name }
+                        </label>
+
+                        <div class="uk-margin uk-text-small uk-text-muted" show="{ field.info }">
+                            { field.info || ' ' }
+                        </div>
+
+                        <div class="uk-margin">
+                            <cp-field field="{ field }" bind="file.meta.{name}" cls="uk-form-large"></cp-field>
+                        </div>
+
                     </div>
 
                 </div>
@@ -99,8 +105,14 @@
 
         this.mixin(RiotBindMixin);
 
-        this.file    = {{ json_encode($file->toArray()) }};
-        this.parents = {{ json_encode(array_reverse($file->parents()->toArray())) }};
+        this.file     = {{ json_encode($file->toArray()) }};
+        this.parents  = {{ json_encode(array_reverse($file->parents()->toArray())) }};
+        this.pagetype = {{ json_encode($pagetype) }};
+
+        this.meta     = App.$.extend(true, {
+            desc: {label:'Description', type:'textarea'},
+            tags: {label:'Tags', type: 'text'}
+        }, (this.pagetype.files && this.pagetype.files.meta) || {});
 
         save() {
 
