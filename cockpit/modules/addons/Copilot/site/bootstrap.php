@@ -32,6 +32,10 @@ if (COCOPI_FRONTEND) {
  define('CP_BASE_URL'     , $CP_BASE_URL);
  define('CP_BASE_ROUTE'   , CP_BASE_URL);
  define('CP_CURRENT_ROUTE', $CP_ROUTE);
+ 
+ 
+// allow cockpit to autoload from cocopi modules
+$app->retrieve('autoload')->append(CP_SITE_DIR.'/modules');
 
 // include helper functions
 include(__DIR__.'/functions.php');
