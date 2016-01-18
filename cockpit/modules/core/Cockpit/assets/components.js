@@ -231,7 +231,7 @@ riot.tag2('cp-field', '', '', '', function(opts) {
                 var container = App.$('<div name="fieldcontainer" type="{ field.type }"></div>').appendTo(this.root);
 
                 var field   = typeof(opts.field) == 'string' ? {type:opts.field} : ( opts.field || {}),
-                    type    = field.options.type || field.type || 'text',
+                    type    = field.type || 'text',
                     options = field.options || {},
                     fc      = 'field-'+type;
 
@@ -245,10 +245,6 @@ riot.tag2('cp-field', '', '', '', function(opts) {
 
                 if (opts.bind) {
                     container[0].setAttribute('bind', opts.bind);
-                }
-
-                if (fc === 'field-text') {
-                    container[0].setAttribute('type', type);
                 }
 
                 riot.mount(container[0], fc, options);

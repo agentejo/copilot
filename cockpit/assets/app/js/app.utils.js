@@ -145,7 +145,7 @@
         }
 
         if (window.devicePixelRatio) {
-            size = (size * window.devicePixelRatio);
+            //size = (size * window.devicePixelRatio);
         }
 
         charIndex     = (initials == '?' ? 72 : initials.charCodeAt(0)) - 64;
