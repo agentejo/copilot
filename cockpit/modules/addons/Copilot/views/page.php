@@ -218,6 +218,8 @@
         <div class="uk-modal-dialog uk-modal-dialog-blank uk-height-viewport uk-flex uk-flex-column">
             <div class="uk-panel-body uk-bg-primary uk-contrast uk-flex uk-flex-middle">
 
+                <strong class="uk-hidden-small">@lang('Preview')</strong>
+
                 <ul class="uk-subnav uk-text-large uk-flex-center uk-flex-item-1 uk-margin-small-top">
                     <li><a href="{ page.url }?nc=s&_m={page.meta.modified}" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 360)"><i class="uk-icon-mobile-phone"></i></a></li>
                     <li><a href="{ page.url }?nc=m&_m={page.meta.modified}" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 768)"><i class="uk-icon-tablet"></i></a></li>

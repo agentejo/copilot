@@ -61,11 +61,6 @@
                                 <i class="uk-icon-cog uk-text-{ page.visible ? 'success':'danger' }"></i>
                                 <div class="uk-dropdown uk-dropdown-close">
 
-                                    <div class="uk-margin"  if="{ copilot.getType(page.type).subpages !== false }">
-                                        <strong class="uk-text-small">Sub pages</strong>
-                                        <cp-pagejumplist dir="{page.dir}"></cp-pagejumplist>
-                                    </div>
-
                                     <ul class="uk-nav uk-nav-dropdown">
                                         <li class="uk-nav-header">@lang('Browse')</li>
                                         <li><a href="@route('/copilot/pages'){page.relpath}">@lang('Sub Pages')</a></li>
@@ -73,6 +68,12 @@
                                         <li class="uk-nav-divider"></li>
                                         <li><a onclick="{ parent.remove }" data-path="{ page.path }">@lang('Delete')</a></li>
                                     </ul>
+
+                                    <div class="uk-margin"  if="{ copilot.getType(page.type).subpages !== false }">
+                                        <strong class="uk-text-small">Sub pages</strong>
+                                        <cp-pagejumplist dir="{page.dir}"></cp-pagejumplist>
+                                    </div>
+
                                 </div>
                             </span>
                         </div>
