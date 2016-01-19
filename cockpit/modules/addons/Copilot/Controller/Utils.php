@@ -3,6 +3,7 @@
 namespace Copilot\Controller;
 
 use copi;
+use Copilot\Lib\Type;
 
 class Utils extends \Cockpit\AuthController {
 
@@ -112,11 +113,7 @@ class Utils extends \Cockpit\AuthController {
         $meta['slug'] = strtolower(str_replace([' '], ['-'], $meta['slug'] ? $meta['slug'] : $meta['title']));
 
         $type     = $meta['type'];
-        $typedef  = [];
-
-        if ($path = copi::path("types:{$type}.yaml")) {
-            $typedef = $this->app->helper('yaml')->fromFile($path);
-        }
+        $typedef  = Type::definition($type);
 
         $type = array_replace_recursive([
             'name' => $type,
