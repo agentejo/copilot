@@ -140,7 +140,7 @@
                     </div>
                     @endif
 
-                    <div data-uk-dropdown="{delay:150}">
+                    <div class="uk-padding-remove uk-margin-left" data-uk-dropdown="{delay:150}">
 
                         <a class="uk-display-block" href="@route('/accounts/account')" style="width:30px;height:30px;" riot-mount>
                             <cp-gravatar email="{{ $app['user']['email'] }}" size="30" alt="{{ $app["user"]["name"] ? $app["user"]["name"] : $app["user"]["user"] }}"></cp-gravatar>
