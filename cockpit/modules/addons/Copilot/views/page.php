@@ -94,6 +94,63 @@
 
                 </div>
 
+                <div class="uk-panel uk-grid-margin" if="{ type.subpages && !type.content.visible && !Object.keys(meta).length }">
+
+                    <label class="uk-text-small uk-display-block">
+                        @lang('Sub Pages') <span class="uk-text-muted uk-text-small" if="{children.length > 5}">{ children.length }</span>
+                    </label>
+
+                    <div class="uk-margin uk-button-group">
+                        <a href="@route('/copilot/pages'.$page->relpath())" class="uk-button uk-button-mini">@lang('Browse')</a>
+                        <a class="uk-button uk-button-mini uk-button-primary" onclick="{ createPage }" if="{children.length}">@lang('Add Page')</a>
+                    </div>
+
+                    <div class="uk-panel uk-panel-box uk-panel-card uk-margin" each="{ page,idx in children }" data-path="{ page.path }">
+
+                        <div class="uk-grid uk-grid-small">
+                            <div>
+                                <span class="uk-margin-small-right" data-uk-dropdown>
+                                    <i class="uk-icon-cog uk-text-{ page.visible ? 'success':'danger' }"></i>
+                                    <div class="uk-dropdown uk-dropdown-close">
+
+                                        <ul class="uk-nav uk-nav-dropdown">
+                                            <li class="uk-nav-header">@lang('Browse')</li>
+                                            <li><a href="@route('/copilot/pages'){page.relpath}">@lang('Sub Pages')</a></li>
+                                            <li><a href="@route('/copilot/files'){page.relpath}">@lang('Files')</a></li>
+                                        </ul>
+
+                                        <div class="uk-margin"  if="{ copilot.getType(page.type).subpages !== false }">
+                                            <strong class="uk-text-small">Sub pages</strong>
+                                            <cp-pagejumplist dir="{page.dir}"></cp-pagejumplist>
+                                        </div>
+
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="uk-flex-item-1">
+                                <a href="@route('/copilot/page'){ page.relpath }">{ page.meta.title || page.basename }</a>
+                            </div>
+                            <div class="uk-text-muted uk-text-small">
+                                { copilot.getTypeLabel(page.type) }
+                            </div>
+                            <div class="uk-width-1-5 uk-text-muted uk-text-small uk-text-tuncate">
+                                <a href="{ page.url }" target="_blank">/{ page.slug }</a>
+                            </div>
+                            <div>
+                                <span class="uk-badge">
+                                    { page.children }
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="uk-text-muted" if="{!children.length}">
+                        @lang('This page has no sub-pages'). <a onclick="{ createPage }">@lang('Create one')</a>.
+                    </div>
+
+                </div>
+
                 <div class="uk-margin">
                     <button class="uk-button uk-button-large uk-button-primary uk-width-1-1 uk-width-medium-1-4">@lang('Save')</button>
                 </div>
@@ -134,7 +191,7 @@
 
                 </div>
 
-                <div class="uk-panel uk-panel-box" if="{type.subpages !== false }">
+                <div class="uk-panel uk-panel-box" if="{type.subpages !== false && (type.content.visible || Object.keys(meta).length) }">
 
                     <h5 class="uk-clearfix">@lang('Sub Pages') <span class="uk-text-muted uk-text-small uk-float-right" if="{children.length > 5}">{ children.length }</span></h5>
 
@@ -386,11 +443,11 @@
 
             App.request('/copilot/utils/updatePage', {page: this.page, updates: this.updates}).then(function(page) {
 
-                App.ui.notify("Page updated", "success");
-
-                $this.page    = page;
+                App.$.extend($this.page, page);
                 $this.updates = { slug: '' };
                 $this.update();
+
+                App.ui.notify("Page updated", "success");
             });
         }
 
