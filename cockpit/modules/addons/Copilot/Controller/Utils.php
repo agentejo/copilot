@@ -130,16 +130,15 @@ class Utils extends \Cockpit\AuthController {
         $pagepath      = $contentfolder.($root=='home' ? '':  $root.'/'.$meta['slug']).'/'.'index.'.($type['ext']=='md' ? 'md':'html');
         $time          = date('Y-m-d H:i:s', time());
 
-        $content = [
-            "uid: ".uniqid('pid-'),
-            "type: ".$meta['type'],
-            "created: ".$time,
-            "modified: ".$time,
-            "title: ".$meta['title'],
-            "===\n",
-        ];
+        $content = $this->app->helper('yaml')->toYAML([
+            "uid" => uniqid('pid-'),
+            "type" => $meta['type'],
+            "created" => $time,
+            "modified" => $time,
+            "title" => $meta['title']
+        ])."\n===\n\n";
 
-        $this->app->helper('fs')->write($pagepath, implode("\n", $content));
+        $this->app->helper('fs')->write($pagepath, $content);
 
         $url = '/'.str_replace([copi::path('site:'), '//'], ['', '/'], $pagepath);
 
