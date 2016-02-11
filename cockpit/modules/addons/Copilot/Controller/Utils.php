@@ -42,7 +42,7 @@ class Utils extends \Cockpit\AuthController {
             $p = copi::page($page['path']);
 
             if (trim($updates['slug'])) {
-                $p->setSlug(strtolower(str_replace(' ', '-', $updates['slug'])));
+                $p->setSlug($this->app->helper('utils')->sluggify($updates['slug']));
             }
 
             $p->setVisibility($page['visible']);
@@ -110,7 +110,7 @@ class Utils extends \Cockpit\AuthController {
             return false;
         }
 
-        $meta['slug'] = strtolower(str_replace([' '], ['-'], $meta['slug'] ? $meta['slug'] : $meta['title']));
+        $meta['slug'] = $this->app->helper('utils')->sluggify($meta['slug'] ? $meta['slug'] : $meta['title']);
 
         $type     = $meta['type'];
         $typedef  = Type::definition($type);
