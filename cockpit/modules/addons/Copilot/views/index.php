@@ -83,8 +83,8 @@
                         <div class="uk-text-muted uk-text-small">
                             { copilot.getTypeLabel(page.type) }
                         </div>
-                        <div class="uk-width-1-5 uk-text-muted uk-text-small uk-text-tuncate">
-                            <a href="{ page.url }" target="_blank">/{ page.slug }</a>
+                        <div class="uk-width-1-5 uk-text-muted uk-text-small">
+                            <a class="uk-display-block uk-text-truncate" href="{ page.url }" target="_blank">/{ page.slug }</a>
                         </div>
                         <div>
                             <span class="uk-badge">
