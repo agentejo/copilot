@@ -54,8 +54,6 @@
 
                     initPlugins();
 
-                    
-                    
                     setTimeout(function(){
 
                         if (!App.$('#'+this.input.id).length) return;
