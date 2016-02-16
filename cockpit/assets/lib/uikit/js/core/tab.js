@@ -36,7 +36,7 @@
 
             this.current = false;
 
-            this.on("click.uikit.tab", this.options.target, function(e) {
+            this.on("click.uk.tab", this.options.target, function(e) {
 
                 e.preventDefault();
 
@@ -73,7 +73,7 @@
             if (this.element.hasClass("uk-tab-bottom")) this.responsivetab.dropdown.addClass("uk-dropdown-up");
 
             // handle click
-            this.responsivetab.lst.on('click.uikit.tab', 'a', function(e) {
+            this.responsivetab.lst.on('click.uk.tab', 'a', function(e) {
 
                 e.preventDefault();
                 e.stopPropagation();

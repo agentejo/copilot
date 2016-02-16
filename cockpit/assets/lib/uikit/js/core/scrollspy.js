@@ -86,6 +86,7 @@
 
                         if (element.data('scrollspy-idle')) {
                             clearTimeout(element.data('scrollspy-idle'));
+                            element.data('scrollspy-idle', false);
                         }
 
                         element.removeClass("uk-scrollspy-inview").toggleClass(toggle);

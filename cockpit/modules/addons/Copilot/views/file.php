@@ -114,6 +114,16 @@
             tags: {label:'Tags', type: 'text'}
         }, (this.pagetype.files && this.pagetype.files.meta) || {});
 
+        this.file.meta = this.file.meta || {};
+
+        Object.keys(this.meta || {}).forEach(function(key){
+
+            // fill with default values
+            if ($this.file.meta[key] === undefined) {
+                $this.file.meta[key] = $this.meta[key].options && $this.meta[key].options.default || null;
+            }
+        });
+
         save() {
 
             App.request('/copilot/utils/updateFile', {file:this.file}).then(function(file) {

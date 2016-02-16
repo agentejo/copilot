@@ -304,12 +304,13 @@
         this.files     = {{ json_encode($page->files()->sorted()->toArray()) }};
         this.type      = {{ json_encode($type) }};
         this.updates   = { slug: '' };
+        this.meta      = {};
 
 
         this.contentType = this.type.content.type ?  this.type.content.type : this.type.ext == 'md' ? 'markdown':'html';
         this.view = App.Utils.count(this.type.meta) ? 'fields':'content';
 
-        this.meta      = {};
+        this.page.rawmeta = this.page.rawmeta || {};
 
         Object.keys(this.type.meta || {}).forEach(function(key, group){
 
@@ -320,8 +321,12 @@
             }
 
             $this.meta[group][key] = $this.type.meta[key];
-        });
 
+            // fill with default values
+            if ($this.page.rawmeta[key] === undefined) {
+                $this.page.rawmeta[key] = $this.type.meta[key].options && $this.type.meta[key].options.default || null;
+            }
+        });
 
         this.on('mount', function() {
 

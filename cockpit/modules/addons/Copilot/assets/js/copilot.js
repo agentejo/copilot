@@ -154,7 +154,7 @@
                         </div>
                         <div class="uk-form-row">
                             <label class="uk-text-small">Url</label>
-                            <input name="url" type="text" class="uk-width-1-1 uk-form-large" required>
+                            <input name="url" type="text" class="uk-width-1-1 uk-form-large" onkeyup="{ update }" required>
                         </div>
                     </form>
                     <div class="uk-modal-footer uk-text-right">
