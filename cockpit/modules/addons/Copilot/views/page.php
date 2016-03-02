@@ -30,6 +30,10 @@
         </li>
     </ul>
 
+    <div class="uk-alert uk-alert-danger" if="{ page.isWritable }">
+        <p>@lang('This page is not writable')</p>
+    </div>
+
     <form onsubmit="{ save }">
 
         <div class="uk-grid uk-grid-divider">
@@ -445,6 +449,11 @@
         }
 
         save() {
+
+            if (!$this.page.isWritable) {
+                App.ui.alert("This page is not writable!");
+                return false;
+            }
 
             App.request('/copilot/utils/updatePage', {page: this.page, updates: this.updates}).then(function(page) {
 

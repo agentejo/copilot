@@ -248,6 +248,14 @@ class Page {
         return ($this->basename == 'index');
     }
 
+
+    /**
+     * @return bool
+     */
+    public function isWritable() {
+        return is_writable($this->path);
+    }
+
     /**
      * @return bool
      */
@@ -868,6 +876,7 @@ class Page {
         $array['visible']    = $this->isVisible();
         $array['children']   = $this->children()->count();
         $array['isRoot']     = $this->isRootIndex();
+        $array['isWritable'] = $this->isWritable();
         $array['rawcontent'] = $this->rawcontent();
         $array['rawmeta']    = $this->rawmeta();
         $array['layout']     = $this->layout();

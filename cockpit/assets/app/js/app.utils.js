@@ -208,7 +208,7 @@
         };
 
         return p;
-    }
+    };
 
     // riot enhancments
     (function(riot){
