@@ -75,16 +75,14 @@
 
                               $this.input.value = $this.value;
 
-                              // Update model on button click
-                              ed.on('ExecCommand', function (e) {
-                                 ed.save();
-                                 $this.$setValue($this.input.value, true);
-                              });
-                              // Update model on keypress
-                              ed.on('KeyUp', function (e) {
-                                 ed.save();
-                                 $this.$setValue($this.input.value, true);
-                              });
+                              var clbChange = function(e){
+                                ed.save();
+                                $this.$setValue($this.input.value, true);
+                              };
+
+                              ed.on('ExecCommand', clbChange);
+                              ed.on('KeyUp', clbChange);
+                              ed.on('Change', clbChange);
 
                               var clbSave = function(){
                                 var form = App.$($this.root).closest('form');
