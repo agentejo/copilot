@@ -30,7 +30,7 @@
         </li>
     </ul>
 
-    <div class="uk-alert uk-alert-danger" if="{ page.isWritable }">
+    <div class="uk-alert uk-alert-danger" if="{ !page.isWritable }">
         <p>@lang('This page is not writable')</p>
     </div>
 
