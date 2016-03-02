@@ -1,7 +1,7 @@
 
 <ul  class="uk-breadcrumb">
     @render('copilot:views/partials/subnav.php')
-    <li><span class="uk-text-primary">@lang('Finder')</span></li>
+    <li><span class="uk-text-primary">@lang('Files')</span></li>
 </ul>
 
 <div riot-view>
