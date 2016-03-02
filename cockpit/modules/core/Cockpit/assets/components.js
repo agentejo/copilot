@@ -1838,6 +1838,17 @@ riot.tag2('field-wysiwyg', '<textarea name="input" class="uk-width-1-1" rows="5"
                                  $this.$setValue($this.input.value, true);
                               });
 
+                              var clbSave = function(){
+                                var form = App.$($this.root).closest('form');
+
+                                if (form.length) {
+                                    form.trigger('submit');
+                                }
+                              };
+
+                              ed.addShortcut('ctrl+s','Save', clbSave, ed);
+                              ed.addShortcut('meta+s','Save', clbSave, ed);
+
                               editor = ed;
 
                               App.$(document).trigger('init-wysiwyg-editor', [editor]);

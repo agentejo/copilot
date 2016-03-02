@@ -86,6 +86,17 @@
                                  $this.$setValue($this.input.value, true);
                               });
 
+                              var clbSave = function(){
+                                var form = App.$($this.root).closest('form');
+
+                                if (form.length) {
+                                    form.trigger('submit');
+                                }
+                              };
+
+                              ed.addShortcut('ctrl+s','Save', clbSave, ed);
+                              ed.addShortcut('meta+s','Save', clbSave, ed);
+
                               editor = ed;
 
                               App.$(document).trigger('init-wysiwyg-editor', [editor]);
@@ -93,7 +104,7 @@
 
                         }));
 
-    
+
                     }.bind(this), 10);
 
                 }.bind(this));
