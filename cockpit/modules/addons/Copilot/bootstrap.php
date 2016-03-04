@@ -53,6 +53,13 @@ $this->module("copilot")->extend([
     }
 ]);
 
+// REST
+if (COCKPIT_REST) {
+
+    $app->on('cockpit.rest.init', function($routes) {
+        $routes['copilot'] = 'Copilot\\Controller\\RestApi';
+    });
+}
 
 // ADMIN
 if (COCKPIT_ADMIN && !COCKPIT_REST) {
