@@ -1481,6 +1481,85 @@ riot.tag2('field-password', '<div class="uk-form-password uk-width-1-1"> <input 
 
 });
 
+riot.tag2('field-rating', '<ul class="uk-grid uk-grid-small"> <li show="{value}"><a onclick="{removeRating}"><i class="uk-icon-trash-o"></i></a></li> <li class="{(!hoverValue && Math.ceil(value) >= n) || (hoverValue && Math.ceil(hoverValue) >= n) ? \'uk-text-primary\' : \'\'}" each="{n,idx in ratingRange}" onmousemove="{hoverRating}" onmouseleave="{leaveHoverRating}" onclick="{setRating}"><i class="uk-icon-{opts.icon ? opts.icon : \'star\'}" title="{(idx+1)}" data-uk-tooltip></i></li> <li show="{value}"><span class="uk-badge">{!hoverValue && value || hoverValue}</span></li> </ul>', 'field-rating .uk-grid > *,[riot-tag="field-rating"] .uk-grid > *,[data-is="field-rating"] .uk-grid > *{ cursor: pointer; }', '', function(opts) {
+
+
+        var mininmum  = opts.mininmum  || 0,
+            maximum   = opts.maximum   || 5,
+            precision = opts.precision || 0,
+            j;
+
+        if (precision < 0 || precision > 0.5) {
+            precision = precision - Math.floor(precision);
+
+            if (precision > 0.5) {
+                precision = precision - 0.5;
+            }
+        }
+
+        this.value = null;
+        this.hoverValue = null;
+
+        this.ratingRange = [];
+
+        for (j = mininmum + 1; j <= maximum; j = j +1) {
+            this.ratingRange.push(j);
+        }
+
+        this.setRating = function(e) {
+            this.$setValue(this.getValue(e));
+        }.bind(this)
+
+        this.getValue = function(e) {
+
+            var element = App.$(e.target).closest('li')[0];
+
+            if (!element) return;
+
+            if (precision === 0) {
+                return e.item.n;
+            }
+
+            return Math.floor(((e.item.n - 1) + (Math.floor(e.layerX/element.clientWidth / precision) + 1) * precision) * 1000) / 1000;
+        }.bind(this)
+
+        this.hoverRating = function(e) {
+            this.hoverValue = this.getValue(e);
+        }.bind(this)
+
+        this.leaveHoverRating = function() {
+            this.hoverValue = null;
+        }.bind(this)
+
+        this.removeRating = function() {
+            this.$setValue(null);
+        }.bind(this)
+
+        this.$updateValue = function(value) {
+            if (value === null && !opts.remove) {
+                value = mininmum;
+            }
+
+            if (value !== null) {
+                if (value < mininmum) {
+                    value = mininmum;
+                }
+
+                if (value > maximum) {
+                    value = maximum;
+                }
+            }
+
+            if (this.value != value) {
+
+                this.value = value;
+                this.update();
+            }
+
+        }.bind(this);
+
+});
+
 riot.tag2('field-repeater', '<div class="uk-alert" show="{!items.length}"> {App.i18n.get(\'No items\')}. </div> <div show="{mode==\'edit\' && items.length}"> <div class="uk-margin uk-panel-box uk-panel-card" each="{item,idx in items}" data-idx="{idx}"> <cp-field class="uk-width-1-1" field="{parent.field}" options="{opts.options}" bind="items[{idx}].value"></cp-field> <div class="uk-panel-box-footer uk-bg-light"> <a onclick="{parent.remove}"><i class="uk-icon-trash-o"></i></a> </div> </div> </div> <div name="itemscontainer" class="uk-sortable" show="{mode==\'reorder\' && items.length}"> <div class="uk-margin uk-panel-box uk-panel-card" each="{item,idx in items}" data-idx="{idx}"> <i class="uk-icon-bars"></i> Item {(idx+1)} </div> </div> <div class="uk-margin"> <a class="uk-button" onclick="{add}" show="{mode==\'edit\'}"><i class="uk-icon-plus-circle"></i> {App.i18n.get(\'Add item\')}</a> <a class="uk-button" onclick="{updateorder}" show="{mode==\'reorder\'}"><i class="uk-icon-plus-circle"></i> {App.i18n.get(\'Update order\')}</a> <a class="uk-button" onclick="{switchreorder}" show="{items.length > 1}"> <span show="{mode==\'edit\'}"><i class="uk-icon-arrows"></i> {App.i18n.get(\'Reorder\')}</span> <span show="{mode==\'reorder\'}">{App.i18n.get(\'Cancel\')}</span> </a> </div>', '', '', function(opts) {
 
         var $this = this;
