@@ -49,20 +49,14 @@ function cockpit($module = null) {
 
         $customconfig = [];
 
-        // load config
+        // load custom config
         if (!defined('COCKPIT_CONFIG_PATH')) {
-
-            $_sitedir = dirname(COCKPIT_DIR);
-
-            foreach(['config.php', 'config.yaml'] as $config) {
-                if (file_exists($_sitedir."/config/{$config}")) {
-                    define('COCKPIT_CONFIG_PATH', $_sitedir."/config/{$config}");
-                    break;
-                }
-            }
+            $_sitedir    = dirname(COCKPIT_DIR);
+            $_configpath = $_sitedir."/config/config.".(file_exists($_sitedir."/config/config.php") ? 'php':'yaml');
+            define('COCKPIT_CONFIG_PATH', $_configpath);
         }
 
-        if (defined('COCKPIT_CONFIG_PATH') && file_exists(COCKPIT_CONFIG_PATH)) {
+        if (file_exists(COCKPIT_CONFIG_PATH)) {
             $customconfig = preg_match('/\.yaml$/', COCKPIT_CONFIG_PATH) ? Spyc::YAMLLoad(COCKPIT_CONFIG_PATH) : include(COCKPIT_CONFIG_PATH);
         }
 
