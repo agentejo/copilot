@@ -80,6 +80,7 @@ function cockpit($module = null) {
                 '#data'    => COCKPIT_STORAGE_FOLDER.'/data',
                 '#cache'   => COCKPIT_STORAGE_FOLDER.'/cache',
                 '#tmp'     => COCKPIT_STORAGE_FOLDER.'/tmp',
+                '#thumbs'  => COCKPIT_STORAGE_FOLDER.'/thumbs',
                 '#modules' => COCKPIT_DIR.'/modules',
                 '#uploads' => COCKPIT_DIR.'/uploads',
                 '#config'  => dirname(COCKPIT_CONFIG_PATH),
@@ -127,10 +128,10 @@ function cockpit($module = null) {
         $app("i18n")->locale = isset($config['i18n']) ? $config['i18n'] : 'en';
 
         // load modules
-        $app->loadModules([
+        $app->loadModules(array_merge([
             COCKPIT_DIR.'/modules/core',  # core
             COCKPIT_DIR.'/modules/addons' # addons
-        ]);
+        ], isset($config['loadmodules']) ? (array) $config['loadmodules'] : []));
 
         // load config global bootstrap
         if ($custombootfile = $app->path('#config:bootstrap.php')) {
