@@ -12,6 +12,8 @@ class Utils extends \Cockpit\AuthController {
 
         if ($src) {
 
+            $src = rawurldecode($src);
+
             // check if absolute url
             if (substr($src, 0,1) == '/' && file_exists($this->app['docs_root'].$src)) {
                 $src = $this->app['docs_root'].$src;
@@ -19,7 +21,7 @@ class Utils extends \Cockpit\AuthController {
 
             $options = array(
                 "rebuild"     => false,
-                "cachefolder" => "#storage:thumbs",
+                "cachefolder" => "#thumbs:",
                 "quality"     => 100,
                 "base64"      => false,
                 "mode"        => "crop",
