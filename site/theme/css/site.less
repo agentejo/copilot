@@ -20,7 +20,33 @@
 @import "../../../cockpit/assets/lib/uikit/less/components/tooltip.less";
 
 // Variables
-@icon-font-path: "../../../cockpit/assets/lib/uikit/fonts";
+@base-body-background:              #fafafa;
+@base-body-font-family:             -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@base-heading-font-family:          @base-body-font-family;
+@base-body-font-size:               16px;
+@base-body-line-height:             1.5;
+
+@navbar-background:                 none;
+@navbar-nav-height:                 80px;
+@navbar-nav-font-family:            @base-body-font-family;
+@navbar-nav-hover-background:       none;
+@navbar-nav-onclick-background:     none;
+@navbar-nav-active-background:      none;
+
+@icon-font-path:                    "../../../cockpit/assets/lib/uikit/fonts";
+
+/* ========================================================================
+   Hookd
+ ========================================================================== */
+
+.hook-navbar-nav {
+    text-transform: uppercase;
+    font-size: 90%;
+}
+
+.hook-navbar-nav-active {
+    font-weight: bolder;
+}
 
 /* ========================================================================
    Theme
@@ -32,6 +58,23 @@
 
 html { overflow-y: scroll; }
 
+b, strong { font-weight: bolder; }
+
+.site-header {
+    border-bottom: 1px #eee solid;
+    background: #fff;
+}
+
+.site-main, .site-footer {
+    padding: 0 @utility-container-padding-horizontal @utility-container-padding-horizontal @utility-container-padding-horizontal;
+    max-width: (@utility-container-max-width * 0.95);
+    margin: auto;
+}
+
 .site-footer {
     margin-bottom: 2rem;
+}
+
+.uk-navbar-brand {
+    font-weight: bolder;
 }

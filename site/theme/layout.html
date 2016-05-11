@@ -21,30 +21,29 @@
     </head>
     <body>
 
-        <div class="uk-container uk-container-center">
+        <section class="site-header">
 
-            <a class="uk-navbar-brand" href="@url('/')">COCOPi</a>
+            <div class="uk-container uk-container-center">
 
-            <div class="uk-navbar-flip">
-                <nav class="uk-navbar">
-                    @menu('main', ['class'=>'uk-navbar-nav', 'activeClass' => 'uk-active'])
-                </nav>
+                <a class="uk-navbar-brand" href="@url('/')">COCOPi</a>
+
+                <div class="uk-navbar-flip">
+                    <nav class="uk-navbar">
+                        @menu('main', ['class'=>'uk-navbar-nav', 'activeClass' => 'uk-active'])
+                    </nav>
+                </div>
             </div>
-        </div>
+        </section>
 
         <main class="site-main uk-margin-large-top">
 
-            <div class="uk-container uk-container-center">
-                {{ $content_for_layout }}
-            </div>
+            {{ $content_for_layout }}
 
         </main>
 
         <footer class="site-footer uk-margin-large-top">
 
-            <div class="uk-container uk-container-center">
-                <strong>Built with <a href="http://cocopi.co"><i class="uk-icon-heart uk-text-danger"></i> COCOPi</a></strong>
-            </div>
+            <strong>Built with <a href="http://cocopi.co"><i class="uk-icon-heart uk-text-danger"></i> COCOPi</a></strong>
 
         </footer>
 
