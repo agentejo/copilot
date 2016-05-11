@@ -338,7 +338,7 @@ riot.tag2('cp-assets', '<div class="uk-form" name="list" show="{mode==\'list\'}"
             }
 
             if (this.filtertitle.value) {
-                this.filter.title = {'$regex':this.filter.value};
+                this.filter.title = {'$regex':this.filtertitle.value};
             }
 
             if (this.filtertype.value) {
@@ -1513,7 +1513,7 @@ riot.tag2('field-html', '<textarea name="input" class="uk-visibility-hidden"></t
 
 });
 
-riot.tag2('field-image', '<figure class="uk-display-block uk-overlay uk-overlay-hover"> <div class="uk-placeholder uk-flex uk-flex-middle uk-flex-center uk-text-muted"> <div class="uk-width-1-1" show="{image.path}" riot-style="min-height:160px;background-size:contain;background-repeat:no-repeat;background-position:50% 50%;{image.path ? \'background-image: url(\'+encodeURI(SITE_URL+\'/\'+image.path)+\')\':\'\'}"></div> <div class="uk-width-1-1" show="{!image.path}"><i class="uk-icon-image"></i></div> </div> <figcaption class="uk-overlay-panel uk-overlay-background"> <ul class="uk-subnav"> <li><a onclick="{selectimage}" title="{App.i18n.get(\'Select image\')}" data-uk-tooltip><i class="uk-icon-image"></i></a></li> <li><a onclick="{title}" title="{App.i18n.get(\'Set title\')}" data-uk-tooltip><i class="uk-icon-tag"></i></a></li> <li><a onclick="{remove}" title="{App.i18n.get(\'Reset\')}" data-uk-tooltip><i class="uk-icon-trash-o"></i></a></li> </ul> <p class="uk-text-small uk-text-truncate">{image.title}</p> </figcaption> </figure>', '', '', function(opts) {
+riot.tag2('field-image', '<figure class="uk-display-block uk-panel uk-panel-box uk-panel-card uk-overlay uk-overlay-hover"> <div class="uk-flex uk-flex-middle uk-flex-center uk-text-muted"> <div class="uk-width-1-1" show="{image.path}" riot-style="min-height:160px;background-size:contain;background-repeat:no-repeat;background-position:50% 50%;{image.path ? \'background-image: url(\'+encodeURI(SITE_URL+\'/\'+image.path)+\')\':\'\'}"></div> <div class="uk-width-1-1 uk-text-large" show="{!image.path}"><i class="uk-icon-image"></i></div> </div> <figcaption class="uk-overlay-panel uk-overlay-background"> <ul class="uk-subnav"> <li><a onclick="{selectimage}" title="{App.i18n.get(\'Select image\')}" data-uk-tooltip><i class="uk-icon-image"></i></a></li> <li><a onclick="{title}" title="{App.i18n.get(\'Set title\')}" data-uk-tooltip><i class="uk-icon-tag"></i></a></li> <li><a onclick="{remove}" title="{App.i18n.get(\'Reset\')}" data-uk-tooltip><i class="uk-icon-trash-o"></i></a></li> </ul> <p class="uk-text-small uk-text-truncate">{image.title}</p> </figcaption> </figure>', '', '', function(opts) {
 
         var $this = this;
 
@@ -2304,6 +2304,33 @@ riot.tag2('field-wysiwyg', '<textarea name="input" class="uk-width-1-1" rows="5"
                     context: 'insert',
                     prependToContext: true
                 });
+
+                editor.addMenuItem('assetpath', {
+                    icon: 'image',
+                    text: 'Insert Asset (Assets)',
+                    onclick: function(){
+
+                        App.assets.select(function(assets){
+
+                            if (Array.isArray(assets) && assets[0]) {
+
+                                var asset = assets[0], content;
+
+                                if (asset.mime.match(/^image\//)) {
+                                    content = '<img src="' + ASSETS_URL+asset.path + '" alt="">';
+                                } else {
+                                    content = '<a href="' + ASSETS_URL+asset.path + '">'+asset.title+'<a>';
+                                }
+
+                                editor.insertContent(content);
+                            }
+                        });
+
+                    },
+                    context: 'insert',
+                    prependToContext: true
+                });
+
             });
 
             initPlugins.done = true;
