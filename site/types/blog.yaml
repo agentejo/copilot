@@ -1,5 +1,5 @@
 label: Blog
-layout: blog
+layout: blog/index
 subpages: blog/article
 ext: md
 content:

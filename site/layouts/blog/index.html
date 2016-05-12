@@ -4,8 +4,8 @@
     $articles = $page->children()->visible()->sort('$p->meta("created")', 'desc');
 %}
 
-@foreach($articles as $article)
-<article class="uk-article">
+@foreach($articles as $idx => $article)
+<article class="uk-article uk-width-medium-3-4 uk-container-center">
 
     <h1 class="uk-article-title"><a href="{{ $article->url() }}">{{ $article->meta('title') }}</a></h1>
 
@@ -24,4 +24,9 @@
     </div>
 
 </article>
+
+@if($idx < count($articles))
+<hr class="uk-width-medium-3-4 uk-container-center uk-margin-large">
+@endif
+
 @endforeach
