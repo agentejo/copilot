@@ -39,7 +39,7 @@ http://yourdomain.com/cockpit.
 ### Download
 
 You can download the latest version of the Copilot Starterkit
-from https://github.com/COCOPi/cocopi-kickstart
+from https://github.com/COCOPi/copilot-kickstart
 
 ### With Git
 
