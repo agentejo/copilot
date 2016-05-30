@@ -844,7 +844,7 @@ class Page {
             $url = copi::$app->routeUrl($url);
             $url = str_replace($this->filename, ($this->isIndex() ? '' : $this->basename), $url);
 
-            $this->url =  $url;
+            $this->url =  rtrim($url, '/');
         }
     }
 
