@@ -39,13 +39,13 @@ http://yourdomain.com/cockpit.
 ### Download
 
 You can download the latest version of the Copilot Starterkit
-from https://github.com/COCOPi/copilot-kickstart
+from https://github.com/COCOPi/copilot
 
 ### With Git
 
 If you prefer Git, clone Copilot's Starterkit repository.
 
-    git clone https://github.com/COCOPi/copilot-kickstart.git
+    git clone https://github.com/COCOPi/copilot.git
 
 ## Documentation
 
@@ -56,7 +56,7 @@ https://github.com/COCOPi/cocopi-docs (in progress)
 If you have a Github account, please report issues
 directly on Github:
 
-- <https://github.com/COCOPi/copilot-kickstart/issues>
+- <https://github.com/COCOPi/copilot/issues>
 
 
 ## Copyright
