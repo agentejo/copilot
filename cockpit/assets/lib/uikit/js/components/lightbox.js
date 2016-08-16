@@ -1,4 +1,4 @@
-/*! UIkit 2.26.3 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
+/*! UIkit 2.26.4 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
 (function(addon) {
 
     var component;
@@ -22,9 +22,10 @@
     UI.component('lightbox', {
 
         defaults: {
-            "group"      : false,
-            "duration"   : 400,
-            "keyboard"   : true
+            allowfullscreen : true,
+            duration        : 400,
+            group           : false,
+            keyboard        : true
         },
 
         index : 0,
@@ -134,17 +135,17 @@
             item   = this.siblings[index];
 
             data = {
-                "lightbox" : $this,
-                "source"   : item.source,
-                "type"     : item.type,
-                "index"    : index,
-                "promise"  : promise,
-                "title"    : item.title,
-                "item"     : item,
-                "meta"     : {
-                    "content" : '',
-                    "width"   : null,
-                    "height"  : null
+                lightbox : $this,
+                source   : item.source,
+                type     : item.type,
+                index    : index,
+                promise  : promise,
+                title    : item.title,
+                item     : item,
+                meta     : {
+                    content : '',
+                    width   : null,
+                    height  : null
                 }
             };
 
@@ -199,14 +200,14 @@
 
             // calculate width
             var tmp = UI.$('<div>&nbsp;</div>').css({
-                'opacity'   : 0,
-                'position'  : 'absolute',
-                'top'       : 0,
-                'left'      : 0,
-                'width'     : '100%',
+                opacity   : 0,
+                position  : 'absolute',
+                top       : 0,
+                left      : 0,
+                width     : '100%',
                 'max-width' : $this.modal.dialog.css('max-width'),
-                'padding'   : $this.modal.dialog.css('padding'),
-                'margin'    : $this.modal.dialog.css('margin')
+                padding   : $this.modal.dialog.css('padding'),
+                margin    : $this.modal.dialog.css('margin')
             }), maxwidth, maxheight, w = data.meta.width, h = data.meta.height;
 
             tmp.appendTo('body').width();
@@ -285,9 +286,9 @@
                     var resolve = function(source, width, height) {
 
                         data.meta = {
-                            "content" : '<img class="uk-responsive-width" width="'+width+'" height="'+height+'" src ="'+source+'">',
-                            "width"   : width,
-                            "height"  : height
+                            content : '<img class="uk-responsive-width" width="'+width+'" height="'+height+'" src ="'+source+'">',
+                            width   : width,
+                            height  : height
                         };
 
                         data.type = 'image';
@@ -331,9 +332,9 @@
                 var id, matches, resolve = function(id, width, height) {
 
                     data.meta = {
-                        'content': '<iframe src="//www.youtube.com/embed/'+id+'" width="'+width+'" height="'+height+'" style="max-width:100%;"></iframe>',
-                        'width': width,
-                        'height': height
+                        content: '<iframe src="//www.youtube.com/embed/'+id+'" width="'+width+'" height="'+height+'" style="max-width:100%;"'+(modal.lightbox.options.allowfullscreen?' allowfullscreen':'')+'></iframe>',
+                        width: width,
+                        height: height
                     };
 
                     data.type = 'iframe';
@@ -401,9 +402,9 @@
                 var id, resolve = function(id, width, height) {
 
                     data.meta = {
-                        'content': '<iframe src="//player.vimeo.com/video/'+id+'" width="'+width+'" height="'+height+'" style="width:100%;box-sizing:border-box;"></iframe>',
-                        'width': width,
-                        'height': height
+                        content: '<iframe src="//player.vimeo.com/video/'+id+'" width="'+width+'" height="'+height+'" style="width:100%;box-sizing:border-box;"'+(modal.lightbox.options.allowfullscreen?' allowfullscreen':'')+'></iframe>',
+                        width: width,
+                        height: height
                     };
 
                     data.type = 'iframe';
@@ -448,9 +449,9 @@
                 var resolve = function(source, width, height) {
 
                     data.meta = {
-                        'content': '<video class="uk-responsive-width" src="'+source+'" width="'+width+'" height="'+height+'" controls></video>',
-                        'width': width,
-                        'height': height
+                        content: '<video class="uk-responsive-width" src="'+source+'" width="'+width+'" height="'+height+'" controls></video>',
+                        width: width,
+                        height: height
                     };
 
                     data.type = 'video';
@@ -493,9 +494,9 @@
                 var resolve = function (source, width, height) {
 
                     data.meta = {
-                        'content': '<iframe class="uk-responsive-width" src="' + source + '" width="' + width + '" height="' + height + '"></iframe>',
-                        'width': width,
-                        'height': height
+                        content: '<iframe class="uk-responsive-width" src="' + source + '" width="' + width + '" height="' + height + '"'+(modal.lightbox.options.allowfullscreen?' allowfullscreen':'')+'></iframe>',
+                        width: width,
+                        height: height
                     };
 
                     data.type = 'iframe';
@@ -574,10 +575,10 @@
         items.forEach(function(item) {
 
             group.push(UI.$.extend({
-                'source' : '',
-                'title'  : '',
-                'type'   : 'auto',
-                'link'   : false
+                source : '',
+                title  : '',
+                type   : 'auto',
+                link   : false
             }, (typeof(item) == 'string' ? {'source': item} : item)));
         });
 

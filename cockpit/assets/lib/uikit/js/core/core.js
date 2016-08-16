@@ -1,4 +1,4 @@
-/*! UIkit 2.26.3 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
+/*! UIkit 2.26.4 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
 (function(core) {
 
     if (typeof define == "function" && define.amd) { // AMD
@@ -44,7 +44,7 @@
 
     var UI = {}, _UI = global.UIkit ? Object.create(global.UIkit) : undefined;
 
-    UI.version = '2.26.3';
+    UI.version = '2.26.4';
 
     UI.noConflict = function() {
         // restore UIkit version
@@ -260,7 +260,7 @@
 
                 var ele  = UI.$(this),
                     cls  = ele.attr('class'),
-                    anim = cls.match(/uk\-animation\-(.+)/);
+                    anim = cls.match(/uk-animation-(.+)/);
 
                 ele.removeClass(anim[0]).width();
 
@@ -370,6 +370,36 @@
 
         return data ? fn(data) : fn;
     };
+
+    UI.Utils.focus = function(element, extra) {
+
+        element = $(element);
+
+        var autofocus = element.find('[autofocus]:first'), tabidx;
+
+        if (autofocus.length) {
+            return autofocus.focus();
+        }
+
+        autofocus = element.find(':input'+(extra && (','+extra) || '')).first();
+
+        if (autofocus.length) {
+            return autofocus.focus();
+        }
+
+        if (!element.attr('tabindex')) {
+            tabidx = 1000;
+            element.attr('tabindex', tabidx);
+        }
+
+        element[0].focus();
+
+        if (tabidx) {
+            element.attr('tabindex', '');
+        }
+
+        return element;
+    }
 
     UI.Utils.events       = {};
     UI.Utils.events.click = UI.support.touch ? 'tap' : 'click';
@@ -605,7 +635,7 @@
             try {
 
                 var observer = new UI.support.mutationobserver(UI.Utils.debounce(function(mutations) {
-                    fn.apply(element, []);
+                    fn.apply(element, [$element]);
                     $element.trigger('changed.uk.dom');
                 }, 50), {childList: true, subtree: true});
 
@@ -645,7 +675,7 @@
             UI.component.bootComponents();
 
             // custom scroll observer
-            requestAnimationFrame((function(){
+            var rafToken = requestAnimationFrame((function(){
 
                 var memory = {dir: {x:0, y:0}, x: window.pageXOffset, y:window.pageYOffset};
 
@@ -668,11 +698,12 @@
                         // Trigger the scroll event, this could probably be sent using memory.clone() but this is
                         // more explicit and easier to see exactly what is being sent in the event.
                         UI.$doc.trigger('scrolling.uk.document', [{
-                            "dir": {"x": memory.dir.x, "y": memory.dir.y}, "x": wpxo, "y": wpyo
+                            dir: {x: memory.dir.x, y: memory.dir.y}, x: wpxo, y: wpyo
                         }]);
                     }
 
-                    requestAnimationFrame(fn);
+                    cancelAnimationFrame(rafToken);
+                    rafToken = requestAnimationFrame(fn);
                 };
 
                 if (UI.support.touch) {
