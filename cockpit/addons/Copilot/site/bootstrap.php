@@ -241,7 +241,7 @@ $site->on('after', function() {
      */
     define('CP_END_TIME'     , microtime(true));
     define('CP_DURATION_TIME', CP_END_TIME - CP_START_TIME);
-    define('CP_MEMORY_USAGE' , (memory_get_peak_usage(false)/1024/1024));
+    define('CP_MEMORY_USAGE' , memory_get_peak_usage(false)/1024/1024);
 
     /**
      * load error layouts if status is 500 or 404
@@ -290,6 +290,7 @@ $site->on('after', function() {
 
         header('SITE_DURATION_TIME: '.CP_DURATION_TIME.'sec');
         header('SITE_MEMORY_USAGE: '.CP_MEMORY_USAGE.'mb');
+        header('SITE_LOADED_FILES: '.count(get_included_files()));
     }
 
 }, 100);

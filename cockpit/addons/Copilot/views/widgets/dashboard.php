@@ -29,7 +29,7 @@
 
         </div>
 
-        <div class="uk-panel-box-footer uk-bg-light">
+        <div class="uk-panel-box-footer">
 
             <ul class="uk-grid uk-grid-small uk-text-small ">
                 <li class="uk-flex-item-1 uk-text-truncate"><a href="{{ $app->pathToUrl('site:') }}" target="_blank"><i class="uk-icon-globe"></i> {{ str_replace(['http://', 'https://'],'', $app->getSiteUrl()) }}</a></li>
