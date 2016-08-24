@@ -11,12 +11,16 @@ class Utils extends \Cockpit\AuthController {
 
         if ($file = $this->param('file')) {
 
-            $f = copi::resource($file['path']);
+            $res = copi::resource($file['path']);
 
-            $f->rename($file['filename']);
-            $f->updateMeta((array)$file['meta']);
+            $res->rename($file['filename']);
+            $res->updateMeta((array)$file['meta']);
 
-            return $f->toArray();
+            $res = $res->toArray();
+
+            $this->app->trigger('copilot.updatefile', [$res]);
+
+            return $res;
         }
 
         return false;
@@ -61,7 +65,11 @@ class Utils extends \Cockpit\AuthController {
 
             file_put_contents($p->path(), implode("\n===\n\n", [$meta, $page['rawcontent']]));
 
-            return $p->toArray();
+            $p = $p->toArray();
+
+            $this->app->trigger('copilot.updatepage', [$p]);
+
+            return $p;
         }
 
         return false;
@@ -142,6 +150,10 @@ class Utils extends \Cockpit\AuthController {
 
         $url = '/'.str_replace([copi::path('site:'), '//'], ['', '/'], $pagepath);
 
+        $page = copi::page($pagepath);
+
+        $this->app->trigger('copilot.createpage', [$page->toArray()]);
+
         return json_encode(['relpath' => $url]);
     }
 
@@ -150,6 +162,7 @@ class Utils extends \Cockpit\AuthController {
         $path = $this->app->param('path');
 
         if ($page = copi::page($path)) {
+            $this->app->trigger('copilot.deletepage', [$page->toArray()]);
             return json_encode(["success" => $page->delete()]);
         }
 
@@ -186,6 +199,7 @@ class Utils extends \Cockpit\AuthController {
         $path = $this->app->param('path');
 
         if ($res = copi::resource($path)) {
+            $this->app->trigger('copilot.deleteresource', [$res->toArray()]);
             return json_encode(["success" => $res->delete()]);
         }
 

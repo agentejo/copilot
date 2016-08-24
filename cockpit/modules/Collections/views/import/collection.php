@@ -63,7 +63,7 @@
                 <tr>
                     <th width="10"></th>
                     <th class="uk-text-small">@lang('Collection Field')</th>
-                    <th width="20%" class="uk-text-small">@lang('Map Field')</th>
+                    <th width="30%" class="uk-text-small">@lang('Map Field')</th>
                     <th width="10" class="uk-text-small">@lang('Filter')</th>
                 </tr>
             </thead>
@@ -82,7 +82,17 @@
                                 <option each="{h,hidx in data.headers}" value="{h}">{h}</option>
                             </select>
                         </div>
-                        
+                        <div class="uk-margin-small-top uk-text-small uk-text-muted" if="{field.type == 'collectionlink' && parent.mapping[field.name] && parent.filter[field.name]}">
+                            <hr>
+                            @lang('Match against:')
+                            <div class="uk-form-select">
+                                {field.options.link}.<a>{parent.filterData[field.name] || '(Select field...)'}</a>
+                                <select bind="filterData.{field.name}">
+                                    <option value=""></option>
+                                    <option value="{f.name}" each="{f in _COL_[field.options.link].fields}">{f.name}</option>
+                                </select>
+                            </div>
+                        </div> 
                     </td>
                     <td>
                         <div class="uk-text-center">
@@ -111,11 +121,21 @@
         this.data = null;
         this.mapping = {};
         this.filter = {};
+        this.filterData = {};
         this.step = 1;
 
         this.fields = [];
 
+        this.on('mount', function() {
+
+            ImportFilter._getCollections.then(function(collections) {
+                window._COL_ = collections;
+            });
+
+        });
+
         this.collection.fields.forEach(function(field) {
+
             $this.fields.push(field);
 
             if (field.localize && App.$data.languages) {
@@ -139,6 +159,7 @@
             this.data = null;
             this.mapping = {};
             this.filter = {};
+            this.filterData = {};
             
             this.step = 1;
             this.step1.classList.remove('uk-dragover');
@@ -259,12 +280,13 @@
 
                             entry = {};
 
-                            Object.keys($this.mapping).forEach(function(k, val){
+                            Object.keys($this.mapping).forEach(function(k, val, d){
                                 
                                 val = c[$this.mapping[k]];
+                                d   = $this.filterData[k];
 
                                 if ($this.filter[k]) {
-                                    promises.push(ImportFilter.filter(fields[k], val).then(function(val){
+                                    promises.push(ImportFilter.filter(fields[k], val, d).then(function(val){
                                         entry[k] = val;
                                     }));
                                 } else {
@@ -295,6 +317,24 @@
 
                                 resolve(data && data.result);
                             });
+                        }, function(msg) {
+                            
+                            App.ui.notify(msg, "danger");
+
+                            progress += cnt;
+
+                            if (progress > $this.data.rows.length) {
+                                progress = $this.data.rows.length;
+                            }
+                            
+                            $this.progress.innerHTML = Math.ceil((progress/$this.data.rows.length)*100)+' %';
+
+                            if (progress == $this.data.rows.length) {
+                                App.ui.notify("Import completed.", "success");
+                                $this.restart();
+                                $this.update();
+                            }
+
                         });
                     });
                 });
@@ -312,8 +352,6 @@
 
             return chunks;
         }
-
-
 
     </script>
 
