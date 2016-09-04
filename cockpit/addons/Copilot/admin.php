@@ -35,7 +35,9 @@ $app->on('admin.init', function() use($app) {
                 if (isset($types[$type]['subtypes'])) {
 
                     foreach($types[$type]['subtypes'] as $subtype => $def) {
-                        $def['parents'] = $type;
+                        if (!isset($def['parents'])) {
+                            $def['parents'] = $type;
+                        }
                         $types["{$type}/{$subtype}"] = $def;
                     }
                 }
