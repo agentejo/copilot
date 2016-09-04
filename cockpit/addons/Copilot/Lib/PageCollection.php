@@ -43,19 +43,23 @@ class PageCollection implements \Iterator {
 
                 if ($page) {
 
+                    $page = Page::fromCache($page);
+
                     if ($criteria && $criteria($page)) {
-                        $pages[] = Page::fromCache($page);
+                        $pages[] = $page;
                     } else {
-                        $pages[] = Page::fromCache($page);
+                        $pages[] = $page;
                     }
                 }
 
             } elseif (in_array($file->getExtension(), ['html', 'md']) && $file->getBasename('.'.$file->getExtension()) != 'index') {
 
+                $page = Page::fromCache($file->getRealPath());
+
                 if ($criteria && $criteria($page)) {
-                    $pages[] = Page::fromCache($file->getRealPath());
+                    $pages[] = $page;
                 } else {
-                    $pages[] = Page::fromCache($file->getRealPath());
+                    $pages[] = $page;
                 }
             }
         }
