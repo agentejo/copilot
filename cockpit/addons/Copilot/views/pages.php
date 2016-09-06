@@ -1,9 +1,3 @@
-<style media="screen">
-    canvas {
-        max-width: 100%;
-        height: auto;
-    }
-</style>
 <div class="uk-form" riot-view>
 
     <ul class="uk-breadcrumb">
