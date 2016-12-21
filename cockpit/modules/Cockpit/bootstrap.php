@@ -132,17 +132,55 @@ $this->module("cockpit")->extend([
         $user = $this->getUser();
 
         if (isset($user["group"])) {
-
-            if ($user["group"]=='admin') return true;
             if ($app("acl")->hasaccess($user["group"], $resource, $action)) return true;
         }
 
         return false;
     },
 
+    "getGroup" => function() use($app) {
+
+        $user = $this->getUser();
+
+        if (isset($user["group"])) {
+            return $user["group"];
+        }
+
+        return false;
+    },
+
+    "getGroupRights" => function($resource, $group = null) use($app) {
+
+        if ($group) {
+            return $app("acl")->getGroupRights($group, $resource);
+        }
+
+        $user = $this->getUser();
+
+        if (isset($user["group"])) {
+            return $app("acl")->getGroupRights($user["group"], $resource);
+        }
+
+        return false;
+    },
+
+    "isSuperAdmin" => function($group = null) use($app) {
+
+        if (!$group) {
+
+            $user = $this->getUser();
+
+            if (isset($user["group"])) {
+                $group = $user["group"];
+            }
+        }
+
+        return $group ? $app("acl")->isSuperAdmin($group) : false;
+    },
+
     "getGroups" => function() use($app) {
 
-        $groups = array_merge(['admin'], array_keys($app->retrieve("config/acl", [])));
+        $groups = array_merge(['admin'], array_keys($app->retrieve("config/groups", [])));
 
         return array_unique($groups);
     },

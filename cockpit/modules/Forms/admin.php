@@ -1,12 +1,17 @@
 <?php
 
 // ACL
-$app("acl")->addResource("forms", ['manage.forms']);
+$app("acl")->addResource("forms", ['manage']);
 
 
 $app->on('admin.init', function() {
 
-    if (!$this->module('cockpit')->hasaccess('forms', ['manage.forms'])) {
+    if (!$this->module('cockpit')->getGroupRights('forms')) {
+
+        $this->bind('/forms/*', function() {
+            return $this('admin')->denyRequest();
+        });
+
         return;
     }
 

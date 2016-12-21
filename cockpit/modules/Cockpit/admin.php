@@ -13,8 +13,7 @@ $app->helpers['admin']  = 'Cockpit\\Helper\\Admin';
 
 // ACL
 $app('acl')->addResource('cockpit', [
-    'manage.backups',
-    'manage.media',
+    'finder'
 ]);
 
 
@@ -24,17 +23,16 @@ $app('acl')->addGroup('admin', true);
 
 if ($user = $app->module('cockpit')->getUser()) {
 
-    $aclsettings = $app->retrieve('config/acl', []);
+    $aclsettings = $app->retrieve('config/groups', []);
 
     /*
-    acl:
+    groups:
         author:
             $admin: false
             $vars:
-                mediapath: /upload
+                finder.path: /upload
             cockpit:
-                manage.media: true
-                manage.backups: true
+                finder: true
 
     */
 
@@ -162,7 +160,7 @@ $app->on('admin.init', function() {
         $this["user"] = $this->module('cockpit')->getUser();
         return $this->view('cockpit:views/base/finder.php');
 
-    }, $this->module("cockpit")->hasaccess('cockpit', 'manage.media'));
+    }, $this->module("cockpit")->hasaccess('cockpit', 'media'));
 
 }, 0);
 
@@ -173,7 +171,7 @@ $app->on('admin.init', function() {
 
 $app->on('cockpit.search', function($search, $list) {
 
-    if (!$this->module('cockpit')->userInGroup('admin')) {
+    if (!$this->module('cockpit')->hasaccess('cockpit', 'accounts')) {
         return;
     }
 
@@ -230,6 +228,17 @@ $app->on("after", function() {
             }
 
             $this->trigger("cockpit.request.error", ['500']);
+            break;
+
+        case 401:
+
+            if ($this->req_is('ajax')) {
+                $this->response->body = '{"error": "401", "message":"Unauthorized"}';
+            } else {
+                $this->response->body = $this->view("cockpit:views/errors/401.php");
+            }
+
+            $this->trigger("cockpit.request.error", ['401']);
             break;
 
         case 404:

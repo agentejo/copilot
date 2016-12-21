@@ -1,6 +1,6 @@
 <cp-pagejumplist>
 
-    <div class="{ pages && pages.length > 10 ? 'uk-scrollable-box':''}" show="{ pages && pages.length }">
+    <div riot-class="{ pages && pages.length > 10 ? 'uk-scrollable-box':''}" if="{ pages && pages.length }">
         <ul class="uk-list">
             <li class="uk-margin-small-top uk-text-truncate" each="{page in pages}">
                 <a href="{ App.route('/copilot/page')+page.relpath }"><i class="uk-icon-file-text-o"></i> { page.meta.title }</a>
@@ -8,11 +8,11 @@
         </ul>
     </div>
 
-    <div class="uk-text-muted" show="{ pages && !pages.length }">
+    <div class="uk-margin-small-top uk-text-muted uk-text-small" if="{ pages && !pages.length }">
         No sub pages.
     </div>
 
-    <div show="{ !pages }">
+    <div if="{ !pages }">
         <i class="uk-icon-spin uk-icon-spinner"></i>
     </div>
 

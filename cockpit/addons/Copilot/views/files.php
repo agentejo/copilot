@@ -35,8 +35,8 @@
             </div>
         </li>
         <li>
-            <span class="uk-text-primary">Files <span class="uk-badge" show="{files && files.length}">{files.length}</span></span>
-            <span name="loadprogress" class="uk-hidden"><i class="uk-icon-refresh uk-icon-spin"></i></span>
+            <span class="uk-text-primary">Files <span class="uk-badge" if="{files && files.length}">{files.length}</span></span>
+            <span ref="loadprogress" class="uk-hidden"><i class="uk-icon-refresh uk-icon-spin"></i></span>
         </li>
     </ul>
 
@@ -50,21 +50,21 @@
         <div class="uk-form-icon uk-form uk-text-muted uk-float-right">
 
             <i class="uk-icon-filter"></i>
-            <input class="uk-form-large uk-form-blank" type="text" name="txtfilter" placeholder="@lang('Filter files...')" onkeyup="{ update }">
+            <input class="uk-form-large uk-form-blank" type="text" ref="txtfilter" placeholder="@lang('Filter files...')" onkeyup="{ update }">
 
         </div>
     </div>
 
-    <div name="uploadprogress" class="uk-margin uk-hidden">
+    <div ref="uploadprogress" class="uk-margin uk-hidden">
         <div class="uk-progress">
-            <div name="progressbar" class="uk-progress-bar" style="width: 0%;">&nbsp;</div>
+            <div ref="progressbar" class="uk-progress-bar" style="width: 0%;">&nbsp;</div>
         </div>
     </div>
 
 
     <div name="container" class="uk-grid uk-grid-match uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-sortable" show="{files && files.length}">
 
-        <div class="uk-grid-margin" each="{file in files}" show="{ parent.infilter(file) }" data-path="{ file.path }">
+        <div class="uk-grid-margin" each="{file, idx in files}" show="{ infilter(file) }" data-path="{ file.path }">
             <div class="uk-panel uk-panel-box uk-panel-card">
 
                 <div class="uk-cover-background uk-position-relative">
@@ -97,12 +97,14 @@
                     { file.fsize }
                 </div>
             </div>
+            
         </div>
     </div>
+    
 
     <div class="uk-margin-large-top uk-viewport-height-1-3 uk-container-center uk-text-center uk-flex uk-flex-middle uk-flex-center" show="{files && !files.length}">
 
-        <div class="">
+        <div>
 
             <h3>{ page.meta.title }</h3>
 
@@ -147,18 +149,18 @@
                         options.params.path = $this.currentpath;
                     },
                     loadstart: function() {
-                        $this.uploadprogress.classList.remove('uk-hidden');
+                        $this.refs.uploadprogress.classList.remove('uk-hidden');
                     },
                     progress: function(percent) {
 
                         percent = Math.ceil(percent) + '%';
 
-                        $this.progressbar.innerHTML   = '<span>'+percent+'</span>';
-                        $this.progressbar.style.width = percent;
+                        $this.refs.progressbar.innerHTML   = '<span>'+percent+'</span>';
+                        $this.refs.progressbar.style.width = percent;
                     },
                     allcomplete: function(response) {
 
-                        $this.uploadprogress.classList.add('uk-hidden');
+                        $this.refs.uploadprogress.classList.add('uk-hidden');
 
                         if (response && response.failed && response.failed.length) {
                             App.ui.notify("File(s) failed to uploaded.", "danger");
@@ -199,13 +201,13 @@
 
         loadPath() {
 
-            $this.loadprogress.classList.remove('uk-hidden');
+            $this.refs.loadprogress.classList.remove('uk-hidden');
 
             App.request('/copilot/utils/getPageResources', {path:this.page.path}).then(function(data) {
 
                 setTimeout(function(){
 
-                    $this.loadprogress.classList.add('uk-hidden');
+                    $this.refs.loadprogress.classList.add('uk-hidden');
                     $this.files = data || [];
                     $this.update();
 
@@ -265,11 +267,11 @@
 
         infilter(file, value, name) {
 
-            if (!this.txtfilter.value) {
+            if (!this.refs.txtfilter.value) {
                 return true;
             }
 
-            value = this.txtfilter.value.toLowerCase();
+            value = this.refs.txtfilter.value.toLowerCase();
             name  = file.filename;
 
             return name.indexOf(value) !== -1;

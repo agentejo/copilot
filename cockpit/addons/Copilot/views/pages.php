@@ -37,18 +37,18 @@
         <div class="uk-form-icon uk-form uk-text-muted uk-float-right">
 
             <i class="uk-icon-filter"></i>
-            <input class="uk-form-large uk-form-blank" type="text" name="txtfilter" placeholder="@lang('Filter pages...')" onkeyup="{ update }">
+            <input class="uk-form-large uk-form-blank" type="text" ref="txtfilter" placeholder="@lang('Filter pages...')" onkeyup="{ update }">
 
         </div>
     </div>
 
     <div name="container" class="uk-grid uk-grid-match uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-sortable" show="{children.length}">
 
-        <div class="uk-grid-margin" each="{child,idx in children}" show="{ parent.infilter(child) }" data-path="{ child.path }">
+        <div class="uk-grid-margin" each="{child,idx in children}" show="{ infilter(child) }" data-path="{ child.path }">
             <div class="uk-panel uk-panel-box uk-panel-card">
                 <div class="uk-flex">
                     <span class="uk-margin-small-right" data-uk-dropdown>
-                        <i class="uk-icon-cog uk-text-{ child.visible ? 'success':'danger' }"></i>
+                        <i riot-class="uk-icon-cog uk-text-{ child.visible ? 'success':'danger' }"></i>
                         <div class="uk-dropdown uk-dropdown-close">
 
                             <div class="uk-margin" if="{ copilot.getType(child.type).subpages !== false }">
@@ -76,6 +76,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <div class="uk-margin-large-top uk-viewport-height-1-3 uk-container-center uk-text-center uk-flex uk-flex-middle uk-flex-center" if="{!children.length}">
@@ -92,7 +93,6 @@
             </p>
         </div>
     </div>
-
 
     <script type="view/script">
 
@@ -125,7 +125,7 @@
 
             var options = {};
 
-            options.parent = this.page.type;
+            options.parentType = this.page.type;
 
             if (this.type && this.type.subpages) {
 
@@ -140,11 +140,12 @@
                 });
             }
 
-
             copilot.createPage(this.page.isRoot ? '/':this.page.contentdir, options);
         }
 
         remove(e) {
+            
+            e.preventDefault();
 
             var path = e.item.child.path;
 
@@ -162,11 +163,11 @@
 
         infilter(page, value, name) {
 
-            if (!this.txtfilter.value) {
+            if (!this.refs.txtfilter.value) {
                 return true;
             }
 
-            value = this.txtfilter.value.toLowerCase();
+            value = this.refs.txtfilter.value.toLowerCase();
             name  = page.meta.title;
 
             return name.indexOf(value) !== -1;

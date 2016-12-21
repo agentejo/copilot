@@ -840,6 +840,11 @@ class App implements \ArrayAccess {
             $callback = $callback->bindTo($this, $this);
         }
 
+        // autou-register for /route/* also /route
+        if (substr($path, -2) == '/*' && !isset($this->routes[substr($path, 0, -2)])) {
+            $this->bind(substr($path, 0, -2), $callback, $condition);
+        }
+
         $this->routes[$path] = $callback;
     }
 
@@ -871,7 +876,7 @@ class App implements \ArrayAccess {
                 $self->response->status = "500";
                 $self->response->body   = $self["debug"] ? json_encode($error, JSON_PRETTY_PRINT):'Internal Error.';
 
-            } elseif (!$self->response->body && !is_string($self->response->body)) {
+            } elseif (!$self->response->body && !is_string($self->response->body) && !is_array($self->response->body)) {
                 $self->response->status = "404";
                 $self->response->body   = "Path not found.";
             }
@@ -1100,9 +1105,9 @@ class App implements \ArrayAccess {
     */
     public function getSiteUrl($withpath = false) {
 
-        $url = ($this->req_is("ssl") ? 'https':'http')."://";
+        $url = ($this->req_is('ssl') ? 'https':'http').'://';
 
-        if ($this->registry['base_port'] != "80") {
+        if (!in_array($this->registry['base_port'], ['80', '443'])) {
             $url .= $this->registry['base_host'].":".$this->registry['base_port'];
         } else {
             $url .= $this->registry['base_host'];

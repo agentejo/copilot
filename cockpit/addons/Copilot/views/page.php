@@ -67,7 +67,7 @@
                     <div class="uk-alert">{ type.description }</div>
                 </div>
 
-                <ul class="uk-tab uk-margin"  if="{ tabs.length }">
+                <ul class="uk-tab uk-margin"  if="{ tabs && tabs.length }">
                     <li class="{ t == parent.tab ? 'uk-active':'' }" each="{t in tabs}">
                         <a onclick="{ parent.selectTab }" select="{t}">{t}</a>
                     </li>
@@ -86,7 +86,7 @@
                         </div>
 
                         <div class="uk-margin">
-                            <cp-field field="{ field }" bind="page.rawmeta.{name}" cls="uk-form-large"></cp-field>
+                            <cp-field type="{field.type || 'text'}" bind="page.rawmeta.{name}" opts="{ field.options || {} }"></cp-field>
                         </div>
 
                     </div>
@@ -94,7 +94,7 @@
 
                 <div class="uk-grid-margin" show="{tab == 'Content'}" tab="Content" if="{ type.content.visible!==false }">
 
-                    <cp-field field="{ contentType }" bind="page.rawcontent" cls="uk-form-large"></cp-field>
+                    <cp-field type="{contentType}" bind="page.rawcontent"></cp-field>
 
                 </div>
 
@@ -114,8 +114,8 @@
 
                     <div class="uk-form-row">
                         <label class="uk-text-small">@lang('Visibility')</label>
-                        <div>
-                            <field-boolean bind="page.visible" cls="uk-form-large uk-width-1-1 uk-margin-small-top"></field-boolean>
+                        <div class="uk-margin-small-top">
+                            <field-boolean bind="page.visible"></field-boolean>
                         </div>
                     </div>
 
@@ -371,7 +371,7 @@
                 var subpages = Array.isArray(this.type.subpages) ? this.type.subpages : [this.type.subpages];
 
                 options.types = {};
-                options.parent = this.page.type;
+                options.parentType = this.page.type;
 
                 subpages.forEach(function(type) {
                     if (COPILOT_PAGE_TYPES[type]) {
@@ -395,7 +395,9 @@
             UIkit.modal('#modal-preview').show();
         }
 
-        save() {
+        save(e) {
+
+            if(e) e.preventDefault();
 
             if (!$this.page.isWritable) {
                 App.ui.alert("This page is not writable!");

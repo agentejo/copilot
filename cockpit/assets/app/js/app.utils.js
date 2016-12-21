@@ -50,7 +50,7 @@
         var str;
 
         if (window.moment) {
-            return window.moment(date).format(format || 'LL');
+            return window.moment(date).format(format || 'll');
         }
 
         if (window.Intl && Intl.DateTimeFormat) {
@@ -64,23 +64,15 @@
 
     App.Utils.count = function(value) {
 
-        var length = 0, key;
-
         if (App.Utils.isObject(value)) {
-            for (key in value) {
-                if (value.hasOwnProperty(key) && !(key.charAt(0) === '$')) {
-                    length++;
-                }
-            }
-
-            return length;
+            return Object.keys(value).length;
         }
 
         if (App.Utils.isString(value) || Array.isArray(value)) {
             return value.length;
         }
 
-        return length;
+        return 0;
     };
 
     // Unix filename pattern matching *.jpg
@@ -267,6 +259,20 @@
 
     App.Utils.renderer.html = App.Utils.renderer.code = function(v) {
         return v ? '<i class="uk-icon-code" title="Code..." data-uk-tooltip></i>':null;
+    };
+
+    App.Utils.renderer.repeater = function(v) {
+        var cnt = Array.isArray(v) ? v.length : 0;
+        return '<span class="uk-badge">'+(cnt+(cnt ==1 ? ' Item' : ' Items'))+'</span>';
+    };
+
+    App.Utils.renderer.tags = App.Utils.renderer.multipleselect = function(v) {
+
+        if (Array.isArray(v) && v.length > 1) {
+            return '<span class="uk-badge" title="'+v.join(', ')+'" data-uk-tooltip>'+v.length+'</span>';
+        }
+
+        return Array.isArray(v) ? v.join(', ') : App.Utils.renderer.default(v);
     };
 
 

@@ -93,5 +93,32 @@
         });
     });
 
+    // Material Ripple effect
+    $('html').on('click', 'a, button, input, .ripple', function(e) {
+
+        var trigger = $(this), w = trigger.outerWidth(), h = trigger.outerHeight(), d = Math.min(w, h), surface;
+
+        surface = $('<div class="material-ripple"><div class="material-ink"></div></div>').css({
+            top      : trigger.offset().top,
+            left     : trigger.offset().left,
+            width    : w,
+            height   : h,
+            overflow : d > 100 || trigger.is('button,.uk-button') ? 'hidden' : ''
+        }).appendTo('body');
+
+        surface.find('.material-ink').css({
+            height     : d,
+            width      : d,
+            top        : Math.floor(h/2 - d/2)+'px',
+            left       : Math.floor(w/2 - d/2)+'px',
+            background : trigger.attr('ripple-color') || ''
+        }).on('animationend', function() {
+            surface.remove();
+        }).addClass("animate").width();
+
+        setTimeout(function(){
+            surface.remove();
+        }, 500);
+    });
 
 })(jQuery, UIkit);

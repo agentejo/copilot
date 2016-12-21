@@ -1,7 +1,5 @@
 <script type="riot/tag" src="@base('copilot:assets/components/qrcode.html')"></script>
 
-
-
 <ul  class="uk-breadcrumb">
     @render('copilot:views/partials/subnav.php')
     <li><span class="uk-text-primary">@lang('Settings')</span></li>
@@ -16,22 +14,22 @@
 
                 <label class="uk-text-small">@lang('Title')</label>
                 <div class="uk-margin-bottom">
-                    <cp-field field="text" bind="meta.title" cls="uk-form-large"></cp-field>
+                    <input type="text" bind="meta.title" class="uk-form-large uk-width-1-1">
                 </div>
 
                 <label class="uk-text-small">@lang('Description')</label>
                 <div class="uk-margin-bottom">
-                    <cp-field field="textarea" bind="meta.description" cls="uk-form-large"></cp-field>
+                    <textarea field="textarea" bind="meta.description" class="uk-form-large uk-width-1-1"></textarea>
                 </div>
 
                 <label class="uk-text-small">@lang('Keywords')</label>
                 <div class="uk-margin-bottom">
-                    <cp-field field="text" bind="meta.keywords" cls="uk-form-large"></cp-field>
+                    <input type="text" bind="meta.keywords" class="uk-form-large uk-width-1-1">
                 </div>
 
                 <label class="uk-text-small">@lang('Author')</label>
                 <div class="uk-margin-bottom">
-                    <cp-field field="text" bind="meta.author" cls="uk-form-large"></cp-field>
+                    <input type="text" bind="meta.author" class="uk-form-large uk-width-1-1">
                 </div>
 
                 <div class="uk-margin-large-top">
@@ -47,10 +45,11 @@
                         <span class="uk-text-large uk-flex-item-1">Copilot</span>
                         <span class="uk-badge uk-margin-small-top uk-flex uk-flex-middle"><span>{{ $info->version }}</span></span>
                     </div>
+                    
                     @if($license->type != 'trial')
 
                     <div class="uk-margin">
-                        <strong class="">@lang('Licensed to')</strong>
+                        <strong>@lang('Licensed to')</strong>
                     </div>
 
                     <div class="uk-margin">
@@ -103,7 +102,9 @@
 
         this.meta = {{ json_encode($meta) }};
 
-        save() {
+        save(e) {
+
+            e.preventDefault();
 
             App.request('/copilot/utils/updateSettings', {settings: this.meta}).then(function(data) {
                 App.ui.notify("Settings updated", "success");

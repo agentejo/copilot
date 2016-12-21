@@ -7,7 +7,7 @@
 <div riot-view>
 
     <div class="uk-tab-center">
-        <ul name="tab" class="uk-tab">
+        <ul class="uk-tab" ref="tab">
             <li class="uk-active"><a>Site</a></li>
             <li><a>Content</a></li>
             <li><a>Theme</a></li>
@@ -33,8 +33,11 @@
 
     <script type="view/script">
 
+        console.log(this.refs)
+
         this.on('mount', function(){
-            UIkit.tab(this.tab, {connect:'#finders'});
+            
+            UIkit.tab(this.refs.tab, {connect:'#finders'});
         });
 
     </script>

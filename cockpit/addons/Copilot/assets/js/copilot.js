@@ -14,12 +14,12 @@
         createPage: function(root, options) {
 
             options  = App.$.extend({
-                'root': root || '/',
-                'parent': 'html',
-                'types': App.$.extend({
-                    'html': {label: 'Html'},
-                    'markdown': {label: 'Markdown', ext: 'md'},
-                    'wysiwyg': {label: 'WYSIWYG'}
+                root: root || '/',
+                parentType: 'html',
+                types: App.$.extend({
+                    html: {label: 'Html'},
+                    markdown: {label: 'Markdown', ext: 'md'},
+                    wysiwyg: {label: 'WYSIWYG'}
                 }, COPILOT_PAGE_TYPES)
             }, options);
 
@@ -29,7 +29,7 @@
 
                     var allowed = Array.isArray(COPILOT_PAGE_TYPES[type].parents) ? COPILOT_PAGE_TYPES[type].parents:[COPILOT_PAGE_TYPES[type].parents];
 
-                    if (allowed.indexOf(options.parent) == -1) {
+                    if (allowed.indexOf(options.parentType) == -1) {
                         delete options.types[type];
                     }
                 }
@@ -40,16 +40,18 @@
                 <div riot-view>
                     <div class="uk-modal-header uk-text-large">
                         Create Page
-                        <div class="uk-text-muted uk-text-small uk-margin-small-top"><i class="uk-icon-link"></i> { opts.root=='home' || opts.root=='/'  ? '':opts.root }/{ slug.value || slugpreview }</div>
+                        <div class="uk-text-muted uk-text-small uk-margin-small-top">
+                            <i class="uk-icon-link"></i> { opts.root=='home' || opts.root=='/'  ? '':opts.root }/{ val('slug') || slugpreview }
+                        </div>
                     </div>
-                    <form id="frmNewPage" class="uk-form" onsubmit="{create}">
+                    <form id="frmNewPage" ref="form" class="uk-form">
                         <div class="uk-form-row">
                             <label class="uk-text-small">Title</label>
-                            <input name="title" type="text" class="uk-width-1-1 uk-form-large" onkeyup="{ updateSlugPreview }" required>
+                            <input ref="title" type="text" class="uk-width-1-1 uk-form-large" onkeyup="{ updateSlugPreview }" required>
                         </div>
                         <div class="uk-form-row" if="{opts.root!='home'}">
                             <label class="uk-text-small">Slug</label>
-                            <input name="slug" type="text" class="uk-width-1-1 uk-form-large" placeholder="{ slugpreview }"  onkeyup="{ updateSlugPreview }">
+                            <input ref="slug" type="text" class="uk-width-1-1 uk-form-large" placeholder="{ slugpreview }"  onkeyup="{ updateSlugPreview }">
                         </div>
                         <div class="uk-form-row">
                             <label class="uk-text-small">Type</label>
@@ -59,7 +61,7 @@
                                 <div class="uk-dropdown" if="{ Object.keys(opts.types).length > 1 }">
                                     <ul class="uk-nav uk-nav-dropdown">
                                         <li class="uk-nav-header">Select a type</li>
-                                        <li each="{key,val in opts.types}">
+                                        <li each="{val,key in opts.types}">
                                             <a class="uk-dropdown-close" data-type="{ key }" onclick="{ parent.selectType }">{ val.label || key }</a>
                                         </li>
                                     </ul>
@@ -75,30 +77,41 @@
 
                     <script type="view/script">
 
+                        var $this = this;
+
                         this.slugpreview = '';
                         this.type = Object.keys(opts.types)[0] || 'html';
 
-                        updateSlugPreview() {
-                            this.slugpreview = App.Utils.sluggify(this.title.value);
-                        };
+                        this.on('mount', function() {
 
-                        create() {
+                            App.$(this.refs.form).on('submit', function(e) {
 
-                            App.request('/copilot/utils/createPage', {root: opts.root, meta: {
-                                title: this.title.value,
-                                slug: this.slug ? this.slug.value : App.Utils.sluggify(this.title.value),
-                                type : this.type
-                            }}).then(function(data) {
+                                e.preventDefault();
+                          
+                                App.request('/copilot/utils/createPage', {root: opts.root, meta: {
+                                    title: $this.refs.title.value,
+                                    slug: $this.refs.slug.value ? $this.refs.slug.value : App.Utils.sluggify($this.refs.title.value),
+                                    type : $this.type
+                                }}).then(function(data) {
 
-                                if (data) {
-                                    location.href = App.route('/copilot/page'+data.relpath);
-                                }
+                                    if (data) {
+                                        location.href = App.route('/copilot/page'+data.relpath);
+                                    }
+                                });
                             });
+                        });
+
+                        updateSlugPreview() {
+                            this.slugpreview = App.Utils.sluggify(this.refs.title.value);
                         };
 
                         selectType(e) {
                             this.type = e.target.getAttribute('data-type');
                         };
+
+                        val(ref) {
+                            return this.refs[ref] && this.refs[ref].value;
+                        }
 
                     </script>
 
@@ -113,7 +126,7 @@
             dialog.show();
 
             setTimeout(function(){
-                dialog.element.find(':input:first').focus();
+               dialog.element.find(':input:first').focus();
             }, 100);
         },
 
@@ -130,7 +143,7 @@
                     <div class="uk-modal-header uk-text-large">
                         Select Url
                     </div>
-                    <form id="frmSelectLink" class="uk-form" onsubmit="{select}">
+                    <form id="frmSelectLink" ref="form" class="uk-form">
                         <div class="uk-form-row">
                             <label class="uk-text-small">Pages</label>
 
@@ -150,15 +163,15 @@
                         </div>
                         <div class="uk-form-row">
                             <label class="uk-text-small">Title</label>
-                            <input name="title" type="text" class="uk-width-1-1 uk-form-large" required>
+                            <input ref="title" type="text" class="uk-width-1-1 uk-form-large" required>
                         </div>
                         <div class="uk-form-row">
                             <label class="uk-text-small">Url</label>
-                            <input name="url" type="text" class="uk-width-1-1 uk-form-large" onkeyup="{ update }" required>
+                            <input ref="url" type="text" class="uk-width-1-1 uk-form-large" onkeyup="{ update }" required>
                         </div>
                     </form>
                     <div class="uk-modal-footer uk-text-right">
-                        <button class="uk-button uk-button-primary uk-margin-right uk-button-large js-create-button" onclick="jQuery('#frmSelectLink').submit()" show="{url.value}">Select</button>
+                        <button class="uk-button uk-button-primary uk-margin-right uk-button-large js-create-button" onclick="jQuery('#frmSelectLink').submit()" show="{val('url')}">Select</button>
                         <button class="uk-button uk-button-link uk-button-large uk-modal-close">Cancel</button>
                     </div>
 
@@ -173,15 +186,24 @@
                             $this.update();
                         });
 
+                        this.on('mount', function() {
+
+                            App.$(this.refs.form).on('submit', function(e) {
+
+                                e.preventDefault();
+                                opts.release({url:$this.refs.url.value, title:$this.refs.title.value});
+                                opts.dialog.hide();
+                            });
+                        });
+
                         apply(e) {
-                            this.url.value   = e.item.page.url;
-                            this.title.value = e.item.page.meta.title;
+                            this.refs.url.value   = e.item.page.url;
+                            this.refs.title.value = e.item.page.meta.title;
                         }
 
-                        select() {
-                            opts.release({url:this.url.value, title:this.title.value});
-                            opts.dialog.hide();
-                        };
+                        val(ref) {
+                            return this.refs[ref] && this.refs[ref].value;
+                        }
 
                     </script>
 

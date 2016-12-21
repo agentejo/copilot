@@ -1,14 +1,67 @@
 <?php
 
 // ACL
-$app("acl")->addResource("collections", ['manage.collections']);
+$app("acl")->addResource("collections", ['create', 'delete']);
 
+$this->module("collections")->extend([
+
+    'getCollectionsInGroup' => function($group = null, $extended = false) {
+
+        if (!$group) {
+            $group = $this->app->module('cockpit')->getGroup();
+        }
+
+        $_collections = $this->collections($extended);
+        $collections = [];
+
+        if ($this->app->module('cockpit')->isSuperAdmin()) {
+            return $_collections;
+        }
+
+        foreach ($_collections as $collection => $meta) {
+
+            if (isset($meta['acl'][$group]['entries_view']) && $meta['acl'][$group]['entries_view']) {
+                $collections[$collection] = $meta;
+            }
+        }
+
+        return $collections;
+    },
+
+    'hasaccess' => function($collection, $action, $group = null) {
+
+        $collection = $this->collection($collection);
+
+        if (!$collection) {
+            return false;
+        }
+
+        if ($this->app->module('cockpit')->isSuperAdmin()) {
+            return true;
+        }
+
+        if (!$group) {
+            $group = $this->app->module('cockpit')->getGroup();
+        }
+
+        if (isset($collection['acl'][$group][$action])) {
+            return $collection['acl'][$group][$action];
+        }
+
+        return false;
+    }
+]);
 
 $app->on('admin.init', function() {
 
     $this->helper('admin')->addAssets('collections:assets/field-collectionlink.tag');
 
-    if (!$this->module('cockpit')->hasaccess('collections', ['manage.collections'])) {
+    if (!$this->module('cockpit')->getGroupRights('collections') && !$this->module('collections')->getCollectionsInGroup()) {
+
+        $this->bind('/collections/*', function() {
+            return $this('admin')->denyRequest();
+        });
+
         return;
     }
 
@@ -29,7 +82,7 @@ $app->on('admin.init', function() {
      */
     $this->on('cockpit.search', function($search, $list) {
 
-        foreach ($this->module('collections')->collections() as $collection => $meta) {
+        foreach ($this->module('collections')->getCollectionsInGroup() as $collection => $meta) {
 
             if (stripos($collection, $search)!==false || stripos($meta['label'], $search)!==false) {
 
@@ -44,7 +97,7 @@ $app->on('admin.init', function() {
 
     $this->on('cockpit.menu.aside', function() {
 
-        $cols        = $this->module('collections')->collections();
+        $cols        = $this->module('collections')->getCollectionsInGroup();
         $collections = [];
 
         foreach($cols as $collection) {
@@ -59,7 +112,7 @@ $app->on('admin.init', function() {
     // dashboard widgets
     $this->on("admin.dashboard.widgets", function($widgets) {
 
-        $collections = $this->module("collections")->collections(true);
+        $collections = $this->module("collections")->getCollectionsInGroup(null, true);
 
         $widgets[] = [
             "name"    => "collections",

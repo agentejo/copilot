@@ -24,7 +24,7 @@
 
     <div class="uk-grid">
         <div class="uk-grid-margin uk-width-medium-2-3">
-            <div class="uk-viewport-height-1-2 uk-flex uk-flex-center uk-flex-middle uk-panel uk-panel-box uk-panel-card { file.isImage ? 'bg-image':''}">
+            <div riot-class="uk-viewport-height-1-2 uk-flex uk-flex-center uk-flex-middle uk-panel uk-panel-box uk-panel-card { file.isImage ? 'bg-image':''}">
                 <div class="uk-width-1-1">
                     <div if="{file.isImage}">
                         <img riot-src="{ file.url }" />
@@ -72,7 +72,7 @@
                         <input type="text" class="uk-width-1-1" bind="file.meta.alt">
                     </div>
 
-                    <div class="uk-margin" each="{name, field in meta}" if="{ (!field.filter || App.Utils.fnmatch(field.filter, parent.file.filename)) }" no-reorder>
+                    <div class="uk-margin" each="{field,name in meta}" if="{ (!field.filter || App.Utils.fnmatch(field.filter, parent.file.filename)) }" no-reorder>
 
                         <label class="uk-text-small">
                             { field.label || name }
@@ -83,7 +83,7 @@
                         </div>
 
                         <div class="uk-margin">
-                            <cp-field field="{ field }" bind="file.meta.{name}" cls="uk-form-large"></cp-field>
+                            <cp-field type="{field.type || 'text'}" bind="file.meta.{name}" opts="{ field.options || {} }"></cp-field>
                         </div>
 
                     </div>
@@ -124,7 +124,9 @@
             }
         });
 
-        save() {
+        save(e) {
+            
+            if(e) e.preventDefault();
 
             App.request('/copilot/utils/updateFile', {file:this.file}).then(function(file) {
                 App.ui.notify("File updated", "success");
