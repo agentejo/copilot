@@ -73,12 +73,12 @@
                     </li>
                 </ul>
 
-                <div class="uk-grid" show="{parent.tab == name}" tab="{name}" each="{name, group in meta}">
+                <div class="uk-grid" show="{tab == name}" tab="{name}" each="{group, name in meta}">
 
-                    <div class="uk-width-medium-{field.width || '1-1'} uk-grid-margin" each="{name, field in group}" no-reorder>
+                    <div class="uk-width-medium-{field.width || '1-1'} uk-grid-margin" each="{field, fname in group}" no-reorder>
 
                         <label class="uk-text-bold">
-                            { field.label || name }
+                            { field.label || fname }
                         </label>
 
                         <div class="uk-margin uk-text-small uk-text-muted">
@@ -86,7 +86,7 @@
                         </div>
 
                         <div class="uk-margin">
-                            <cp-field type="{field.type || 'text'}" bind="page.rawmeta.{name}" opts="{ field.options || {} }"></cp-field>
+                            <cp-field type="{field.type || 'text'}" bind="page.rawmeta.{fname}" opts="{ field.options || {} }"></cp-field>
                         </div>
 
                     </div>
