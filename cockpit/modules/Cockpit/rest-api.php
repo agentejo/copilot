@@ -10,6 +10,8 @@ $this->on("before", function() {
     */
     $this->trigger("cockpit.rest.init", [$routes])->bind("/api/*", function($params) use($routes) {
 
+        $this->module('cockpit')->setUser(false, false);
+
         $route = $this['route'];
         $path  = $params[":splat"][0];
 
@@ -17,20 +19,40 @@ $this->on("before", function() {
             return false;
         }
 
-        // api key check
-        $apikeys = $this->module('cockpit')->loadApiKeys();
-        $allowed = (isset($apikeys['master']) && trim($apikeys['master']) && $apikeys['master'] == $this->param('token'));
+        $token = $this->param('token', isset($_SERVER['HTTP_COCKPIT_TOKEN']) ? $_SERVER['HTTP_COCKPIT_TOKEN'] : null);
 
-        if (!$allowed) {
-            return false;
+        // api key check
+        $allowed = false;
+
+        if (preg_match('/account-/', $token)) {
+            
+            $account = $this->storage->findOne("cockpit/accounts", ["api_key" => $token]);
+
+            if ($account) {
+                $allowed = true;
+                $this->module('cockpit')->setUser($account, false);
+            }
+
+        } else {
+            $apikeys = $this->module('cockpit')->loadApiKeys();
+            $allowed = (isset($apikeys['master']) && trim($apikeys['master']) && $apikeys['master'] == $token);
         }
 
         $parts      = explode('/', $path, 2);
         $resource   = $parts[0];
         $params     = isset($parts[1]) ? explode('/', $parts[1]) : [];
         $output     = false;
+        $user       = $this->module('cockpit')->getUser();
 
-        if (isset($routes[$resource])) {
+        if ($resourcefile = $this->path("#config:api/public/{$resource}.php")) {
+            
+            $output = include($resourcefile);
+
+        } elseif ($allowed && $resourcefile = $this->path("#config:api/{$resource}.php")) {
+
+            $output = include($resourcefile);
+
+        } elseif ($allowed && isset($routes[$resource])) {
 
             try {
 
@@ -66,4 +88,32 @@ $this->on("before", function() {
         return $output;
     });
 
+});
+
+
+$this->bind('/api/image', function() {
+
+    $options = [
+        'src' => $this->param('src', false),
+        'mode' => $this->param('m', 'thumbnail'),
+        'width' => intval($this->param('w', null)),
+        'height' => intval($this->param('h', null)),
+        'quality' => intval($this->param('q', 100)),
+        'rebuild' => intval($this->param('r', false)),
+        'base64' => intval($this->param('b64', false)),
+        'output' => intval($this->param('o', false)),
+        'domain' => intval($this->param('d', false)),
+    ];
+
+    foreach([
+        'blur', 'brighten', 
+        'colorize', 'contrast', 
+        'darken', 'desaturate', 
+        'edge detect', 'emboss', 
+        'flip', 'invert', 'opacity', 'pixelate', 'sepia', 'sharpen', 'sketch'
+    ] as $f) {
+        if ($this->param($f)) $options[$f] = $this->param($f);
+    }
+
+    return $this->module('cockpit')->thumbnail($options);
 });

@@ -260,6 +260,7 @@
                     });
 
                     this.loading = true;
+                    this.update();
                     this.checkselected(true);
 
                 }.bind(this));
@@ -393,6 +394,22 @@
                     $this.update();
                 }
             });
+        }
+
+        hasFieldAccess(field) {
+  
+            var acl = this.fieldsidx[field] && this.fieldsidx[field].acl || [];
+
+            if (field == '_modified' || 
+                App.$data.user.group == 'admin' || 
+                !acl ||
+                (Array.isArray(acl) && !acl.length) ||
+                acl.indexOf(App.$data.user.group) > -1 ||
+                acl.indexOf(App.$data.user._id) > -1
+            
+            ) { return true; }
+
+            return false;
         }
 
     </script>

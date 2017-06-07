@@ -18,7 +18,7 @@
 
     </style>
 
-    <div show="{ data }">
+    <div show="{ App.Utils.count(data) }">
 
         <div class="uk-clearfix" data-uk-margin>
             <div class="uk-float-left">
@@ -78,12 +78,12 @@
 
                     <ul class="uk-nav uk-nav-side">
                         <li class="uk-nav-header">Display</li>
-                        <li riot-class="{ !typefilter ? 'uk-active':'' }"><a data-type="" onclick="{ settypefilter }"><i class="uk-icon-circle-o uk-icon-justify"></i> All</a></li>
-                        <li riot-class="{ typefilter=='image' ? 'uk-active':'' }"><a data-type="image" onclick="{ settypefilter }"><i class="uk-icon-image uk-icon-justify"></i> Images</a></li>
-                        <li riot-class="{ typefilter=='video' ? 'uk-active':'' }"><a data-type="video" onclick="{ settypefilter }"><i class="uk-icon-video-camera uk-icon-justify"></i> Video</a></li>
-                        <li riot-class="{ typefilter=='audio' ? 'uk-active':'' }"><a data-type="audio" onclick="{ settypefilter }"><i class="uk-icon-volume-up uk-icon-justify"></i> Audio</a></li>
-                        <li riot-class="{ typefilter=='document' ? 'uk-active':'' }"><a data-type="document" onclick="{ settypefilter }"><i class="uk-icon-paper-plane uk-icon-justify"></i> Documents</a></li>
-                        <li riot-class="{ typefilter=='archive' ? 'uk-active':'' }"><a data-type="archive" onclick="{ settypefilter }"><i class="uk-icon-archive uk-icon-justify"></i> Archives</a></li>
+                        <li class="{ !typefilter ? 'uk-active':'' }"><a data-type="" onclick="{ settypefilter }"><i class="uk-icon-circle-o uk-icon-justify"></i> All</a></li>
+                        <li class="{ typefilter=='image' ? 'uk-active':'' }"><a data-type="image" onclick="{ settypefilter }"><i class="uk-icon-image uk-icon-justify"></i> Images</a></li>
+                        <li class="{ typefilter=='video' ? 'uk-active':'' }"><a data-type="video" onclick="{ settypefilter }"><i class="uk-icon-video-camera uk-icon-justify"></i> Video</a></li>
+                        <li class="{ typefilter=='audio' ? 'uk-active':'' }"><a data-type="audio" onclick="{ settypefilter }"><i class="uk-icon-volume-up uk-icon-justify"></i> Audio</a></li>
+                        <li class="{ typefilter=='document' ? 'uk-active':'' }"><a data-type="document" onclick="{ settypefilter }"><i class="uk-icon-paper-plane uk-icon-justify"></i> Documents</a></li>
+                        <li class="{ typefilter=='archive' ? 'uk-active':'' }"><a data-type="archive" onclick="{ settypefilter }"><i class="uk-icon-archive uk-icon-justify"></i> Archives</a></li>
                     </ul>
                 </div>
 
@@ -112,7 +112,7 @@
                     This is an empty folder
                 </div>
 
-                <div riot-class="{modal ? 'uk-overflow-container':''}">
+                <div class="{modal ? 'uk-overflow-container':''}">
 
                     <div class="uk-margin-top" if="{data && data.folders.length}">
 
@@ -121,7 +121,7 @@
                         <ul class="uk-grid uk-grid-small uk-grid-match uk-grid-width-1-2 uk-grid-width-medium-1-4">
 
                             <li class="uk-grid-margin" each="{folder, idx in data.folders}" onclick="{ select }" if="{ infilter(folder) }">
-                                <div riot-class="uk-panel uk-panel-box finder-folder { folder.selected ? 'uk-selected':'' }">
+                                <div class="uk-panel uk-panel-box finder-folder { folder.selected ? 'uk-selected':'' }">
                                     <div class="uk-flex">
                                         <div>
                                             <span class="uk-margin-small-right" data-uk-dropdown="mode:'click'">
@@ -153,7 +153,7 @@
                         <ul class="uk-grid uk-grid-small uk-grid-match uk-grid-width-1-2 uk-grid-width-medium-1-4">
 
                             <li class="uk-grid-margin" each="{file, idx in data.files}" onclick="{ select }" if="{ infilter(file) }">
-                                <div riot-class="uk-panel uk-panel-box finder-file { file.selected ? 'uk-selected':'' }">
+                                <div class="uk-panel uk-panel-box finder-file { file.selected ? 'uk-selected':'' }">
 
                                     <div class="uk-panel-teaser uk-cover-background uk-position-relative">
 
@@ -225,7 +225,7 @@
 
         this.currentpath = opts.path || App.session.get('app.finder.path', opts.root);
 
-        this.data;
+        this.data = null;
         this.breadcrumbs = [];
         this.selected    = {count:0, paths:{}};
         this.bookmarks   = {"folders":[], "files":[]};
@@ -263,18 +263,18 @@
                             options.params.path = $this.currentpath;
                         },
                         loadstart: function() {
-                            $this.uploadprogress.classList.remove('uk-hidden');
+                            $this.refs.uploadprogress.classList.remove('uk-hidden');
                         },
                         progress: function(percent) {
 
                             percent = Math.ceil(percent) + '%';
 
-                            $this.progressbar.innerHTML   = '<span>'+percent+'</span>';
-                            $this.progressbar.style.width = percent;
+                            $this.refs.progressbar.innerHTML   = '<span>'+percent+'</span>';
+                            $this.refs.progressbar.style.width = percent;
                         },
                         allcomplete: function(response) {
 
-                            $this.uploadprogress.classList.add('uk-hidden');
+                            $this.refs.uploadprogress.classList.add('uk-hidden');
 
                             if (response && response.failed && response.failed.length) {
                                 App.ui.notify("File(s) failed to uploaded.", "danger");
@@ -518,7 +518,7 @@
             path  = path || $this.currentpath;
             defer = App.deferred();
 
-            requestapi({"cmd":"ls", "path": path}, function(data){
+            requestapi({cmd:"ls", path: path}, function(data){
 
                 $this.currentpath = path;
                 $this.breadcrumbs = [];

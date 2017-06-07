@@ -3,7 +3,7 @@
 </IfModule>
 
 # Deny access to database/config files
-<Files ~ "\.(sqlite|sdb|s3db|db|yaml)$">
+<Files ~ "\.(sqlite|sdb|s3db|db|yaml|yml)$">
   Deny from all
 </Files>
 
@@ -21,7 +21,7 @@ Options -Indexes
 
     # Protect some contents
     RewriteRule ^.*/?\.git+ - [F,L]
-    RewriteRule ^content/(.*)\.(html|md)$ /error [R=301,L]
+    RewriteRule ^content/(.*)\.(html|md)$ index.php [L]
 
     # cockpit admin panel
     RewriteCond %{REQUEST_FILENAME} !-f
