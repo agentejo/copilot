@@ -94,6 +94,15 @@ class Resource {
      * @return mixed
      */
     public function mime() {
+
+        // get mime
+        if (!$this->mime && $this->exists) {
+
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $this->mime = finfo_file($finfo, $this->path);
+            finfo_close($finfo);
+        }
+
         return $this->mime;
     }
 
@@ -410,6 +419,7 @@ class Resource {
         $array['imageInfo']   = $this->isImage() ? $this->imageInfo() : false;
         $array['dimensions']  = $this->dimensions();
         $array['orientation'] = $this->orientation();
+        $array['mime']        = $this->mime();
 
         return $array;
     }
@@ -431,14 +441,6 @@ class Resource {
         $this->ext      = pathinfo($this->path, \PATHINFO_EXTENSION);
         $this->exists   = is_file($this->path);
         $this->mime     = null;
-
-        // get mime
-        if ($this->exists) {
-
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $this->mime = finfo_file($finfo, $this->path);
-            finfo_close($finfo);
-        }
     }
 
 }
