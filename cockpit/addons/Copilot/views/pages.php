@@ -48,7 +48,7 @@
             <div class="uk-panel uk-panel-box uk-panel-card">
                 <div class="uk-flex">
                     <span class="uk-margin-small-right" data-uk-dropdown>
-                        <i riot-class="uk-icon-cog uk-text-{ child.visible ? 'success':'danger' }"></i>
+                        <i class="uk-icon-cog uk-text-{ child.visible ? 'success':'danger' }"></i>
                         <div class="uk-dropdown uk-dropdown-close">
 
                             <div class="uk-margin" if="{ copilot.getType(child.type).subpages !== false }">

@@ -68,14 +68,14 @@
                 </div>
 
                 <ul class="uk-tab uk-margin" if="{ tabs && tabs.length }">
-                    <li riot-class="{ t == parent.tab ? 'uk-active':'' }" each="{t in tabs}">
+                    <li class="{ t == parent.tab ? 'uk-active':'' }" each="{t in tabs}">
                         <a onclick="{ parent.selectTab }" select="{t}">{t}</a>
                     </li>
                 </ul>
 
                 <div class="uk-grid" show="{tab == name}" tab="{name}" each="{group, name in meta}">
 
-                    <div riot-class="uk-width-medium-{field.width || '1-1'} uk-grid-margin" each="{field, fname in group}" no-reorder>
+                    <div class="uk-width-medium-{field.width || '1-1'} uk-grid-margin" each="{field, fname in group}" no-reorder>
 
                         <label class="uk-text-bold">
                             { field.label || fname }
@@ -146,7 +146,7 @@
 
                     <h5 class="uk-clearfix">@lang('Sub Pages') <span class="uk-text-muted uk-text-small uk-float-right" if="{children.length > 5}">{ children.length }</span></h5>
 
-                    <div riot-class="{ children.length > 5 ? 'uk-scrollable-box':'' }" if="{children.length}">
+                    <div class="{ children.length > 5 ? 'uk-scrollable-box':'' }" if="{children.length}">
                         <ul class="uk-list uk-list-space" if="{children.length}">
                             <li each="{child in children}">
 
@@ -190,7 +190,7 @@
 
                     <h5 class="uk-clearfix">@lang('Files') <span class="uk-text-muted uk-text-small uk-float-right" if="{files.length > 5}">{ files.length }</span></h5>
 
-                    <div riot-class="{ files.length > 5 ? 'uk-scrollable-box':'' }" if="{files.length}">
+                    <div class="{ files.length > 5 ? 'uk-scrollable-box':'' }" if="{files.length}">
                         <ul class="uk-list uk-list-space" if="{files.length}">
                             <li each="{file in files}">
 

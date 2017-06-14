@@ -1,6 +1,6 @@
 <cp-pagejumplist>
 
-    <div riot-class="{ pages && pages.length > 10 ? 'uk-scrollable-box':''}" if="{ pages && pages.length }">
+    <div class="{ pages && pages.length > 10 ? 'uk-scrollable-box':''}" if="{ pages && pages.length }">
         <ul class="uk-list">
             <li class="uk-margin-small-top uk-text-truncate" each="{page in pages}">
                 <a href="{ App.route('/copilot/page')+page.relpath }"><i class="uk-icon-file-text-o"></i> { page.meta.title }</a>

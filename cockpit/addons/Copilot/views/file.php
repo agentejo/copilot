@@ -24,7 +24,7 @@
 
     <div class="uk-grid">
         <div class="uk-grid-margin uk-width-medium-2-3">
-            <div riot-class="uk-viewport-height-1-2 uk-flex uk-flex-center uk-flex-middle uk-panel uk-panel-box uk-panel-card { file.isImage ? 'bg-image':''}">
+            <div class="uk-viewport-height-1-2 uk-flex uk-flex-center uk-flex-middle uk-panel uk-panel-box uk-panel-card { file.isImage ? 'bg-image':''}">
                 <div class="uk-width-1-1">
                     <div if="{file.isImage}">
                         <img riot-src="{ file.url }" />
