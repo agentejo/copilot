@@ -3,25 +3,22 @@ namespace Cockpit\Controller;
 
 class RestApi extends \LimeExtra\Controller {
 
-    protected function before() {
-        $this->app->response->mime = 'json';
-    }
-
     public function authUser() {
 
-        $data = [ 'user' => $this->param('user'), 'password' => $this->param('password') ];
+        $response = ['error' => 'Authentication failed'];
+        $data     = [ 'user' => $this->param('user'), 'password' => $this->param('password') ];
 
         if (!$data['user'] || !$data['password']) {
-            return $this->stop('{"error": "Missing user or password"}', 412);
+            return $response;
         }
 
         $user = $this->module('cockpit')->authenticate($data);
 
-        if (!$user) {
-            return $this->stop('{"error": "Authentication failed"}', 401);
+        if ($user) {
+            $response = $user;
         }
 
-        return $user;
+        return $response;
     }
 
     public function saveUser() {
@@ -36,25 +33,26 @@ class RestApi extends \LimeExtra\Controller {
         if ($user) {
 
             if (!isset($data["_id"]) && !$this->module('cockpit')->isSuperAdmin()) {
-                return $this->stop(401);
+                return false;
             }
 
             if (!$this->module('cockpit')->isSuperAdmin() && $data["_id"] != $user["_id"] ) {
-                return $this->stop(401);
+                return false;
             }
         }
+
 
         // new user needs a password
         if (!isset($data["_id"])) {
 
             // new user needs a password
             if (!isset($data["password"])) {
-                return $this->stop('{"error": "User password required"}', 412);
+                return false;
             }
 
             // new user needs a username
             if (!isset($data["user"])) {
-                return $this->stop('{"error": "User password required"}', 412);
+                return false;
             }
 
             $data = array_merge($account = [
@@ -65,15 +63,6 @@ class RestApi extends \LimeExtra\Controller {
                 "group"    => "user",
                 "i18n"     => "en"
             ], $data);
-
-            if (isset($data['api_key'])) {
-                $data['api_key'] = uniqid('account-').uniqid();
-            }
-
-            // check for duplicate users
-            if ($user = $this->app->storage->findOne("cockpit/accounts", ["user" => $data["user"]])) {
-                return $this->stop('{"error": "User already exists"}', 412);
-            }
         }
 
         if (isset($data["password"])) {
