@@ -186,14 +186,19 @@
 
                 var sortable = UIkit.sortable(App.$('[name="container"]'), {animation: true}).element.on("change.uk.sortable", function(e, sortable, ele) {
 
-                    var order = [];
-
+                    var order = [], fromIndex, toIndex = ele.index(), path = ele.attr('data-path');
+                    
                     sortable.element.children().each(function(index){
                         order.push(this.getAttribute('data-path'));
                     });
 
+                    $this.files.forEach(function(file, index) {
+                        if (file.path == path) fromIndex = index;
+                    });
+
                     App.request('/copilot/utils/updateResourcesOrder', {order: order}).then(function(){
                         App.ui.notify("Files reordered", "success");
+                        $this.files.splice(toIndex, 0, $this.files.splice(fromIndex, 1)[0]);
                     });
                 });
             });
