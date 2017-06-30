@@ -7,7 +7,25 @@
 <div riot-view>
 
     <div class="uk-grid">
-        <div class="uk-grid-margin uk-width-medium-3-4">
+
+        <div class="uk-grid-margin uk-width-medium-1-4">
+            <div class="uk-panel">
+                <h4>@lang('Site')</h4>
+
+                <div class="uk-text-truncate">
+                    <ul class="uk-list uk-list-space">
+                        <li>
+                            <a href="{{ $app->pathToUrl('site:') }}" target="_blank">
+                                <i class="uk-icon-globe uk-icon-justify"></i> {{ str_replace(['http://', 'https://'],'', $app->getSiteUrl()) }}
+                            </a>
+                        </li>
+                        <li><a href="@route('/copilot/settings')"><i class="uk-icon-cogs uk-icon-justify"></i> @lang('Settings')</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="uk-grid-margin uk-width-medium-3-4 uk-flex-order-first-medium">
 
             <div class="uk-margin">
 
@@ -108,22 +126,7 @@
             </div>
 
         </div>
-        <div class="uk-grid-margin uk-width-medium-1-4">
-            <div class="uk-panel">
-                <h4>@lang('Site')</h4>
-
-                <div class="uk-text-truncate">
-                    <ul class="uk-list uk-list-space">
-                        <li>
-                            <a href="{{ $app->pathToUrl('site:') }}" target="_blank">
-                                <i class="uk-icon-globe uk-icon-justify"></i> {{ str_replace(['http://', 'https://'],'', $app->getSiteUrl()) }}
-                            </a>
-                        </li>
-                        <li><a href="@route('/copilot/settings')"><i class="uk-icon-cogs uk-icon-justify"></i> @lang('Settings')</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        
     </div>
 
     <script type="view/script">

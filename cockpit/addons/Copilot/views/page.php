@@ -21,12 +21,21 @@
 
             </div>
         </li>
-        <li>
+        <li data-uk-dropdown>
             <a class="{ page.visible ? 'uk-text-primary':'uk-text-danger'}" onclick="{ showPreview }">
                 <i class="uk-icon-home" if="{page.isRoot}"></i>
                 <i class="uk-icon-eye{ page.visible ? '':'-slash'}" if="{!page.isRoot}"></i>
                 { page.meta.title }
             </a>
+            <div class="uk-dropdown" if="{ copilot.getType(page.type).subpages !== false || copilot.getType(page.type).files !== false }">
+
+                <ul class="uk-nav uk-nav-dropdown">
+                    <li class="uk-nav-header">@lang('Browse')</li>
+                    <li><a href="@route('/copilot/pages'){page.relpath}" if="{ copilot.getType(page.type).subpages !== false }">@lang('Sub Pages')</a></li>
+                    <li><a href="@route('/copilot/files'){page.relpath}" if="{ copilot.getType(page.type).files !== false }">@lang('Files')</a></li>
+                </ul>
+
+            </div>
         </li>
     </ul>
 

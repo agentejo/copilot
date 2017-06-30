@@ -10,33 +10,7 @@
     <form onsubmit="{ save }">
 
         <div class="uk-grid">
-            <div class="uk-grid-margin uk-width-medium-2-3">
 
-                <label class="uk-text-small">@lang('Title')</label>
-                <div class="uk-margin-bottom">
-                    <input type="text" bind="meta.title" class="uk-form-large uk-width-1-1">
-                </div>
-
-                <label class="uk-text-small">@lang('Description')</label>
-                <div class="uk-margin-bottom">
-                    <textarea field="textarea" bind="meta.description" class="uk-form-large uk-width-1-1"></textarea>
-                </div>
-
-                <label class="uk-text-small">@lang('Keywords')</label>
-                <div class="uk-margin-bottom">
-                    <input type="text" bind="meta.keywords" class="uk-form-large uk-width-1-1">
-                </div>
-
-                <label class="uk-text-small">@lang('Author')</label>
-                <div class="uk-margin-bottom">
-                    <input type="text" bind="meta.author" class="uk-form-large uk-width-1-1">
-                </div>
-
-                <div class="uk-margin-large-top">
-                    <button class="uk-button uk-button-large uk-button-primary uk-width-medium-1-2 uk-width-medium-1-4 uk-margin-small-right">@lang('Save')</button>
-                </div>
-
-            </div>
             <div class="uk-grid-margin uk-width-medium-1-3">
 
                 <div class="uk-panel uk-panel-box uk-panel-card">
@@ -90,6 +64,35 @@
                     @endif
                 </div>
             </div>
+
+            <div class="uk-grid-margin uk-width-medium-2-3 uk-flex-order-first-medium"">
+
+                <label class="uk-text-small">@lang('Title')</label>
+                <div class="uk-margin-bottom">
+                    <input type="text" bind="meta.title" class="uk-form-large uk-width-1-1">
+                </div>
+
+                <label class="uk-text-small">@lang('Description')</label>
+                <div class="uk-margin-bottom">
+                    <textarea field="textarea" bind="meta.description" class="uk-form-large uk-width-1-1"></textarea>
+                </div>
+
+                <label class="uk-text-small">@lang('Keywords')</label>
+                <div class="uk-margin-bottom">
+                    <input type="text" bind="meta.keywords" class="uk-form-large uk-width-1-1">
+                </div>
+
+                <label class="uk-text-small">@lang('Author')</label>
+                <div class="uk-margin-bottom">
+                    <input type="text" bind="meta.author" class="uk-form-large uk-width-1-1">
+                </div>
+
+                <div class="uk-margin-large-top">
+                    <button class="uk-button uk-button-large uk-button-primary uk-width-medium-1-2 uk-width-medium-1-4 uk-margin-small-right">@lang('Save')</button>
+                </div>
+
+            </div>
+            
         </div>
     </form>
 
