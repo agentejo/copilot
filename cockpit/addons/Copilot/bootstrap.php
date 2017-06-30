@@ -54,7 +54,7 @@ $this->module("copilot")->extend([
 ]);
 
 // REST
-if (COCKPIT_REST) {
+if (COCKPIT_API_REQUEST) {
 
     $app->on('cockpit.rest.init', function($routes) {
         $routes['copilot'] = 'Copilot\\Controller\\RestApi';
@@ -62,9 +62,13 @@ if (COCKPIT_REST) {
 }
 
 // ADMIN
-if (COCKPIT_ADMIN && !COCKPIT_REST) {
+if (COCKPIT_ADMIN && !COCKPIT_API_REQUEST) {
 
     copi::trigger('cockpit.bootstrap', [$this]);
 
     include_once(__DIR__.'/admin.php');
 }
+
+$this->on('cockpit.api.js', function() {
+    include_once(__DIR__.'/views/api.js');
+});
