@@ -133,21 +133,21 @@
                         <div class="uk-form-row">
                             <label class="uk-text-small">@lang('Description')</label>
                             <div>
-                                <textarea bind="page.rawmeta.description" placeholder="{page.meta.description}" class="uk-form-large uk-width-1-1"></textarea>
+                                <textarea bind="page.rawmeta.description" placeholder="{page.meta.description}" class="uk-form-large uk-text-muted uk-width-1-1"></textarea>
                             </div>
                         </div>
 
                         <div class="uk-form-row">
                             <label class="uk-text-small">@lang('Keywords')</label>
                             <div>
-                                <input field="text" bind="page.rawmeta.keywords" placeholder="{page.meta.keywords}" class="uk-form-large uk-width-1-1">
+                                <input field="text" bind="page.rawmeta.keywords" placeholder="{page.meta.keywords}" class="uk-form-large uk-text-muted uk-width-1-1">
                             </div>
                         </div>
 
                         <div class="uk-form-row">
                             <label class="uk-text-small">@lang('Author')</label>
                             <div>
-                                <input field="text" bind="page.rawmeta.author" placeholder="{page.meta.author}" class="uk-form-large uk-width-1-1">
+                                <input field="text" bind="page.rawmeta.author" placeholder="{page.meta.author}" class="uk-form-large uk-text-muted uk-width-1-1">
                             </div>
                         </div>
 
@@ -187,12 +187,13 @@
                         </div>
 
                         <div class="uk-text-muted" if="{!children.length}">
-                            @lang('This page has no sub-pages'). <a onclick="{ createPage }">@lang('Create one')</a>.
+                            @lang('This page has no sub-pages').
                         </div>
 
-                        <a href="@route('/copilot/pages'.$page->relpath())" class="uk-text-small uk-margin-small-right">@lang('Browse Pages')</a>
-                        <a class="uk-text-small" onclick="{ createPage }" if="{children.length}" title="@lang('Add Page')" data-uk-tooltip><i class="uk-icon-plus-circle"></i></a>
-
+                        <div class="uk-margin">
+                            <a href="@route('/copilot/pages'.$page->relpath())" class="uk-text-small uk-margin-small-right">@lang('Browse Pages')</a>
+                            <a class="uk-text-small" onclick="{ createPage }" title="@lang('Add Page')" data-uk-tooltip><i class="uk-icon-plus-circle"></i></a>
+                        </div>
                     </div>
 
                     <div class="uk-margin-top" if="{type.files !== false }">
