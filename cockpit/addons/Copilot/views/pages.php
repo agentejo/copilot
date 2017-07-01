@@ -79,16 +79,16 @@
 
     </div>
 
-    <div class="uk-margin-large-top uk-viewport-height-1-3 uk-container-center uk-text-center uk-flex uk-flex-middle uk-flex-center" if="{!children.length}">
+    <div class="uk-margin-large-top uk-viewport-height-1-3 uk-container-center uk-text-center uk-flex uk-flex-middle uk-flex-center uk-animation-slide-bottom" if="{!children.length}">
 
         <div class="">
 
-            <h3>{ page.meta.title }</h3>
+            <h1 class="uk-text-bold">@lang('Sub Pages')</h1>
 
-            <p>
-                { App.i18n.get('This page has no sub-pages.') }
+            <p class="uk-h2 uk-text-muted">
+                { App.i18n.get('This page has no sub-pages yet') }
             </p>
-            <p if="{ type.subpages !== false }">
+            <p class="uk-margin-large-top" if="{ type.subpages !== false }">
                 <a class="uk-button uk-button-large uk-button-primary" onclick="{ createPage }">@lang('Create one')</a>
             </p>
         </div>
