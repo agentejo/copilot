@@ -45,7 +45,7 @@
 
     <form onsubmit="{ save }">
 
-        <div class="uk-grid uk-grid-divider">
+        <div class="uk-grid">
 
             <div class="uk-grid-margin uk-width-medium-3-4">
 
@@ -117,113 +117,114 @@
 
             </div>
             <div class="uk-grid-margin uk-width-medium-1-4">
-                <h3>@lang('Settings')</h3>
+                <div class="uk-panel-box uk-panel-card">
+                
+                    <h3>@lang('Settings')</h3>
 
-                <div class="uk-panel">
+                    <div class="uk-panel">
 
-                    <div class="uk-form-row">
-                        <label class="uk-text-small">@lang('Visibility')</label>
-                        <div class="uk-margin-small-top">
-                            <field-boolean bind="page.visible"></field-boolean>
+                        <div class="uk-form-row">
+                            <label class="uk-text-small">@lang('Visibility')</label>
+                            <div class="uk-margin-small-top">
+                                <field-boolean bind="page.visible"></field-boolean>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="uk-form-row">
-                        <label class="uk-text-small">@lang('Description')</label>
-                        <div>
-                            <textarea bind="page.rawmeta.description" placeholder="{page.meta.description}" class="uk-form-large uk-width-1-1"></textarea>
+                        <div class="uk-form-row">
+                            <label class="uk-text-small">@lang('Description')</label>
+                            <div>
+                                <textarea bind="page.rawmeta.description" placeholder="{page.meta.description}" class="uk-form-large uk-width-1-1"></textarea>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="uk-form-row">
-                        <label class="uk-text-small">@lang('Keywords')</label>
-                        <div>
-                            <input field="text" bind="page.rawmeta.keywords" placeholder="{page.meta.keywords}" class="uk-form-large uk-width-1-1">
+                        <div class="uk-form-row">
+                            <label class="uk-text-small">@lang('Keywords')</label>
+                            <div>
+                                <input field="text" bind="page.rawmeta.keywords" placeholder="{page.meta.keywords}" class="uk-form-large uk-width-1-1">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="uk-form-row">
-                        <label class="uk-text-small">@lang('Author')</label>
-                        <div>
-                            <input field="text" bind="page.rawmeta.author" placeholder="{page.meta.author}" class="uk-form-large uk-width-1-1">
+                        <div class="uk-form-row">
+                            <label class="uk-text-small">@lang('Author')</label>
+                            <div>
+                                <input field="text" bind="page.rawmeta.author" placeholder="{page.meta.author}" class="uk-form-large uk-width-1-1">
+                            </div>
                         </div>
+
                     </div>
 
-                </div>
+                    <div class="uk-margin-top" if="{type.subpages !== false }">
 
-                <div class="uk-panel uk-panel-box" if="{type.subpages !== false }">
+                        <h5 class="uk-clearfix">@lang('Sub Pages') <span class="uk-text-muted uk-text-small uk-float-right" if="{children.length > 5}">{ children.length }</span></h5>
 
-                    <h5 class="uk-clearfix">@lang('Sub Pages') <span class="uk-text-muted uk-text-small uk-float-right" if="{children.length > 5}">{ children.length }</span></h5>
+                        <div class="{ children.length > 5 ? 'uk-scrollable-box':'' }" if="{children.length}">
+                            <ul class="uk-list uk-list-space" if="{children.length}">
+                                <li each="{child in children}">
 
-                    <div class="{ children.length > 5 ? 'uk-scrollable-box':'' }" if="{children.length}">
-                        <ul class="uk-list uk-list-space" if="{children.length}">
-                            <li each="{child in children}">
-
-                                <div class="uk-grid uk-grid-small">
-                                    <div>
-                                        <span class="uk-margin-small-right" data-uk-dropdown="\{pos:'left-center'\}">
-                                            <i class="uk-icon-file-text-o uk-text-{ child.visible ? 'success':'danger' }"></i>
-                                            <div class="uk-dropdown">
-                                                <ul class="uk-nav uk-nav-dropdown">
-                                                    <li class="uk-nav-header">@lang('Browse')</li>
-                                                    <li><a href="@route('/copilot/pages'){child.relpath}">@lang('Sub Pages')</a></li>
-                                                    <li><a href="@route('/copilot/files'){child.relpath}">@lang('Files')</a></li>
-                                                </ul>
-                                            </div>
-                                        </span>
+                                    <div class="uk-grid uk-grid-small">
+                                        <div>
+                                            <span class="uk-margin-small-right" data-uk-dropdown="\{pos:'left-center'\}">
+                                                <i class="uk-icon-file-text-o uk-text-{ child.visible ? 'success':'danger' }"></i>
+                                                <div class="uk-dropdown">
+                                                    <ul class="uk-nav uk-nav-dropdown">
+                                                        <li class="uk-nav-header">@lang('Browse')</li>
+                                                        <li><a href="@route('/copilot/pages'){child.relpath}">@lang('Sub Pages')</a></li>
+                                                        <li><a href="@route('/copilot/files'){child.relpath}">@lang('Files')</a></li>
+                                                    </ul>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="uk-flex-item-1 uk-text-truncate">
+                                            <a href="@route('/copilot/page'){ child.relpath }">{ child.meta.title }</a>
+                                        </div>
+                                        <div>
+                                            <span class="uk-badge">{ child.children }</span>
+                                        </div>
                                     </div>
-                                    <div class="uk-flex-item-1 uk-text-truncate">
-                                        <a href="@route('/copilot/page'){ child.relpath }">{ child.meta.title }</a>
-                                    </div>
-                                    <div>
-                                        <span class="uk-badge">{ child.children }</span>
-                                    </div>
-                                </div>
 
-                            </li>
-                        </ul>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="uk-text-muted" if="{!children.length}">
+                            @lang('This page has no sub-pages'). <a onclick="{ createPage }">@lang('Create one')</a>.
+                        </div>
+
+                        <a href="@route('/copilot/pages'.$page->relpath())" class="uk-text-small uk-margin-small-right">@lang('Browse Pages')</a>
+                        <a class="uk-text-small" onclick="{ createPage }" if="{children.length}" title="@lang('Add Page')" data-uk-tooltip><i class="uk-icon-plus-circle"></i></a>
+
                     </div>
 
-                    <div class="uk-text-muted" if="{!children.length}">
-                        @lang('This page has no sub-pages'). <a onclick="{ createPage }">@lang('Create one')</a>.
-                    </div>
+                    <div class="uk-margin-top" if="{type.files !== false }">
 
-                    <div class="uk-margin uk-button-group">
-                        <a href="@route('/copilot/pages'.$page->relpath())" class="uk-button uk-button-mini">@lang('Browse')</a>
-                        <a class="uk-button uk-button-mini uk-button-primary" onclick="{ createPage }" if="{children.length}">@lang('Add Page')</a>
-                    </div>
+                        <h5 class="uk-clearfix">@lang('Files') <span class="uk-text-muted uk-text-small uk-float-right" if="{files.length > 5}">{ files.length }</span></h5>
 
-                </div>
+                        <div class="{ files.length > 5 ? 'uk-scrollable-box':'' }" if="{files.length}">
+                            <ul class="uk-list uk-list-space" if="{files.length}">
+                                <li each="{file in files}">
 
-                <div class="uk-panel uk-panel-box" if="{type.files !== false }">
-
-                    <h5 class="uk-clearfix">@lang('Files') <span class="uk-text-muted uk-text-small uk-float-right" if="{files.length > 5}">{ files.length }</span></h5>
-
-                    <div class="{ files.length > 5 ? 'uk-scrollable-box':'' }" if="{files.length}">
-                        <ul class="uk-list uk-list-space" if="{files.length}">
-                            <li each="{file in files}">
-
-                                <div class="uk-grid uk-grid-small">
-                                    <div>
-                                        <i class="uk-icon-{ copilot.getFileIconCls(file.filename) }"></i>
+                                    <div class="uk-grid uk-grid-small">
+                                        <div>
+                                            <i class="uk-icon-{ copilot.getFileIconCls(file.filename) }"></i>
+                                        </div>
+                                        <div class="uk-flex-item-1 uk-text-truncate">
+                                            <a href="@route('/copilot/file'){ file.relpath }">{ file.filename }</a>
+                                        </div>
+                                        <div>
+                                            <span class="uk-text-small uk-text-muted">{ file.fsize }</span>
+                                        </div>
                                     </div>
-                                    <div class="uk-flex-item-1 uk-text-truncate">
-                                        <a href="@route('/copilot/file'){ file.relpath }">{ file.filename }</a>
-                                    </div>
-                                    <div>
-                                        <span class="uk-text-small uk-text-muted">{ file.fsize }</span>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                                </li>
+                            </ul>
+                        </div>
 
-                    <div class="uk-text-muted" if="{!files.length}">
-                        @lang('This page has no files')
-                    </div>
+                        <div class="uk-text-muted" if="{!files.length}">
+                            @lang('This page has no files')
+                        </div>
 
-                    <div class="uk-margin">
-                        <a href="@route('/copilot/files'.$page->relpath())" class="uk-button uk-button-mini">@lang('Browse')</a>
+                        <div class="uk-margin">
+                            <a href="@route('/copilot/files'.$page->relpath())" class="uk-text-small">@lang('Browse Files')</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -233,24 +234,42 @@
 
     <div id="modal-preview" class="uk-modal">
         <div class="uk-modal-dialog uk-modal-dialog-blank uk-height-viewport uk-flex uk-flex-column">
-            <div class="uk-panel-body uk-bg-primary uk-contrast uk-flex uk-flex-middle">
+            <div class="uk-flex uk-flex-middle">
 
-                <strong class="uk-hidden-small">@lang('Preview')</strong>
+                <span class="uk-margin-left uk-text-large uk-text-primary"><i class="uk-icon-eye"></i></span>
 
-                <ul class="uk-subnav uk-text-large uk-flex-center uk-flex-item-1 uk-margin-small-top">
-                    <li><a href="{ page.url }?nc=s&_m={page.meta.modified}" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 360)"><i class="uk-icon-mobile-phone"></i></a></li>
-                    <li><a href="{ page.url }?nc=m&_m={page.meta.modified}" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', 768)"><i class="uk-icon-tablet"></i></a></li>
-                    <li><a href="{ page.url }?nc=l&_m={page.meta.modified}" target="preview-frame" onclick="App.$('#preview-frame').css('max-width', '')"><i class="uk-icon-desktop"></i></a></li>
+                <ul class="uk-subnav uk-text-large uk-margin-left uk-flex-item-1 uk-flex-center uk-margin-small-top">
+                    <li><a onclick="App.$('#preview-frame').css('max-width', 360).attr('screen', 'mobile')"><i class="uk-icon-mobile-phone"></i></a></li>
+                    <li><a onclick="App.$('#preview-frame').css('max-width', 768).attr('screen', 'tablet')"><i class="uk-icon-tablet"></i></a></li>
+                    <li><a onclick="App.$('#preview-frame').css('max-width', '100%').attr('screen', '')"><i class="uk-icon-desktop"></i></a></li>
                 </ul>
 
-                <a class="uk-modal-close uk-text-contrast uk-text-large"><i class="uk-icon-close"></i></a>
+                <a class="uk-modal-close uk-link-muted uk-text-large uk-margin-right"><i class="uk-icon-close"></i></a>
 
             </div>
-            <div class="uk-position-relative uk-flex-item-1 uk-block-secondary">
-                <iframe id="preview-frame" name="preview-frame" class="uk-position-top uk-container-center" src="" width="100%" height="100%"></iframe>
+            <div class="uk-position-relative uk-bg-light uk-flex-item-1">
+                <iframe id="preview-frame" name="preview-frame" class="uk-position-top uk-container-center" riot-src="{ page.url }?_m={page.meta.modified}" width="100%" height="100%"></iframe>
             </div>
         </div>
     </div>
+
+    <style>
+
+        #preview-frame {
+            transition: max-width 300ms, margin-top 300ms, box-shadow 300ms;
+            max-width: 100%;
+            margin-top: 0px;
+            box-shadow: 0 0 20px rgba(0,0,0,0);
+        }
+
+        #preview-frame[screen='mobile'],
+        #preview-frame[screen='tablet'] {
+            box-shadow: 0 0 40px rgba(0,0,0,.2);
+            margin-top: 30px;
+            height: calc(100% - 60px);
+        }
+
+    </style>
 
     <script type="view/script">
 
