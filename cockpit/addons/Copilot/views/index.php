@@ -16,7 +16,7 @@
                     <ul class="uk-list uk-list-space">
                         <li>
                             <a href="{{ $app->pathToUrl('site:') }}" target="_blank">
-                                <i class="uk-icon-globe uk-icon-justify"></i> {{ str_replace(['http://', 'https://'],'', $app->getSiteUrl()) }}
+                                <i class="uk-icon-globe uk-icon-justify"></i> @lang('View page')
                             </a>
                         </li>
                         <li><a href="@route('/copilot/settings')"><i class="uk-icon-cogs uk-icon-justify"></i> @lang('Settings')</a></li>
@@ -113,7 +113,9 @@
 
                 </div>
 
-                <a class="uk-button uk-button-large uk-width-1-1 uk-width-medium-1-4 uk-button-primary" onclick="{ createPage }" title="@lang('Create another page')" data-uk-tooltip="\{pos:'right'\}" root="/"><i class="uk-icon-plus"></i></a>
+                <div class="uk-margin uk-text-center">
+                    <a class="uk-text-xlarge" onclick="{ createPage }" title="@lang('Create another page')" data-uk-tooltip="\{pos:'bottom'\}" root="/"><i class="uk-icon-plus-circle"></i></a>
+                </div>
 
             </div>
 

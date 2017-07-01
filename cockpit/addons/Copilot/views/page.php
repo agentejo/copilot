@@ -155,7 +155,7 @@
 
                     <div class="uk-margin-top" if="{type.subpages !== false }">
 
-                        <h5 class="uk-clearfix">@lang('Sub Pages') <span class="uk-text-muted uk-text-small uk-float-right" if="{children.length > 5}">{ children.length }</span></h5>
+                        <h5 class="uk-clearfix"><i class="uk-icon-sitemap uk-margin-small-right"></i> @lang('Sub Pages') <span class="uk-text-muted uk-text-small uk-float-right" if="{children.length > 5}">{ children.length }</span></h5>
 
                         <div class="{ children.length > 5 ? 'uk-scrollable-box':'' }" if="{children.length}">
                             <ul class="uk-list uk-list-space" if="{children.length}">
@@ -198,7 +198,7 @@
 
                     <div class="uk-margin-top" if="{type.files !== false }">
 
-                        <h5 class="uk-clearfix">@lang('Files') <span class="uk-text-muted uk-text-small uk-float-right" if="{files.length > 5}">{ files.length }</span></h5>
+                        <h5 class="uk-clearfix"><i class="uk-icon-folder-o uk-margin-small-right"></i> @lang('Files') <span class="uk-text-muted uk-text-small uk-float-right" if="{files.length > 5}">{ files.length }</span></h5>
 
                         <div class="{ files.length > 5 ? 'uk-scrollable-box':'' }" if="{files.length}">
                             <ul class="uk-list uk-list-space" if="{files.length}">
