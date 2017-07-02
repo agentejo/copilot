@@ -3,12 +3,27 @@
     <li><span class="uk-text-primary">@lang('Pages')</span></li>
 </ul>
 
+@if($app->module("copilot")->getLicense()->type == 'trial')
+<div class="uk-flex uk-text-muted">
+    <div class="uk-margin-small-right">
+        <img class="uk-svg-adjust" src="@base('copilot:assets/media/icons/license.svg')" width="50" alt="License" data-uk-svg>
+    </div>
+    <div class="uk-flex-item-1">
+        <span class="uk-badge uk-badge-danger">@lang('Free Trial')</span>
+        <div class="uk-margin-small-top">
+            @lang('Unlicensed version. Enjoy your free trial.') 
+            <a href="http://getcockpit.com" target="_blank">@lang('Buy a license')</a>
+        </div>
+    </div>
+</div>
+@end
 
 <div riot-view>
 
     <div class="uk-grid">
 
         <div class="uk-grid-margin uk-width-medium-1-4">
+
             <div class="uk-panel">
                 <h4>@lang('Site')</h4>
 
@@ -23,6 +38,7 @@
                     </ul>
                 </div>
             </div>
+
         </div>
 
         <div class="uk-grid-margin uk-width-medium-3-4 uk-flex-order-first-medium">
