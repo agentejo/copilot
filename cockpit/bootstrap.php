@@ -14,6 +14,11 @@ spl_autoload_register(function($class){
     if(file_exists($class_path)) include_once($class_path);
 });
 
+// check for custom defines
+if (file_exists(__DIR__.'/defines.php')) {
+    include(__DIR__.'/defines.php');
+}
+
 /*
  * Collect needed paths
  */
@@ -39,7 +44,7 @@ if (!defined('COCKPIT_DIR'))             define('COCKPIT_DIR'            , $COCK
 if (!defined('COCKPIT_DOCS_ROOT'))       define('COCKPIT_DOCS_ROOT'      , $COCKPIT_DOCS_ROOT);
 if (!defined('COCKPIT_BASE_URL'))        define('COCKPIT_BASE_URL'       , $COCKPIT_BASE_URL);
 if (!defined('COCKPIT_BASE_ROUTE'))      define('COCKPIT_BASE_ROUTE'     , $COCKPIT_BASE_ROUTE);
-if (!defined('COCKPIT_STORAGE_FOLDER'))  define('COCKPIT_STORAGE_FOLDER' , dirname(COCKPIT_DIR) . '/storage');
+if (!defined('COCKPIT_STORAGE_FOLDER'))  define('COCKPIT_STORAGE_FOLDER' , COCKPIT_DIR . '/storage');
 
 function cockpit($module = null) {
 
@@ -51,8 +56,7 @@ function cockpit($module = null) {
 
         // load custom config
         if (!defined('COCKPIT_CONFIG_PATH')) {
-            $_sitedir    = dirname(COCKPIT_DIR);
-            $_configpath = $_sitedir."/config/config.".(file_exists($_sitedir."/config/config.php") ? 'php':'yaml');
+            $_configpath = COCKPIT_DIR."/config/config.".(file_exists(COCKPIT_DIR."/config/config.php") ? 'php':'yaml');
             define('COCKPIT_CONFIG_PATH', $_configpath);
         }
 
@@ -80,11 +84,11 @@ function cockpit($module = null) {
                 '#data'    => COCKPIT_STORAGE_FOLDER.'/data',
                 '#cache'   => COCKPIT_STORAGE_FOLDER.'/cache',
                 '#tmp'     => COCKPIT_STORAGE_FOLDER.'/tmp',
-                '#thumbs'  => COCKPIT_STORAGE_FOLDER.'/thumbs',
-                '#uploads' => COCKPIT_STORAGE_FOLDER.'/uploads',
+                '#thumbs'  => COCKPIT_DIR.'/storage/thumbs',
+                '#uploads' => COCKPIT_DIR.'/storage/uploads',
                 '#modules' => COCKPIT_DIR.'/modules',
-                '#addons' => COCKPIT_DIR.'/addons',
-                '#config'  => dirname(COCKPIT_CONFIG_PATH),
+                '#addons'  => COCKPIT_DIR.'/addons',
+                '#config'  => defined('COCKPIT_CONFIG_PATH') ? dirname(COCKPIT_CONFIG_PATH) : COCKPIT_DIR.'/config',
                 'assets'   => COCKPIT_DIR.'/assets',
                 'site'     => COCKPIT_DIR == COCKPIT_DOCS_ROOT ? COCKPIT_DIR : dirname(COCKPIT_DIR)
             ]

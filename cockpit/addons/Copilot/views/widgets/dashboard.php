@@ -32,7 +32,7 @@
         <div class="uk-panel-box-footer">
 
             <ul class="uk-grid uk-grid-small uk-text-small ">
-                <li class="uk-flex-item-1 uk-text-truncate"><a href="{{ $app->pathToUrl('site:') }}" target="_blank"><i class="uk-icon-globe"></i> {{ str_replace(['http://', 'https://'],'', $app->getSiteUrl()) }}</a></li>
+                <li class="uk-flex-item-1 uk-text-truncate"><a href="{{ $app->pathToUrl('site:') }}" target="_blank"><i class="uk-icon-globe"></i> @lang('View page')</a></li>
                 <li><a class="uk-link-muted" href="@route('/copilot')"><i class="uk-icon-sitemap"></i> @lang('Pages')</a></li>
                 <li><a class="uk-link-muted" href="@route('/copilot/settings')"><i class="uk-icon-cog"></i> @lang('Settings')</a></li>
                 <li><a class="uk-link-muted" href="@route('/copilot/finder')"><i class="uk-icon-folder-o"></i> @lang('Files')</a></li>
