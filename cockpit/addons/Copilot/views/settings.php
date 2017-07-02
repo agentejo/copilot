@@ -11,7 +11,7 @@
 
         <div class="uk-grid">
 
-            <div class="uk-grid-margin uk-width-medium-1-3">
+            <div class="uk-grid-margin uk-width-medium-1-2">
 
                 <div class="uk-panel uk-panel-box uk-panel-card">
 
@@ -19,53 +19,61 @@
                         <span class="uk-text-large uk-flex-item-1">Copilot</span>
                         <span class="uk-badge uk-margin-small-top uk-flex uk-flex-middle"><span>{{ $info->version }}</span></span>
                     </div>
-                    
-                    @if($license->type != 'trial')
 
-                    <div class="uk-margin">
-                        <strong>@lang('Licensed to')</strong>
-                    </div>
+                    <div class="uk-flex">
+                        <div class="uk-margin-right">
+                            <img class="uk-svg-adjust uk-text-{{ $license->type != 'trial' ? 'success':'muted'}}" src="@base('copilot:assets/media/icons/license.svg')" width="50" alt="License" data-uk-svg>
+                        </div>
+                        <div class="uk-flex-item-1">
+                            @if($license->type != 'trial')
 
-                    <div class="uk-margin">
+                            <div class="uk-margin">
+                                <strong>@lang('Licensed to')</strong>
+                            </div>
 
-                        <p>
-                            {{ $license->name }}<br>
-                            <span class="uk-text-small">{{ @$license->domain }}</span>
-                        </p>
+                            <div class="uk-margin">
 
-                        <div class="uk-grid uk-margin">
-                            <div class="uk-width-3-4">
-                                <p class="uk-text-muted uk-text-small">
-                                    <span class="uk-text-uppercase">{{ $license->type}}</span><br>
-                                    {{ $license->email}}<br>
-                                    {{ $license->company }}
+                                <p>
+                                    {{ $license->name }}<br>
+                                    <span class="uk-text-small">{{ @$license->domain }}</span>
+                                </p>
+
+                                <div class="uk-grid uk-margin">
+                                    <div class="uk-width-3-4">
+                                        <p class="uk-text-muted uk-text-small">
+                                            <span class="uk-text-uppercase">{{ $license->type}}</span><br>
+                                            {{ $license->email}}<br>
+                                            {{ $license->company }}
+                                        </p>
+                                    </div>
+                                    <div class="uk-width-1-4">
+                                        <qrcode text="Thank you!"></qrcode>
+                                    </div>
+                                </div>
+
+                                <hr class="uk-width-1-2">
+                                <p class="uk-text-small">
+                                    <i class="uk-icon-heart uk-text-danger uk-margin-small-right"></i>
+                                    Thank you for being awesome and your support!
                                 </p>
                             </div>
-                            <div class="uk-width-1-4">
-                                <qrcode text="Thank you!"></qrcode>
+
+                            @else
+
+                            <span class="uk-badge uk-badge-danger">@lang('Free Trial')</span>
+
+                            <div class="uk-margin-small-top uk-text-muted">
+                                @lang('Unlicensed version. Enjoy your free trial.') 
+                                <a href="http://getcockpit.com" target="_blank">@lang('Buy a license')</a>
                             </div>
+                            @endif
                         </div>
-
-                        <hr class="uk-width-1-2">
-                        <p class="uk-text-small">
-                            <i class="uk-icon-heart uk-text-danger uk-margin-small-right"></i>
-                            Thank you for being awesome and your support!
-                        </p>
                     </div>
 
-                    @else
-
-                    <div class="uk-margin uk-alert uk-alert-warning">
-                        <p><i class="uk-icon-warning uk-margin-small-right"></i> @lang('Unlicensed version. Enjoy your trial.')</p>
-                    </div>
-
-                    <a href="http://cocopi.co" target="_blank">@lang('Buy a license')</a>
-
-                    @endif
                 </div>
             </div>
 
-            <div class="uk-grid-margin uk-width-medium-2-3 uk-flex-order-first-medium"">
+            <div class="uk-grid-margin uk-width-medium-1-2 uk-flex-order-first-medium"">
 
                 <label class="uk-text-small">@lang('Title')</label>
                 <div class="uk-margin-bottom">
@@ -74,7 +82,7 @@
 
                 <label class="uk-text-small">@lang('Description')</label>
                 <div class="uk-margin-bottom">
-                    <textarea field="textarea" bind="meta.description" class="uk-form-large uk-width-1-1"></textarea>
+                    <textarea field="textarea" bind="meta.description" class="uk-form-large uk-width-1-1" style="height:150px;"></textarea>
                 </div>
 
                 <label class="uk-text-small">@lang('Keywords')</label>
