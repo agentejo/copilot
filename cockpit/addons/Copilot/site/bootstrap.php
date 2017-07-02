@@ -200,6 +200,7 @@ if ($site['offline']) {
  * load modules
  */
 $site->loadModules([CP_ROOT_DIR.'/site/modules']);
+$app->loadModules([CP_ROOT_DIR.'/site/cockpit']);
 
 /**
  * bootstrap site
@@ -209,6 +210,14 @@ include(CP_ROOT_DIR.'/site/bootstrap.php');
 // bootstrap from theme
 if (is_file(CP_ROOT_DIR.'/site/theme/bootstrap.php')) {
     include(CP_ROOT_DIR.'/site/theme/bootstrap.php');
+}
+
+if (is_dir(CP_ROOT_DIR.'/site/theme/modules')) {
+    $site->loadModules([CP_ROOT_DIR.'/site/theme/modules']);
+}
+
+if (is_dir(CP_ROOT_DIR.'/site/theme/cockpit')) {
+    $app->loadModules([CP_ROOT_DIR.'/site/theme/cockpit']);
 }
 
 
