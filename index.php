@@ -14,7 +14,9 @@ if (PHP_SAPI == 'cli-server' && is_file(__DIR__.parse_url($_SERVER['REQUEST_URI'
 /**
  * bootstrap Cockpit
  */
-include_once(__DIR__.'/cockpit/bootstrap.php');
+$adminfolder = 'cockpit';
+
+include_once(__DIR__."/{$adminfolder}/bootstrap.php");
 
 /**
  * start the app engine

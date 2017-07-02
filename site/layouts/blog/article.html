@@ -2,22 +2,18 @@
 
 @snippet('breadcrumbs')
 
-<article class="uk-article">
+<article>
 
-    <h1 class="uk-article-title">{{ $page->meta('title') }}</h1>
+    <h1>{{ $page->meta('title') }}</h1>
 
-    <div class="uk-article-meta">
+    <div>
         {{ date('F d, Y', strtotime($page->meta('created'))) }}
     </div>
 
     @if($page->meta('teaser'))
-    <div class="uk-margin">
-        {{ $page->meta('teaser') }}
-    </div>
+    <div> {{ $page->meta('teaser') }}</div>
     @endif
 
-    <div class="uk-margin">
-        {{ $page->content() }}
-    </div>
+    <div>{{ $page->content() }}</div>
 
 </article>

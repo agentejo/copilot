@@ -5,28 +5,24 @@
 %}
 
 @foreach($articles as $idx => $article)
-<article class="uk-article uk-width-medium-3-4 uk-container-center">
+<article>
 
-    <h1 class="uk-article-title"><a href="{{ $article->url() }}">{{ $article->meta('title') }}</a></h1>
+    <h1><a href="{{ $article->url() }}">{{ $article->meta('title') }}</a></h1>
 
-    <div class="uk-article-meta">
+    <div>
         {{ date('F d, Y', strtotime($article->meta('created'))) }}
     </div>
 
     @if($article->meta('teaser'))
-    <div class="uk-margin">
-        {{ $article->meta('teaser') }}
-    </div>
+    <div>{{ $article->meta('teaser') }}</div>
     @endif
 
-    <div class="uk-margin">
-        {{ $article->content() }}
-    </div>
+    <div>{{ $article->content() }}</div>
 
 </article>
 
 @if($idx < count($articles))
-<hr class="uk-width-medium-3-4 uk-container-center uk-margin-large">
+<br>
 @endif
 
 @endforeach

@@ -13,37 +13,33 @@
 
         <link rel="icon" href="@base('/favicon.png')" type="image/png">
 
-        @assets(['theme:css/site.css', 'cockpit:assets/lib/jquery.js', 'cockpit:assets/lib/uikit/js/uikit.min.js', 'theme:js/site.js'])
+        @assets(['theme:css/site.css', 'theme:js/site.js'])
         @assets($meta->assets)
 
         @trigger('site.header')
-
     </head>
     <body>
 
-        <section class="site-header">
-
-            <div class="uk-container uk-container-center">
-
-                <a class="uk-navbar-brand" href="@url('/')">Copilot</a>
-
-                <div class="uk-navbar-flip">
-                    <nav class="uk-navbar">
-                        @menu('main', ['class'=>'uk-navbar-nav', 'activeClass' => 'uk-active'])
-                    </nav>
+        <header class="site-header">
+            <div class="container flex">
+                <div class="flex-expand">
+                    <a class="brand-link" href="@url('/')">Copilot</a>
                 </div>
+                <nav>
+                    @menu('main', ['class'=>'nav', 'activeClass' => 'active'])
+                </nav>
             </div>
-        </section>
+        </header>
 
-        <main class="site-main uk-margin-large-top">
+        <main class="site-main container">
 
             {{ $content_for_layout }}
 
         </main>
 
-        <footer class="site-footer uk-margin-large-top">
+        <footer class="site-footer container">
 
-            <strong>Built with <a href="http://getcockpit.com"><i class="uk-icon-heart uk-text-danger"></i> Copilot</a></strong>
+            <strong>Built with <a href="http://getcockpit.com">Copilot</a></strong>
 
         </footer>
 
