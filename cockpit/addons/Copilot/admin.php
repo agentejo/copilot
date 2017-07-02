@@ -24,11 +24,11 @@ $app->on('admin.init', function() use($app) {
             __DIR__.'/site/types',
             copi::path('site:site/types'),
             copi::path('site:site/theme/types')
-        ] as $fol) {
+        ] as $folder) {
 
-            if (!$fol) continue;
+            if (!$folder) continue;
 
-            foreach($this->helper('fs')->ls('*.yaml', $fol) as $file) {
+            foreach($this->helper('fs')->ls('*.yaml', $folder) as $file) {
                 $type = $file->getBasename('.yaml');
                 $types[$type] = $this->helper('yaml')->fromFile($file->getRealPath());
 
