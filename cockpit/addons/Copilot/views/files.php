@@ -102,7 +102,7 @@
     </div>
     
 
-    <div class="uk-margin-large-top uk-viewport-height-1-3 uk-container-center uk-text-center uk-flex uk-flex-middle uk-flex-center uk-animation-slide-bottom" if="{files && !files.length}">
+    <div class="uk-margin-large-top uk-viewport-height-1-3 uk-container-center uk-text-center uk-flex uk-flex-middle uk-flex-center uk-animation-scale" if="{files && !files.length}">
 
         <div>
 
