@@ -235,9 +235,9 @@
 
     <div id="modal-preview" class="uk-modal">
         <div class="uk-modal-dialog uk-modal-dialog-blank uk-height-viewport uk-flex uk-flex-column">
-            <div class="uk-flex uk-flex-middle">
+            <div class="uk-flex uk-flex-middle preview-header">
 
-                <span class="uk-margin-left uk-text-large uk-text-primary"><i class="uk-icon-eye"></i></span>
+                <span class="uk-margin-left uk-text-bold uk-text-primary"><i class="uk-icon-eye uk-margin-small-right"></i> @lang('Live')</span>
 
                 <ul class="uk-subnav uk-text-large uk-margin-left uk-flex-item-1 uk-flex-center uk-margin-small-top">
                     <li><a onclick="App.$('#preview-frame').css('max-width', 360).attr('screen', 'mobile')"><i class="uk-icon-mobile-phone"></i></a></li>
@@ -245,7 +245,7 @@
                     <li><a onclick="App.$('#preview-frame').css('max-width', '100%').attr('screen', '')"><i class="uk-icon-desktop"></i></a></li>
                 </ul>
 
-                <a class="uk-modal-close uk-link-muted uk-text-large uk-margin-right"><i class="uk-icon-close"></i></a>
+                <a class="uk-modal-close uk-link-muted uk-margin-right"><i class="uk-icon-button uk-icon-close"></i></a>
 
             </div>
             <div class="uk-position-relative uk-bg-light uk-flex-item-1">
@@ -255,6 +255,11 @@
     </div>
 
     <style>
+
+        .preview-header {
+            box-shadow:0 0 20px rgba(0,0,0,0.07);
+            z-index:1;
+        }
 
         #preview-frame {
             transition: max-width 300ms, margin-top 300ms, box-shadow 300ms;
