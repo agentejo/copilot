@@ -62,7 +62,7 @@
                                     <ul class="uk-nav uk-nav-dropdown">
                                         <li class="uk-nav-header">Select a type</li>
                                         <li each="{val,key in opts.types}">
-                                            <a class="uk-dropdown-close" data-type="{ key }" onclick="{ parent.selectType }">{ val.label || key }</a>
+                                            <a class="uk-dropdown-close uk-text-small" data-type="{ key }" onclick="{ parent.selectType }"><i class="uk-icon-justify uk-icon-cube"></i> { val.label || key }</a>
                                         </li>
                                     </ul>
                                 </div>
