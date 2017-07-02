@@ -73,7 +73,9 @@
                 </div>
             </div>
 
-            <div class="uk-grid-margin uk-width-medium-1-2 uk-flex-order-first-medium"">
+            <div class="uk-grid-margin uk-width-medium-1-2 uk-flex-order-first-medium">
+
+                <h3>@lang('Meta Information')</h3>
 
                 <label class="uk-text-small">@lang('Title')</label>
                 <div class="uk-margin-bottom">
