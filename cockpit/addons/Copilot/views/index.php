@@ -39,6 +39,7 @@
                 </div>
             </div>
 
+            @trigger('copilot.index.aside')
         </div>
 
         <div class="uk-grid-margin uk-width-medium-3-4 uk-flex-order-first-medium">

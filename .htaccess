@@ -7,6 +7,10 @@
   Deny from all
 </Files>
 
+<Files ~ "\.(html|md)$">
+  Header set X-Robots-Tag "noindex, nofollow"
+</Files>
+
 # Don't show directory listings
 Options -Indexes
 
