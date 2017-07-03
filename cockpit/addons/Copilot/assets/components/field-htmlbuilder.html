@@ -20,11 +20,11 @@
         }
 
         .html-builder-toolbar {
-            padding: 20px 20px;
+            padding: 10px 20px;
             box-shadow: 0 0 40px rgba(0,0,0,.2);
         }
         .html-builder-content {
-            padding:  40px 80px 20px 80px;
+            padding:  40px 20px 20px 20px;
             position: absolute;
             top: 60px;
             bottom: 0;
@@ -42,10 +42,18 @@
             margin-top: -30px;
         }
 
-        [data-component]:empty:after {
+        div[ref="content"] {
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        [data-component]:empty:not(hr):after {
             content: attr(data-component);
             text-transform: capitalize;
+            color: #eee;
         }
+
     </style>
 
     <div class="uk-panel-box uk-panel-card uk-text-muted uk-text-center">
@@ -56,11 +64,11 @@
 
     <div class="html-builder-container" ref="container">
         
-        <div class="html-builder-toolbar uk-flex">
+        <div class="html-builder-toolbar uk-flex uk-flex-middle">
             <strong>HTML Builder</strong>
             <div class="uk-flex-item-1"></div>
             <a class="uk-margin-right" onclick="{emptyBuilder}" show="{ value }"><i class="uk-icon-trash-o"></i></a>
-            <a onclick="{hideBuilder}"><i class="uk-icon-close"></i></a>
+            <a onclick="{hideBuilder}"><i class="uk-icon-button uk-icon-close"></i></a>
         </div>
         
         <div class="html-builder-content" show="{value}">
@@ -70,10 +78,11 @@
             </div>
             <div class="html-builder-actions uk-flex uk-flex-middle" ref="actions" show="{activeComponent}">
                 <strong class="uk-text-uppercase uk-text-small uk-margin-right">{ activeComponent && activeComponent.getAttribute('data-component') }</strong>
-                <a class="uk-button uk-button-small uk-button-link" onclick="{remove}"><i class="uk-icon-trash-o"></i></a>
+                <a class="uk-button uk-button-small uk-button-link" onclick="{addComponent}"><i class="uk-icon-plus-circle"></i></a>
                 <a class="uk-button uk-button-small uk-button-link" onclick="{moveUp}" show="{activeComponent && App.$(activeComponent).prev('[data-component]').length}"><i class="uk-icon-caret-up"></i></a>
                 <a class="uk-button uk-button-small uk-button-link" onclick="{moveDown}" show="{activeComponent && App.$(activeComponent).next('[data-component]').length}"><i class="uk-icon-caret-down"></i></a>
                 <a class="uk-button uk-button-small uk-button-link" onclick="{editHTML}"><i class="uk-icon-code"></i></a>
+                <a class="uk-button uk-button-small uk-button-link" onclick="{remove}"><i class="uk-icon-trash-o"></i></a>
             </div>
         </div>
         
@@ -125,9 +134,14 @@
         this.value = '';
 
         this.snippets = {
-            "header": {label: 'Header', html:'<h1>Header</h1>'},
+            "heading": {label: 'Heading', html:'<h1>Header</h1>'},
             "html": {label: 'Html', html:'<div>Html Code....</div>'},
-            "text": {label: 'Text', html:'<p>Lorem Ipsum....</p>'}
+            "text": {label: 'Text', html:'<p>Lorem Ipsum....</p>'},
+            "divider": {label: 'Divider', html:'<hr>'},
+            "video": {label: 'Video', html:'<div><video src="" data-media="video" width="600" height="400"></video></div>'},
+            "audio": {label: 'Audio', html:'<div><audio src="" data-media="audio"></audio></div>'},
+            "image": {label: 'Image', html:'<div><img src="" data-media="image" width="400" height="300"></div>'},
+            "spacer": {label: 'Spacer', html:'<div style="height:40px;"></div>'}
         };
 
         this.$updateValue = function(value, field) {
@@ -196,13 +210,24 @@
             this.refs.container.classList.add('open');
         }
 
-        addComponent() {
+        addComponent(e) {
             UIkit.modal(this.refs.components).show();
         }
 
         addSnippet(e) {
 
             var component = App.$(e.item.snippet.html).attr('data-component', e.item.component);
+
+            component.find('audio,video,img').filter('[src=""]').each(function() {
+                
+                if (this.matches('img')) {
+
+                } else if(this.matches('audio')) {
+
+                } else if(this.matches('video')) {
+                    
+                }
+            });
 
             App.$(this.refs.content).append(component);
 
