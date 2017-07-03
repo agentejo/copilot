@@ -108,6 +108,10 @@
             <a class="uk-modal-close uk-close"></a>
             <h3>{ App.i18n.get('Code') }</h3>
             <codemirror ref="code" syntax="html"></codemirror>
+
+            <div class="uk-margin-top uk-text-right">
+                <button type="button" class="uk-button uk-button-large uk-button-primary" onclick="{ saveHtml }">{ App.i18n.get('Save') }</button>
+            </div>
         </div>
 
     </div>
@@ -120,6 +124,7 @@
 
         this.snippets = {
             "header": {label: 'Header', html:'<h1>Header</h1>'},
+            "html": {label: 'Html', html:'<div>Html Code....</div>'},
             "text": {label: 'Text', html:'<p>Lorem Ipsum....</p>'}
         };
 
@@ -217,12 +222,19 @@
             
             var value = this.activeComponent.outerHTML;
 
+            this.refs.code._activeComponent = this.activeComponent;
+
             setTimeout(function() {
                 $this.refs.code.editor.refresh();
                 $this.refs.code.editor.setValue(html_beautify(value || ''));
             }, 100);
 
             UIkit.modal(this.refs.html).show();
+        }
+
+        saveHtml() {
+            App.$(this.refs.code._activeComponent).replaceWith($this.refs.code.editor.getValue());
+            UIkit.modal(this.refs.html).hide();
         }
 
     </script>
