@@ -49,6 +49,7 @@
     </style>
 
     <div class="uk-panel-box uk-panel-card uk-text-muted uk-text-center">
+        <div class="uk-alert">The Layout Builder is in active development. <strong>Use at your own risk</strong>.</div>
         <img class="uk-svg-adjust" riot-src="{ App.base('/addons/Copilot/assets/media/icons/layout.svg') }" width="100" data-uk-svg>
         <div><a onclick="{ openBuilder }" title="{ App.i18n.get('Open Layout Builder') }" data-uk-tooltip><i class="uk-icon-button uk-icon-pencil"></i></a></div>
     </div>
@@ -58,6 +59,7 @@
         <div class="html-builder-toolbar uk-flex">
             <strong>HTML Builder</strong>
             <div class="uk-flex-item-1"></div>
+            <a class="uk-margin-right" onclick="{emptyBuilder}" show="{ value }"><i class="uk-icon-trash-o"></i></a>
             <a onclick="{hideBuilder}"><i class="uk-icon-close"></i></a>
         </div>
         
@@ -178,6 +180,11 @@
             this.$setValue(this.value, true);
 
             delete clone;
+        }
+
+        emptyBuilder() {
+            this.refs.content.innerHTML = '';
+            this.doUpdate();
         }
 
         hideBuilder() {
