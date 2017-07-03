@@ -57,13 +57,13 @@
         }
     };
 
+    <?php $app->trigger('cockpit.api.js') ?>
+
     // AMD support
     if (typeof define === 'function' && define.amd) {
         define(function() { return Cockpit; });
     }
 
     w.Cockpit = Cockpit;
-
-    <?php $app->trigger('cockpit.api.js') ?>
 
 })(window, document);
