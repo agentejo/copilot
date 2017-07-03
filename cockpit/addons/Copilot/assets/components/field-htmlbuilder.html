@@ -133,7 +133,7 @@
             if (this.value != value) {
                 this.value = value;
                 this.refs.content.innerHTML = value;
-                App.$(this.refs.content).find('[data-component]').attr('contenteditable', true);
+                App.$(this.refs.content).find('[data-component]');
             }
 
         }.bind(this);
