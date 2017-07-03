@@ -99,7 +99,7 @@
 
         <div class="uk-modal-dialog uk-width-medium-1-2">
             <a class="uk-modal-close uk-close"></a>
-            <h3>{ App.i18n.get('HTML Components') }</h3>
+            <h3><i class="uk-icon-cubes uk-margin-small-right"></i> { App.i18n.get('HTML Components') }</h3>
 
             <div class="uk-grid uk-grid-small uk-grid-width-medium-1-3">
                 <div class="uk-grid-margin uk-text-center" each="{ snippet, component in snippets}">
@@ -137,6 +137,7 @@
             "heading": {label: 'Heading', html:'<h1>Header</h1>'},
             "html": {label: 'Html', html:'<div>Html Code....</div>'},
             "text": {label: 'Text', html:'<p>Lorem Ipsum....</p>'},
+            "button": {label: 'Button', html:'<div><button>Button</button></div>'},
             "divider": {label: 'Divider', html:'<hr>'},
             "video": {label: 'Video', html:'<div><video src="" data-media="video" width="600" height="400"></video></div>'},
             "audio": {label: 'Audio', html:'<div><audio src="" data-media="audio"></audio></div>'},
@@ -211,6 +212,13 @@
         }
 
         addComponent(e) {
+
+            this.refs.components._activeComponent = null;
+
+            if (App.$(e.target).parents('.html-builder-actions').length) {
+                this.refs.components._activeComponent = this.activeComponent;
+            }
+
             UIkit.modal(this.refs.components).show();
         }
 
@@ -229,7 +237,12 @@
                 }
             });
 
-            App.$(this.refs.content).append(component);
+            if (this.refs.components._activeComponent) {
+                App.$(this.refs.components._activeComponent).after(component);
+            } else {
+                App.$(this.refs.content).append(component);
+            }
+
 
             this.doUpdate();
         }
