@@ -1,0 +1,230 @@
+<field-htmlbuilder>
+
+    <style>
+        
+        .html-builder-container {
+            display: none;
+            position: fixed;
+            box-sizing: border-box;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #fff;
+            overflow: auto;
+            z-index: 10;
+        }
+
+        .html-builder-container.open {
+            display: block;
+        }
+
+        .html-builder-toolbar {
+            padding: 20px 20px;
+            box-shadow: 0 0 40px rgba(0,0,0,.2);
+        }
+        .html-builder-content {
+            padding:  40px 80px 20px 80px;
+            position: absolute;
+            top: 60px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            overflow: hidden;
+        }
+
+        .html-builder-actions {
+            position: absolute;
+            background: #222;
+            padding: 3px 8px;
+            border-radius: 2px;
+            color: #fff;
+            margin-top: -30px;
+        }
+
+        [data-component]:empty:after {
+            content: attr(data-component);
+            text-transform: capitalize;
+        }
+    </style>
+
+    <div class="uk-panel-box uk-panel-card uk-text-muted uk-text-center">
+        <img class="uk-svg-adjust" riot-src="{ App.base('/addons/Copilot/assets/media/icons/layout.svg') }" width="100" data-uk-svg>
+        <div><a onclick="{ openBuilder }" title="{ App.i18n.get('Open Layout Builder') }" data-uk-tooltip><i class="uk-icon-button uk-icon-pencil"></i></a></div>
+    </div>
+
+    <div class="html-builder-container" ref="container">
+        
+        <div class="html-builder-toolbar uk-flex">
+            <strong>HTML Builder</strong>
+            <div class="uk-flex-item-1"></div>
+            <a onclick="{hideBuilder}"><i class="uk-icon-close"></i></a>
+        </div>
+        
+        <div class="html-builder-content" show="{value}">
+            <div ref="content"></div>
+            <div class="uk-margin uk-text-center" builder-gui>
+                <a class="uk-text-xlarge" onclick="{ addComponent }" title="{ App.i18n.get('Add Content') }" data-uk-tooltip><i class="uk-icon-plus-circle"></i></a>
+            </div>
+            <div class="html-builder-actions uk-flex uk-flex-middle" ref="actions" show="{activeComponent}">
+                <strong class="uk-text-uppercase uk-text-small uk-margin-right">{ activeComponent && activeComponent.getAttribute('data-component') }</strong>
+                <a class="uk-button uk-button-small uk-button-link" onclick="{remove}"><i class="uk-icon-trash-o"></i></a>
+                <a class="uk-button uk-button-small uk-button-link" onclick="{moveUp}" show="{activeComponent && App.$(activeComponent).prev('[data-component]').length}"><i class="uk-icon-caret-up"></i></a>
+                <a class="uk-button uk-button-small uk-button-link" onclick="{moveDown}" show="{activeComponent && App.$(activeComponent).next('[data-component]').length}"><i class="uk-icon-caret-down"></i></a>
+                <a class="uk-button uk-button-small uk-button-link" onclick="{editHTML}"><i class="uk-icon-code"></i></a>
+            </div>
+        </div>
+        
+        <div class="uk-margin-large-top uk-viewport-height-1-3 uk-container-center uk-text-center uk-flex uk-flex-middle uk-flex-center uk-animation-scale" if="{!value.trim()}">
+            <div>
+                <img class="uk-svg-adjust uk-text-muted" riot-src="{ App.base('/addons/Copilot/assets/media/icons/layout.svg') }" width="100" data-uk-svg>
+                <p class="uk-h1 uk-text-bold">{ App.i18n.get('No Content yet') }</p>
+                <a class="uk-text-xlarge" onclick="{ addComponent }" title="{ App.i18n.get('Add Content') }" data-uk-tooltip><i class="uk-icon-plus-circle"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div class="uk-modal" ref="components">
+
+        <div class="uk-modal-dialog uk-width-medium-1-2">
+            <a class="uk-modal-close uk-close"></a>
+            <h3>{ App.i18n.get('HTML Components') }</h3>
+
+            <div class="uk-grid uk-grid-small uk-grid-width-medium-1-3">
+                <div class="uk-grid-margin uk-text-center" each="{ snippet, component in snippets}">
+                    <div class="uk-panel uk-panel-framed">
+                        { snippet.label }
+                        <a class="uk-position-cover uk-modal-close" onclick="{ parent.addSnippet }"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="uk-modal" ref="html">
+
+        <div class="uk-modal-dialog uk-width-medium-2-3">
+            <a class="uk-modal-close uk-close"></a>
+            <h3>{ App.i18n.get('Code') }</h3>
+            <codemirror ref="code" syntax="html"></codemirror>
+        </div>
+
+    </div>
+    
+    <script>
+
+        var $this = this, actionsIdle;
+
+        this.value = '';
+
+        this.snippets = {
+            "header": {label: 'Header', html:'<h1>Header</h1>'},
+            "text": {label: 'Text', html:'<p>Lorem Ipsum....</p>'}
+        };
+
+        this.$updateValue = function(value, field) {
+            
+            if (this.value != value) {
+                this.value = value;
+                this.refs.content.innerHTML = value;
+                App.$(this.refs.content).find('[data-component]').attr('contenteditable', true);
+            }
+
+        }.bind(this);
+
+        this.on('mount', function() {
+
+            App.assets.require('/addons/Copilot/assets/js/beautify-html.js', function() {});
+
+            App.$(this.root).on('mouseenter', '[data-component]', function() {
+                
+                if (actionsIdle) clearTimeout(actionsIdle);
+
+                $this.activeComponent = this;
+
+                App.$($this.refs.actions).css({
+                    top: this.offsetTop,
+                    left: this.offsetLeft
+                }).addClass('open');
+
+                $this.update();
+            });
+
+            App.$(this.root).on('click', function(e) {
+
+                if (!App.$(e.target).parents('[data-component]').length) {
+                    $this.activeComponent = false;
+                    $this.update();
+                };
+            });
+
+
+            this.trigger('update');
+        });
+
+        doUpdate() {
+
+            var clone = App.$(this.refs.content).clone();
+            
+            clone.find('[contenteditable]').removeAttr('contenteditable');
+
+            this.value = clone.html();
+            this.$setValue(this.value, true);
+
+            delete clone;
+        }
+
+        hideBuilder() {
+            this.doUpdate();
+            this.refs.container.classList.remove('open');
+        }
+
+        openBuilder() {
+            this.refs.container.classList.add('open');
+        }
+
+        addComponent() {
+            UIkit.modal(this.refs.components).show();
+        }
+
+        addSnippet(e) {
+
+            var component = App.$(e.item.snippet.html).attr('data-component', e.item.component);
+
+            App.$(this.refs.content).append(component);
+
+            this.doUpdate();
+        }
+
+        remove() {
+            App.$(this.activeComponent).remove();
+            this.activeComponent = false;
+            this.doUpdate();
+        }
+
+        moveUp(e) {
+            App.$(this.activeComponent).prev('[data-component]').before(this.activeComponent);
+            this.doUpdate();
+        }
+
+        moveDown(e) {
+            App.$(this.activeComponent).next('[data-component]').after(this.activeComponent);
+            this.doUpdate();
+        }
+
+        editHTML() {
+            
+            var value = this.activeComponent.outerHTML;
+
+            setTimeout(function() {
+                $this.refs.code.editor.refresh();
+                $this.refs.code.editor.setValue(html_beautify(value || ''));
+            }, 100);
+
+            UIkit.modal(this.refs.html).show();
+        }
+
+    </script>
+
+</field-htmlbuilder>

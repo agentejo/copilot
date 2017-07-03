@@ -1,0 +1,4 @@
+label: Layout Builder
+content:
+    type: htmlbuilder
+    parse: false
