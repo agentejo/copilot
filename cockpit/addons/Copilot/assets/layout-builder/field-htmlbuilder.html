@@ -174,9 +174,11 @@
                 '/addons/Copilot/assets/layout-builder/layout-builder.css'
             ], function() {});
 
-            App.$(this.root).on('mouseenter', '[data-component]', function() {
+            App.$(this.root).on('mouseenter', '[data-component]', function(e) {
                 
                 if (actionsIdle) clearTimeout(actionsIdle);
+
+                e.stopPropagation();
 
                 $this.activate(this);
 
