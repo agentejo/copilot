@@ -35,11 +35,20 @@
 
         .html-builder-actions {
             position: absolute;
+            box-sizing: border-box;
             background: #222;
             padding: 3px 8px;
-            border-radius: 2px;
             color: #fff;
             margin-top: -30px;
+        }
+
+        div[ref="componentframe"] {
+            position: absolute;
+            box-sizing: border-box;
+            left: 0;
+            top: 100%;
+            border: 2px #222 solid;
+            pointer-events: none;
         }
 
         div[ref="content"] {
@@ -84,6 +93,7 @@
                 <a class="uk-button uk-button-small uk-button-link" onclick="{moveDown}" show="{activeComponent && App.$(activeComponent).next('[data-component]').length}"><i class="uk-icon-caret-down"></i></a>
                 <a class="uk-button uk-button-small uk-button-link" onclick="{editHTML}"><i class="uk-icon-code"></i></a>
                 <a class="uk-button uk-button-small uk-button-link" onclick="{remove}"><i class="uk-icon-trash-o"></i></a>
+                <div ref="componentframe"></div>
             </div>
         </div>
         
@@ -165,7 +175,7 @@
                 
                 if (actionsIdle) clearTimeout(actionsIdle);
 
-                $this.activeComponent = this;
+                $this.activate(this);
 
                 App.$($this.refs.actions).css({
                     top: this.offsetTop,
@@ -178,7 +188,7 @@
             App.$(this.root).on('click', function(e) {
 
                 if (!App.$(e.target).parents('[data-component]').length) {
-                    $this.activeComponent = false;
+                    $this.deactivate();
                     $this.update();
                 };
             });
@@ -186,6 +196,19 @@
 
             this.trigger('update');
         });
+
+        deactivate() {
+            this.activeComponent = false;
+        }
+
+        activate(component) {
+            this.deactivate();
+            this.activeComponent = component;
+            App.$(this.refs.componentframe).css({
+                width: component.offsetWidth,
+                height: component.offsetHeight
+            });
+        }
 
         doUpdate() {
 
@@ -255,7 +278,7 @@
 
         remove() {
             App.$(this.activeComponent).remove();
-            this.activeComponent = false;
+            this.deactivate();
             this.doUpdate();
         }
 
