@@ -1,5 +1,5 @@
 <li data-uk-dropdown>
-    <a href="@route('/copilot')"><i class="uk-icon-bars"></i> Copilot</a>
+    <a href="@route('/copilot')">Copilot</a>
     <div class="uk-dropdown">
         <ul class="uk-nav uk-nav-dropdown">
             <li><a href="@route('/copilot')"><i class="uk-icon-sitemap uk-icon-justify"></i> @lang('Pages')</a></li>

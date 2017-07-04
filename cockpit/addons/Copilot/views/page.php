@@ -29,10 +29,12 @@
             </a>
             <div class="uk-dropdown" if="{ copilot.getType(page.type).subpages !== false || copilot.getType(page.type).files !== false }">
 
-                <ul class="uk-nav uk-nav-dropdown">
+                <ul class="uk-nav uk-nav-dropdown uk-dopdown-close">
                     <li class="uk-nav-header">@lang('Browse')</li>
                     <li><a href="@route('/copilot/pages'){page.relpath}" if="{ copilot.getType(page.type).subpages !== false }">@lang('Sub Pages')</a></li>
                     <li><a href="@route('/copilot/files'){page.relpath}" if="{ copilot.getType(page.type).files !== false }">@lang('Files')</a></li>
+                    <li class="uk-nav-divider"></li>
+                    <li><a onclick="{ showPreview }">@lang('View Page')</a></li>
                 </ul>
 
             </div>
