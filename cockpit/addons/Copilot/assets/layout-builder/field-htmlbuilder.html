@@ -572,7 +572,14 @@
             this.$element.remove();
             this.parent.overlays.splice(this.parent.overlays.indexOf(this.element), 1);
             
+            // cleanup parent container
             if ($parent.is('.bl-grid') && !$parent.children().length) {
+
+                var idx = this.parent.overlays.indexOf($parent[0]);
+
+                if (idx != -1) {
+                    this.parent.overlays.splice(idx, 1);
+                }
                 $parent.remove();
             }
             
