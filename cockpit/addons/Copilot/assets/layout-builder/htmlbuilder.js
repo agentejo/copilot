@@ -121,6 +121,10 @@
 
             });
 
+        },
+
+        injectAfter: function(component, element) {
+            return this.inject(component, element.parentNode, element);
         }
 
     };

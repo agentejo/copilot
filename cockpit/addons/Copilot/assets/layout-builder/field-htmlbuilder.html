@@ -23,6 +23,7 @@
             padding: 10px 20px;
             box-shadow: 0 0 40px rgba(0,0,0,.2);
         }
+
         .html-builder-content {
             padding:  40px 20px 20px 20px;
             position: absolute;
@@ -31,40 +32,6 @@
             left: 0;
             right: 0;
             overflow: auto;
-        }
-
-        .html-builder-actions {
-            position: absolute;
-            box-sizing: border-box;
-            background: #222;
-            padding: 3px 8px;
-            color: #fff;
-            margin-top: -30px;
-        }
-
-        .html-builder-repeatable-action {
-            visibility: hidden;
-            pointer-events:none;
-            position: absolute;
-            box-sizing: border-box;
-            background: #222;
-            padding: 3px 8px;
-            color: #fff;
-            margin-top: 10px;
-        }
-
-        .html-builder-repeatable-action.open {
-            visibility: visible;
-            pointer-events:auto;
-        }
-
-        div[ref="componentframe"] {
-            position: absolute;
-            box-sizing: border-box;
-            left: 0;
-            top: 100%;
-            border: 2px #222 solid;
-            pointer-events: none;
         }
 
         div[ref="content"] {
@@ -77,6 +44,10 @@
             content: attr(data-component);
             text-transform: capitalize;
             color: #eee;
+        }
+
+        .bl-grid > div {
+            min-height: 100px;
         }
 
     </style>
@@ -101,21 +72,8 @@
             <div class="uk-margin uk-text-center" builder-gui>
                 <a class="uk-text-xlarge" onclick="{ addComponent }" title="{ App.i18n.get('Add Content') }" data-uk-tooltip><i class="uk-icon-plus-circle"></i></a>
             </div>
-            <div class="html-builder-actions uk-flex uk-flex-middle" ref="actions" show="{activeComponent}">
-                <strong class="uk-text-uppercase uk-text-small uk-margin-right">{ activeComponent && activeComponent.getAttribute('data-component') }</strong>
-                <a class="uk-button uk-button-small uk-button-link" onclick="{addComponent}"><i class="uk-icon-plus-circle"></i></a>
-                <a class="uk-button uk-button-small uk-button-link" onclick="{cloneComponent}"><i class="uk-icon-clone"></i></a>
-                <a class="uk-button uk-button-small uk-button-link" onclick="{moveUp}" show="{activeComponent && App.$(activeComponent).prev('[data-component]').length}"><i class="uk-icon-caret-up"></i></a>
-                <a class="uk-button uk-button-small uk-button-link" onclick="{moveDown}" show="{activeComponent && App.$(activeComponent).next('[data-component]').length}"><i class="uk-icon-caret-down"></i></a>
-                <a class="uk-button uk-button-small uk-button-link" onclick="{edit}"><i class="uk-icon-pencil"></i></a>
-                <a class="uk-button uk-button-small uk-button-link" onclick="{editHTML}"><i class="uk-icon-code"></i></a>
-                <a class="uk-button uk-button-small uk-button-link" onclick="{remove}"><i class="uk-icon-trash-o"></i></a>
-                <div ref="componentframe"></div>
-            </div>
 
-            <div class="html-builder-repeatable-action uk-flex uk-flex-middle" ref="repeatable">
-                <i class="uk-icon-plus"></i>
-            </div>
+            <html-builderoverlay each="{element in overlays}" element="{element}"></html-builderoverlay>
         </div>
         
         <div class="uk-margin-large-top uk-viewport-height-1-3 uk-container-center uk-text-center uk-flex uk-flex-middle uk-flex-center uk-animation-scale" if="{!value.trim()}">
@@ -141,7 +99,7 @@
                     <div class="uk-panel uk-panel-hover uk-panel-framed">
                         <img class="uk-text-muted uk-svg-adjust" riot-src="{ App.base(meta.icon || '/addons/Copilot/assets/layout-builder/icons/default.svg') }" width="30" data-uk-svg>
                         <div class="uk-margin uk-text-small uk-text-bold">{ meta.label }</div>
-                        <a class="uk-position-cover uk-modal-close" onclick="{ parent.injectComponent }"></a>
+                        <a class="uk-position-cover uk-modal-close" onclick="{ parent.injectComponent.bind(parent, component) }"></a>
                     </div>
                 </div>
             </div>
@@ -195,7 +153,7 @@
                 <div>
                     <div class="uk-form-row">
                         <label class="uk-text-small uk-text-uppercase">Style</label>
-                        <textarea class="uk-width-1-1 uk-margin-small-top" data-attribute="style" name="style" style="min-height:200px;font-family:monospace;"></textarea>
+                        <textarea class="uk-width-1-1 uk-margin-small-top" data-attribute="style" name="style" style="min-height:200px;font-family:monospace;" placeholder="color:red;"></textarea>
                     </div>
                 </div>
 
@@ -210,9 +168,10 @@
     
     <script>
 
-        var $this = this, actionsIdle, repeatableIdle;
+        var $this = this;
 
         this.value = '';
+        this.overlays = [];
 
         this.$updateValue = function(value, field) {
             
@@ -246,81 +205,19 @@
                 '/addons/Copilot/assets/layout-builder/layout-builder.css'
             ], function() {
 
-                App.$(this.root).on('mouseenter', '[data-component], .html-builder-actions', function(e) {
+                App.$(this.root).on('mouseenter', '[data-component]', function(e) {
                     
-                    if (actionsIdle) clearTimeout(actionsIdle);
-
-                    e.stopPropagation();
-
-                    if (this.matches('.html-builder-actions')) return;
-
-                    $this.activate(this);
-
-                    App.$($this.refs.actions).css({
-                        top: this.offsetTop,
-                        left: this.offsetLeft
-                    }).addClass('open');
-
-                    $this.update();
-                });
-
-                App.$(this.root).on('mouseleave', '[data-component], .html-builder-actions', function(e) {
-
-                    actionsIdle = setTimeout(function() {
-                        $this.deactivate();
+                    if (!this._builderoverlay) {
+                        $this.overlays.push(this);
+                        this._builderoverlay = true;
                         $this.update();
-                    }, 300)
+                    }
                 });
 
-                 App.$(this.root).on('mouseenter', '[data-repeatable], .html-builder-repeatable-add', function(e) {
-                    
-                    if (repeatableIdle) clearTimeout(repeatableIdle);
-
-                    repeatableIdle = setTimeout(function() {
-                        $this.update();
-                    }, 300)
-
-                    if (this.matches('.html-builder-repeatable-add')) return;
-
-                    App.$($this.refs.repeatable).css({
-                        top: this.offsetTop,
-                        left: this.offsetLeft
-                    }).addClass('open');
-
-                });
-
-                App.$(this.root).on('mouseleave', '[data-repeatable], .html-builder-repeatable-add', function(e) {
-                    
-                    repeatableIdle = setTimeout(function() {
-                        $this.refs.repeatable.classList.remove('open');
-                    }, 300)
-                });
-
-                App.$(this.root).on('click', function(e) {
-
-                    if (!App.$(e.target).parents('[data-component]').length) {
-                        $this.deactivate();
-                        $this.update();
-                    };
-                });
-
-                this.trigger('update');
+                this.update();
 
             }.bind(this));
         });
-
-        deactivate() {
-            this.activeComponent = false;
-        }
-
-        activate(component) {
-            this.deactivate();
-            this.activeComponent = component;
-            App.$(this.refs.componentframe).css({
-                width: component.offsetWidth,
-                height: component.offsetHeight
-            });
-        }
 
         doUpdate() {
 
@@ -332,6 +229,8 @@
             this.$setValue(this.value, true);
 
             delete clone;
+
+            this.update();
         }
 
         emptyBuilder() {
@@ -348,50 +247,31 @@
             this.refs.container.classList.add('open');
         }
 
-        addComponent(e) {
-
-            this.refs.components._activeComponent = null;
-
-            if (App.$(e.target).parents('.html-builder-actions').length) {
-                this.refs.components._activeComponent = this.activeComponent;
-            }
+        addComponent(container, after) {
+            
+            this.refs.components._container = !container.target ? container : this.refs.content;
+            this.refs.components._after = after;
 
             UIkit.modal(this.refs.components).show();
         }
 
-        cloneComponent() {
-            App.$(this.activeComponent).after(this.activeComponent.outerHTML);
-        }
+        injectComponent(component) {
 
-        injectComponent(e) {
+            var container = this.refs.components._container,
+                after = this.refs.components._after;
 
-            var component = e.item.component, meta = e.item.meta;
+            var method  = after ? 'injectAfter':'inject',
+                element = after ? after : container;
 
-            HTMLBuilder.inject(e.item.component, this.refs.content, this.refs.components._activeComponent).then(function(template) {
+            HTMLBuilder[method](component, element).then(function(template) {
                 $this.doUpdate();
                 $this.update();
             });
         }
 
-        remove() {
-            App.$(this.activeComponent).remove();
-            this.deactivate();
-            this.doUpdate();
-        }
+        edit(element) {
 
-        moveUp(e) {
-            App.$(this.activeComponent).prev('[data-component]').before(this.activeComponent);
-            this.doUpdate();
-        }
-
-        moveDown(e) {
-            App.$(this.activeComponent).next('[data-component]').after(this.activeComponent);
-            this.doUpdate();
-        }
-
-        edit(e) {
-
-            this.editElement = this.activeComponent;
+            this.editElement = element;
 
             var fields = {};
 
@@ -446,9 +326,13 @@
                     this._tag.$updateValue(fields[uid].value, uid);
                 });
 
-                UIkit.modal(this.refs.edit).show();
+                UIkit.modal(this.refs.edit).show().one('hide.uk.modal',function() {
+                    $this.editElement = null;
+                });
 
             }.bind(this), 50);
+
+            this.update();
         }
 
         saveEdit() {
@@ -484,11 +368,11 @@
             UIkit.modal(this.refs.edit).hide();
         }
 
-        editHTML() {
+        editHTML(element) {
             
-            var value = this.activeComponent.outerHTML;
+            var value = element.outerHTML;
 
-            this.refs.code._activeComponent = this.activeComponent;
+            this.refs.code._element = element;
 
             setTimeout(function() {
                 $this.refs.code.editor.refresh();
@@ -499,10 +383,171 @@
         }
 
         saveHtml() {
-            App.$(this.refs.code._activeComponent).replaceWith($this.refs.code.editor.getValue());
+            App.$(this.refs.code._element).replaceWith($this.refs.code.editor.getValue());
             UIkit.modal(this.refs.html).hide();
         }
 
     </script>
 
 </field-htmlbuilder>
+
+<html-builderoverlay>
+    
+    <style>
+    
+        .container {
+            visibility: hidden;
+            pointer-events:none;
+            position: absolute;
+            color: #fff;
+        }
+
+        .container.open {
+            visibility: visible;
+            pointer-events:auto;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            box-sizing: border-box;
+            background: #222;
+            padding: 3px 8px;
+            transform: translateY(-100%);
+        }
+
+        div[ref="componentframe"] {
+            position: absolute;
+            box-sizing: border-box;
+            top: 0;
+            left: 0;
+            border: 2px #222 solid;
+            pointer-events: none;
+        }
+
+        .container[data-element='column'] .actions {
+            transform: translateY(0) translateX(-100%);
+            flex-direction: column;
+            padding: 8px 3px;
+        }
+
+        .container[data-element='column'] .actions strong { display: none; }
+    
+    </style>
+
+
+    <div class="container {active ? 'open':''}" data-element="{component}" ref="container">
+        <div class="actions" ref="actions">
+            <strong class="uk-text-uppercase uk-text-small uk-margin-right">{ component }</strong>
+            <a class="uk-button uk-button-small uk-button-link" onclick="{addComponent}"><i class="uk-icon-plus-circle"></i></a>
+            <a class="uk-button uk-button-small uk-button-link" onclick="{cloneComponent}"><i class="uk-icon-clone"></i></a>
+            <a class="uk-button uk-button-small uk-button-link" onclick="{moveUp}" show="{opts.element && App.$(opts.element).prev('[data-component]').length}"><i class="uk-icon-caret-up"></i></a>
+            <a class="uk-button uk-button-small uk-button-link" onclick="{moveDown}" show="{opts.element && App.$(opts.element).next('[data-component]').length}"><i class="uk-icon-caret-down"></i></a>
+            <a class="uk-button uk-button-small uk-button-link" onclick="{edit}"><i class="uk-icon-pencil"></i></a>
+            <a class="uk-button uk-button-small uk-button-link" onclick="{parent.editHTML.bind(parent, element)}"><i class="uk-icon-code"></i></a>
+            <a class="uk-button uk-button-small uk-button-link" onclick="{remove}"><i class="uk-icon-trash-o"></i></a>
+        </div>
+        <div ref="componentframe"></div>
+    </div>
+
+    <script>
+
+        var $this = this, actionsIdle;
+
+        this.active = false;
+
+        this.on('mount', function() {
+
+            this.element = opts.element;
+            this.component = this.element.getAttribute('data-component');
+            this.inColumn  = App.$(this.element).closest('[data-component="column"]').length;
+
+
+            App.$([this.element, this.refs.actions]).on('mousemove', function(e) {
+                
+                if (actionsIdle) clearTimeout(actionsIdle);
+                
+                if ($this.active) {
+                    return;
+                }
+
+                //e.stopPropagation();
+
+                if (this === $this.refs.actions) return;
+                
+                $this.show();
+            });
+
+            App.$([this.element, $this.refs.actions]).on('mouseleave', function(e) {
+
+                actionsIdle = setTimeout(function() {
+
+                    $this.active = false;
+                    $this.update();
+                }, 50)
+            });
+
+            this.show();
+        });
+
+        show() {
+            
+            this.active = true;
+
+            App.$(this.refs.container).css({
+                top: this.element.offsetTop,
+                left: this.element.offsetLeft
+            });
+
+            App.$(this.refs.componentframe).css({
+                width: this.element.offsetWidth,
+                height: this.element.offsetHeight,
+                opacity: this.inColumn || this.component == 'column' ? 0:1
+            });
+
+            if (this.inColumn && this.component != 'column') {
+                App.$(this.refs.actions).css({
+                    top: this.element.offsetHeight + (this.refs.actions.offsetHeight  > this.element.offsetHeight ? this.refs.actions.offsetHeight:0 )
+                });
+            }
+
+            this.update();
+        }
+
+        addComponent() {
+
+            if (this.component == 'column') {
+                this.parent.addComponent(this.element);
+            } else {
+                this.parent.addComponent(this.element.parentNode, this.element);
+            }
+        }
+
+        cloneComponent() {
+            App.$(this.element).after(this.element.outerHTML);
+        }
+
+        remove() {
+            App.$(this.element).remove();
+            this.parent.overlays.splice(this.parent.overlays.indexOf(this.element), 1);
+            this.parent.doUpdate();
+        }
+
+        moveUp() {
+            this.show(App.$(this.element).prev('[data-component]').before(this.element));
+        }
+
+        moveDown() {
+            this.show(App.$(this.element).next('[data-component]').after(this.element));
+        }
+
+        edit() {
+            this.parent.edit(this.element);
+        }
+
+    </script>
+
+</html-builderoverlay>
