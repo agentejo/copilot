@@ -485,8 +485,9 @@
         this.on('mount', function() {
 
             this.element = opts.element;
+            this.$element = App.$(this.element);
             this.component = this.element.getAttribute('data-component');
-            this.inComponent  = App.$(this.element).parents('[data-component]').length;
+            this.inComponent  = this.$element.parents('[data-component]').length;
 
 
             App.$([this.element, this.refs.actions]).on('mousemove', function(e) {
@@ -520,14 +521,26 @@
             
             this.active = true;
 
-            App.$(this.refs.container).css({
+            var offset = {
                 top: this.element.offsetTop,
-                left: this.element.offsetLeft
+                left: this.element.offsetLeft,
+                width: this.element.offsetWidth,
+                height: this.element.offsetHeight
+            };
+
+            if (this.$element.is('.bl-grid') || this.$element.parent().is('.bl-grid')) {
+                var prop = this.$element.is('.bl-grid') ? 'margin-left':'padding-left';
+                offset.left += Math.abs(parseFloat(this.$element.css(prop)));
+            }
+
+            App.$(this.refs.container).css({
+                top: offset.top,
+                left: offset.left
             });
 
             App.$(this.refs.componentframe).css({
-                width: this.element.offsetWidth,
-                height: this.element.offsetHeight,
+                width: offset.width,
+                height: offset.height,
                 opacity: this.inComponent ? 0:1
             });
 
@@ -551,21 +564,21 @@
         }
 
         cloneComponent() {
-            App.$(this.element).after(this.element.outerHTML);
+            this.$element.after(this.element.outerHTML);
         }
 
         remove() {
-            App.$(this.element).remove();
+            this.$element.remove();
             this.parent.overlays.splice(this.parent.overlays.indexOf(this.element), 1);
             this.parent.doUpdate();
         }
 
         moveUp() {
-            this.show(App.$(this.element).prev('[data-component]').before(this.element));
+            this.show(this.$element.prev('[data-component]').before(this.element));
         }
 
         moveDown() {
-            this.show(App.$(this.element).next('[data-component]').after(this.element));
+            this.show(this.$element.next('[data-component]').after(this.element));
         }
 
         edit() {
