@@ -447,7 +447,7 @@
             box-sizing: border-box;
             top: 0;
             left: 0;
-            border: 2px #222 solid;
+            border: 2px rgba(0,0,0,.1) dashed;
             pointer-events: none;
         }
 
@@ -462,7 +462,7 @@
     </style>
 
 
-    <div class="container {active ? 'open':''}" data-element="{component}" ref="container">
+    <div class="container {active ? 'open':''}" data-element="{component}" data-nested="{String(inComponent)}" ref="container">
         <div class="actions" ref="actions">
             <strong class="uk-text-uppercase uk-text-small uk-margin-right">{ component }</strong>
             <a class="uk-button uk-button-small uk-button-link" onclick="{addComponent}"><i class="uk-icon-plus-circle"></i></a>
@@ -488,7 +488,6 @@
             this.$element = App.$(this.element);
             this.component = this.element.getAttribute('data-component');
             this.inComponent  = this.$element.parents('[data-component]').length;
-
 
             App.$([this.element, this.refs.actions]).on('mousemove', function(e) {
                 
@@ -540,8 +539,7 @@
 
             App.$(this.refs.componentframe).css({
                 width: offset.width,
-                height: offset.height,
-                opacity: this.inComponent ? 0:1
+                height: offset.height
             });
 
             if (this.inComponent && this.component != 'column' && this.component != 'grid') {
@@ -568,8 +566,16 @@
         }
 
         remove() {
+
+            var $parent = this.$element.parent();
+
             this.$element.remove();
             this.parent.overlays.splice(this.parent.overlays.indexOf(this.element), 1);
+            
+            if ($parent.is('.bl-grid') && !$parent.children().length) {
+                $parent.remove();
+            }
+            
             this.parent.doUpdate();
         }
 
