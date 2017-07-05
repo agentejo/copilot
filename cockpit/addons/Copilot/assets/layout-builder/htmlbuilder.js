@@ -61,6 +61,10 @@
             "grid": {
                 label: 'Grid',
                 html: '@/addons/Copilot/assets/layout-builder/components/grid/template.html'
+            },
+            "team": {
+                label: 'Team',
+                html: '@/addons/Copilot/assets/layout-builder/components/team/template.html'
             }
         },
 
