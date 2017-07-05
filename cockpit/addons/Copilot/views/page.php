@@ -247,6 +247,8 @@
                     <li><a onclick="App.$('#preview-frame').css('max-width', '100%').attr('screen', '')"><i class="uk-icon-desktop"></i></a></li>
                 </ul>
 
+                <a class="uk-margin-right" href="{{ $page->url() }}" target="_blank"><i class="uk-icon-share"></i></a>
+
                 <a class="uk-modal-close uk-link-muted uk-margin-right"><i class="uk-icon-button uk-icon-close"></i></a>
 
             </div>
