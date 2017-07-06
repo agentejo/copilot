@@ -40,10 +40,6 @@ canvas {
     height: auto;
 }
 
-
-.flex { display: flex; }
-.flex-expand { flex: 1; }
-
 [class*="container"] {
     max-width: 960px;
     margin-left: auto;
@@ -116,3 +112,11 @@ canvas {
     padding-top: 2rem;
 }
 
+.m { margin-bottom: 1em;}
+* + .m {margin-top: 1em;}
+
+.flex { display: flex; }
+.flex-inline { display: inline-flex; }
+.flex-expand { flex: 1; }
+
+.t-c { text-align: center !important;}

@@ -5,6 +5,15 @@ ext: md
 content:
     visible: false
 
+meta:
+    limit:
+        type: text
+        label: Limit
+        options:
+            type: number
+            default: 10
+
+
 subtypes:
     article:
         label: Blog Article

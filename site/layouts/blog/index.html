@@ -2,6 +2,14 @@
 
 {%
     $articles = $page->children()->visible()->sort('$p->meta("created")', 'desc');
+
+    // pagination
+    $_limit = $page->meta('limit', 10);
+    $_page  = intval(copi::param('p', 1));
+    $pagination = new Pagination($articles->count(), $_limit, $_page);
+    $_pages = $pagination->pages();
+    $articles  = $articles->skip($pagination->offset())->limit($_limit);
+    $QUERY_STRING = preg_replace('/&p=(\d+)/', '', $_SERVER['QUERY_STRING']);
 %}
 
 @foreach($articles as $idx => $article)
@@ -26,3 +34,22 @@
 @endif
 
 @endforeach
+
+
+@if($_pages > 1)
+<nav class="container m t-c">
+    <ul class="nav flex-inline">
+        @if($_page > 1)
+        <li><a href="{{ $page->url() }}?{{ "{$QUERY_STRING}&p=".($_page-1) }}">Prev</a></li>
+        @endif
+
+        @foreach($pagination->range(5) as $p)
+        <li class="{{ $p==$_page ? 'active':''}}"><a href="{{ $page->url() }}?{{ "{$QUERY_STRING}&p=".$p }}">{{ $p }}</a></li>
+        @endforeach
+
+        @if($_page != $_pages)
+        <li><a href="{{ $page->url() }}?{{ "{$QUERY_STRING}&p=".($_page+1) }}">Next</a></li>
+        @endif
+    </ul>
+</nav>
+@endif
