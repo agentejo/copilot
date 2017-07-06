@@ -2,7 +2,10 @@
 
     var Builder = {
 
+        assets: [],
+
         _cache : {},
+        _filters: {},
 
         components: {
             "heading": {
@@ -68,6 +71,26 @@
             }
         },
 
+        addFilter: function(component, name, filter) {
+
+            if (!this._filters[component]) this._filters[component] = {};
+
+            this._filters[component][name] = filter;
+        },
+
+        applyFilter: function(component, element) {
+
+            if (!this._filters[component]) return element;
+
+            var filters = this._filters[component];
+
+            Object.keys(filters).forEach(function(filter){
+                filters[filter](element);
+            });
+
+            return element;
+        },
+
         getTemplate: function(name, container) {
 
             var $this = this;
@@ -113,6 +136,7 @@
                             
                         }
                     });
+
 
                     if (after) {
                         App.$(after).after(element);

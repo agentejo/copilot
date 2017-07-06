@@ -221,9 +221,9 @@
             });
 
             App.assets.require([
+                '/addons/Copilot/assets/layout-builder/layout-builder.css',
                 '/addons/Copilot/assets/layout-builder/htmlbuilder.js',
-                '/addons/Copilot/assets/layout-builder/beautify-html.js',
-                '/addons/Copilot/assets/layout-builder/layout-builder.css'
+                '/addons/Copilot/assets/lib/beautify-html.js'
             ], function() {
 
                 App.$(this.root).on('mouseenter', '[data-component]', function(e) {
@@ -236,11 +236,27 @@
                 });
 
                 App.$(this.refs.edit).on('change', '[data-uid][data-is="field-text"], [data-uid][data-is="field-boolean"]', function(e) {
-                    
                     $this.editElement._fields[this.getAttribute('data-uid')].value = e.target.value;
                 });
 
+                // observe content
+                var observer = new MutationObserver(function(mutations) {
+                    
+                    mutations.forEach(function(mutation) {
+                        
+                        if (mutation.addedNodes.length) {
+
+                        }
+                    });
+                });
+                
+                observer.observe($this.refs.content, { childList: true, subtree:true });    
+
                 this.update();
+
+                setTimeout(function() {
+                    App.$(this.root).trigger('htmlbuilder-init', [$this]);
+                });
 
             }.bind(this));
         });
@@ -556,7 +572,7 @@
             if (this.inComponent && this.component != 'column' && this.component != 'grid') {
                 App.$(this.refs.actions).css({
                     top: this.element.offsetHeight + this.refs.actions.offsetHeight,
-                    width: this.element.offsetWidth
+                    minWidth: this.element.offsetWidth
                 });
             }
 
