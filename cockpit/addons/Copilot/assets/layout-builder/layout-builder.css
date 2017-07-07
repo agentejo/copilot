@@ -1,6 +1,6 @@
 /* Grid 
    ===================================*/
-root {
+:root {
     --cp-grid-gutter: 1em;
 }
 
@@ -28,7 +28,7 @@ root {
 
 /* Button 
    ===================================*/
-root {
+:root {
     --cp-button-background: #000;
     --cp-button-color: #fff;
 }
