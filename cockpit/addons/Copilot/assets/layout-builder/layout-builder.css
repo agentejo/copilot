@@ -9,7 +9,7 @@
     margin: 0;
     padding: 0;
     flex-wrap: wrap;
-    margin-left: var(--cp-grid-gutter);
+    margin-left: calc(-1 * var(--cp-grid-gutter));
     list-style: none;
 }
 .cp-grid > * { margin: 0; }
