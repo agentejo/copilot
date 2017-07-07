@@ -145,7 +145,7 @@ input[disabled] {
 /* Spacing 
    ===================================*/
 :root {
-    --cp-spacing-small: 1em;
+    --cp-spacing-small: 0.5em;
     --cp-spacing-medium: 2em;
     --cp-spacing-large: 4em;
 }
@@ -469,8 +469,8 @@ input[disabled] {
 /* Flex 
    ===================================*/
 
-.cp-flex { display: flex }
-.cp-flex-inline { display: inline-flex }
+.cp-flex { display: flex !important }
+.cp-flex-inline { display: inline-flex !important }
 
 .cp-flex::before,
 .cp-flex::after,
@@ -483,8 +483,20 @@ input[disabled] {
 .cp-flex-between { justify-content: space-between }
 .cp-flex-around { justify-content: space-around }
 
-.uk-flex-auto { flex: auto }
-.uk-flex-expand { flex: 1 }
+.cp-flex-auto { flex: auto }
+.cp-flex-expand { flex: 1 }
+
+.cp-flex-top {
+    -ms-flex-align: start;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+}
+
+.cp-flex-middle { align-items: center }
+.cp-flex-bottom { align-items: flex-end }
+
+.cp-flex-row { flex-direction: row }
+.cp-flex-column { flex-direction: column }
 
 /* Visibility 
    ===================================*/

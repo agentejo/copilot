@@ -11,7 +11,7 @@
     $parents = $page->parents()->reverse();
 %}
 
-<nav>
+<div class="m">
     <ul class="breadcrumbs">
         @foreach($parents as $parent)
         @if($parent->meta('title') && !$parent->isRootIndex())
@@ -19,4 +19,4 @@
         @endif
         @endforeach
     </ul>
-</nav>
+</div>
