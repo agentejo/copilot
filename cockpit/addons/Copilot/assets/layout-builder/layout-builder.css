@@ -15,14 +15,29 @@
 .cp-grid > * { margin: 0; }
 .cp-grid > * > :last-child { margin-bottom: 0; }
 .cp-grid > * { 
-    padding-left: 1em;
+    padding-left: var(--cp-grid-gutter);
     padding-bottom: var(--cp-grid-gutter); 
 }
 
+.cp-grid-small { --cp-grid-gutter: 0.5em; }
+.cp-grid-large { --cp-grid-gutter: 2em; }
+
 .cp-grid-collapse { margin-left: 0; }
 .cp-grid-collapse > * { 
-    padding-left: 0; 
-    padding-bottom: 0; 
+    --cp-grid-gutter: 0;
+}
+
+.cp-grid-match > *,
+.cp-grid-item-match { 
+    display: flex;
+    flex-wrap: wrap; 
+}
+
+.cp-grid-match > * > :not([class*='cp-width']),
+.cp-grid-item-match > :not([class*='cp-width']) {
+    box-sizing: border-box;
+    width: 100%;
+    flex: auto;
 }
 
 
@@ -57,17 +72,36 @@
     border: 1px currentColor solid;
 }
 
+.cp-button-secondary {
+    --cp-button-background: #fff;
+    --cp-button-color: #000;
+}
+
 button[disabled], 
 input[disabled] { 
     cursor: default 
 }
 
-/* display */
+/* Display 
+   ===================================*/
 .cp-block { display: block !important }
 .cp-inline { display: inline !important }
 .cp-inline-block { display: inline-block !important }
 
-/* float */
+/* Position 
+   ===================================*/
+.cp-relative { position: relative !important }
+.cp-absolute { position: absolute !important }
+.cp-cover { 
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+/* Float 
+   ===================================*/
 .cp-float-l { float: left !important }
 .cp-float-r { float: right !important }
 
@@ -246,7 +280,7 @@ input[disabled] {
     .cp-child-w-auto\@s > * { width: auto }
     .cp-child-w-expand\@s > * { width: 1px }
 
-    .cp-child-w-expand\@s > :not([class*="uk-w-"]) {
+    .cp-child-w-expand\@s > :not([class*="cp-w-"]) {
         flex: 1;
         min-width: 0;
         flex-basis: 1px;
@@ -264,7 +298,7 @@ input[disabled] {
     .cp-child-w-auto\@m > * { width: auto }
     .cp-child-w-expand\@m > * { width: 1px }
 
-    .cp-child-w-expand\@m > :not([class*="uk-w-"]) {
+    .cp-child-w-expand\@m > :not([class*="cp-w-"]) {
         flex: 1;
         min-width: 0;
         flex-basis: 1px;
@@ -282,7 +316,7 @@ input[disabled] {
     .cp-child-w-auto\@l > * { width: auto }
     .cp-child-w-expand\@l > * { width: 1px }
 
-    .cp-child-w-expand\@l > :not([class*="uk-w-"]) {
+    .cp-child-w-expand\@l > :not([class*="cp-w-"]) {
         flex: 1;
         min-width: 0;
         flex-basis: 1px;
@@ -302,17 +336,18 @@ input[disabled] {
     .cp-child-w-auto\@xl > * { width: auto }
     .cp-child-w-expand\@xl > * { width: 1px }
 
-    .cp-child-w-expand\@xl > :not([class*="uk-w-"]) {
+    .cp-child-w-expand\@xl > :not([class*="cp-w-"]) {
         flex: 1;
         min-width: 0;
         flex-basis: 1px;
     }
 }
 
+.cp-w-1-1 { width: 100% }
 .cp-w-1-2 { width: 50% }
 
-.cp-w-1-3 { width: ~calc(100% * 1 / 3.001) }
-.cp-w-2-3 { width: ~calc(100% * 2 / 3.001) }
+.cp-w-1-3 { width: calc(100% * 1 / 3.001) }
+.cp-w-2-3 { width: calc(100% * 2 / 3.001) }
 
 .cp-w-1-4 { width: 25% }
 .cp-w-3-4 { width: 75% }
@@ -497,6 +532,9 @@ input[disabled] {
 
 .cp-flex-row { flex-direction: row }
 .cp-flex-column { flex-direction: column }
+
+.cp-flex-first { order: -1; }
+.cp-flex-last {order: 99;}
 
 /* Visibility 
    ===================================*/
