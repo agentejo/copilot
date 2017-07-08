@@ -12,47 +12,43 @@ function write($out, $fgcolor = null, $bgcolor = null) {
     if ($fgcolor === true) $fgcolor = 'green';
     if ($fgcolor === false) $fgcolor = 'red';
 
-    $fg_colors = [];
-    $fg_colors['black'] = '0;30';
-    $fg_colors['dark_gray'] = '1;30';
-    $fg_colors['blue'] = '0;34';
-    $fg_colors['light_blue'] = '1;34';
-    $fg_colors['green'] = '0;32';
-    $fg_colors['light_green'] = '1;32';
-    $fg_colors['cyan'] = '0;36';
-    $fg_colors['light_cyan'] = '1;36';
-    $fg_colors['red'] = '0;31';
-    $fg_colors['light_red'] = '1;31';
-    $fg_colors['purple'] = '0;35';
-    $fg_colors['light_purple'] = '1;35';
-    $fg_colors['brown'] = '0;33';
-    $fg_colors['yellow'] = '1;33';
-    $fg_colors['light_gray'] = '0;37';
-    $fg_colors['white'] = '1;37';
+    $fg_colors = [
+        'black'     => '0;30',
+        'white'     => '1;37',
+        'dark_gray' => '1;30', 'light_gray'   => '0;37',
+        'blue'      => '0;34', 'light_blue'   => '1;34',
+        'green'     => '0;32', 'light_green'  => '1;32',
+        'cyan'      => '0;36', 'light_cyan'   => '1;36',
+        'red'       => '0;31', 'light_red'    => '1;31',
+        'purple'    => '0;35', 'light_purple' => '1;35',
+        'brown'     => '0;33',
+        'yellow'    => '1;33'
+    ];
 
-    $bg_colors = [];
-    $bg_colors['black'] = '40';
-    $bg_colors['white'] = '47';
-    $bg_colors['red'] = '41';
-    $bg_colors['green'] = '42';
-    $bg_colors['yellow'] = '43';
-    $bg_colors['blue'] = '44';
-    $bg_colors['magenta'] = '45';
-    $bg_colors['cyan'] = '46';
-    $bg_colors['light_gray'] = '47';
+    $bg_colors = [
+        'black'      => '40',
+        'white'      => '47',
+        'red'        => '41',
+        'green'      => '42',
+        'yellow'     => '43',
+        'blue'       => '44',
+        'magenta'    => '45',
+        'cyan'       => '46',
+        'light_gray' => '47'
+    ];
 
-    $colored_string = "";
+    $colored = "";
 
     if ($fgcolor && isset($fg_colors[$fgcolor])) {
-        $colored_string .= "\033[".$fg_colors[$fgcolor]."m";
+        $colored .= "\033[".$fg_colors[$fgcolor]."m";
     }
 
     if ($bgcolor && isset($bg_colors[$bgcolor])) {
-        $colored_string .= "\033[" . $bg_colors[$bgcolor] . "m";
+        $colored .= "\033[" . $bg_colors[$bgcolor] . "m";
     }
 
-    if ($colored_string) {
-        $out = $colored_string.$out."\033[0m";
+    if ($colored) {
+        $out = $colored.$out."\033[0m";
     }
 
     echo "{$out}";
@@ -77,6 +73,8 @@ if (isset($argv[1])) {
 
             if (file_exists(CP_SITE_DIR."/cli/{$cmd}.php")) {
                 include(CP_SITE_DIR."/cli/{$cmd}.php");
+            } else {
+                writeln("Command - {$cmd} - not found!", false);
             }
     }
 }
