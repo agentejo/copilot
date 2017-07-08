@@ -66,15 +66,17 @@ include_once(__DIR__."/cockpit/bootstrap.php");
 
 if (isset($argv[1])) {
 
-    switch($argv[1]) {
+    $cmd = str_replace('../', '', $argv[1]);
+    
+    switch($cmd) {
 
         case 'test':
             writeln("Yepp!", true);
             break;
         default:
 
-            if (file_exists(CP_SITE_DIR."/cli/$argv[1].php")) {
-                include(CP_SITE_DIR."/cli/$argv[1].php");
+            if (file_exists(CP_SITE_DIR."/cli/{$cmd}.php")) {
+                include(CP_SITE_DIR."/cli/{$cmd}.php");
             }
     }
 }
