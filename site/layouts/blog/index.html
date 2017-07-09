@@ -4,9 +4,9 @@
     $articles = $page->children()->visible()->sort('$p->meta("created")', 'desc');
 
     // pagination
-    $_limit = $page->meta('limit', 1);
+    $_limit = $page->meta('limit', 10);
     $_page  = intval(copi::param('p', 1));
-    $pagination = new Pagination($articles->count(), $_limit, $_page);
+    $pagination = $articles->pagination($_limit, $_page);
     $_pages = $pagination->pages();
     $articles  = $articles->skip($pagination->offset())->limit($_limit);
     $QUERY_STRING = preg_replace('/&p=(\d+)/', '', $_SERVER['QUERY_STRING']);
