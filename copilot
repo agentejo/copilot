@@ -20,8 +20,8 @@ if (isset($argv[1])) {
             break;
         default:
 
-            if (file_exists(CP_SITE_DIR."/cli/{$cmd}.php")) {
-                include(CP_SITE_DIR."/cli/{$cmd}.php");
+            if ($script = copi::path("cli:{$cmd}.php")) {
+                include($script);
             } else {
                 CLI::writeln("Command - {$cmd} - not found!", false);
             }

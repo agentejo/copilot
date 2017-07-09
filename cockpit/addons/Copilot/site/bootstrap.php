@@ -111,6 +111,13 @@ $site->path('layouts' , __DIR__.'/layouts');
 $site->path('layouts' , CP_SITE_DIR.'/layouts');
 $site->path('layouts' , CP_SITE_DIR.'/theme/layouts');
 
+# cli scripts
+$site->path('cli' , __DIR__.'/cli');
+$site->path('cli' , CP_SITE_DIR.'/cli');
+$site->path('cli' , CP_SITE_DIR.'/theme/cli');
+$site->path('cli' , CP_SITE_DIR.'/theme/cli');
+$site->path('cli' , CP_ROOT_DIR.'/config/cli');
+
 # cockpit
 $site->path('cockpit', COCKPIT_DIR);
 
