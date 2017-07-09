@@ -20,11 +20,7 @@ $app->on('admin.init', function() use($app) {
 
         $types = [];
 
-        foreach([
-            __DIR__.'/site/types',
-            copi::path('site:site/types'),
-            copi::path('site:site/theme/types')
-        ] as $folder) {
+        foreach(copi::paths('types') as $folder) {
 
             if (!$folder) continue;
 
