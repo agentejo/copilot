@@ -9,14 +9,14 @@
         @assets(['theme:css/site.css', 'theme:js/site.js'])
 
     </head>
-    <body>
+    <body class="cp-flex cp-flex-middle cp-flex-center cp-align-c">
 
         <div class="container">
 
             <h1>404</h1>
 
-            <a class="site-brand" href="@route('/')" title="Get me home">
-                <img src="@url('theme:media/logo.svg')" alt="Logo">
+            <a class="cp-block cp-m" href="@route('/')" title="Get me home">
+                <img src="@url('theme:media/logo.svg')" width="100" alt="Logo">
             </a>
 
             <p>
@@ -24,7 +24,7 @@
                 but the requested file was not found.
             </p>
 
-            <a href="@route('/')" class="button">Get me home</a>
+            <a href="@route('/')" class="cp-button cp-button-outline">Get me home</a>
         </div>
 
     </body>
