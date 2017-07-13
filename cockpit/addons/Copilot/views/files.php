@@ -13,8 +13,8 @@
                 </ul>
 
                 <div class="uk-margin" if="{ copilot.getType(p.type).subpages !== false }">
-                    <strong class="uk-text-small">Sub pages</strong>
-                    <cp-pagejumplist dir="{p.dir}"></cp-pagejumplist>
+                    <strong class="uk-text-small">@lang('Sub Pages')</strong>
+                    <cp-pagejumplist class="uk-text-small" dir="{p.dir}"></cp-pagejumplist>
                 </div>
 
             </div>
@@ -29,7 +29,7 @@
                 </ul>
 
                 <div class="uk-margin">
-                    <strong class="uk-text-small">Sub pages</strong>
+                    <strong class="uk-text-small">@lang('Sub Pages')</strong>
                     <cp-pagejumplist dir="{page.dir}"></cp-pagejumplist>
                 </div>
             </div>
@@ -70,8 +70,9 @@
                 <div class="uk-cover-background uk-position-relative">
                     <canvas class="uk-responsive-width uk-display-block" width="400" height="300" if="{!file.isImage}"></canvas>
                     <cp-thumbnail src="{file.url}" width="400" height="300" if="{file.isImage}"></cp-thumbnail>
-                    <a class="uk-position-cover uk-text-muted uk-flex uk-flex-middle uk-flex-center" href="@route('/copilot/file'){ file.relpath }">
-                        <div class="uk-text-large uk-text-center" if="{!file.isImage}">
+                    <a class="uk-position-cover uk-flex uk-flex-middle uk-flex-center" href="@route('/copilot/file'){ file.relpath }">
+                        <div class="uk-text-center uk-text-bold uk-text-muted" if="{!file.isImage}">
+                            <i class="uk-icon-{ copilot.getFileIconCls(file.filename) }"></i>
                             <p>{ file.ext.toUpperCase() }</p>
                         </div>
                     </a>
@@ -79,23 +80,24 @@
 
                 <div class="uk-margin-top uk-flex">
 
-                    <span class="uk-margin-small-right" data-uk-dropdown>
-                        <a><i class="uk-icon-{ copilot.getFileIconCls(file.filename) }"></i></a>
+                    <span class="uk-margin-right" data-uk-dropdown>
+                        <a class="uk-text-success"><i class="uk-icon-cog"></i></a>
                         <div class="uk-dropdown uk-dropdown-close">
                             <ul class="uk-nav uk-nav-dropdown">
-                                <li><a onclick="{ parent.rename }">Rename</a></li>
+                                <li><a onclick="{ parent.rename }">@lang('Rename')</a></li>
                                 <li class="uk-nav-divider"></li>
-                                <li><a onclick="{ parent.remove }">Delete</a></li>
+                                <li><a onclick="{ parent.remove }">@lang('Delete')</a></li>
                             </ul>
                         </div>
                     </span>
-
-                    <a class="uk-flex-item-1 uk-text-truncate" href="@route('/copilot/file'){ file.relpath }">{ file.filename }</a>
-
+                    <div>
+                        <a class="uk-flex-item-1 uk-text-truncate" href="@route('/copilot/file'){ file.relpath }">{ file.filename }</a>
+                        <div class="uk-text-small uk-text-muted uk-margin-small-top">
+                            { file.fsize }
+                        </div>
+                    </div>
                 </div>
-                <div class="uk-text-small uk-text-muted uk-margin-small-top">
-                    { file.fsize }
-                </div>
+                
             </div>
             
         </div>
@@ -277,7 +279,7 @@
             }
 
             value = this.refs.txtfilter.value.toLowerCase();
-            name  = file.filename;
+            name  = file.filename.toLowerCase();
 
             return name.indexOf(value) !== -1;
         }

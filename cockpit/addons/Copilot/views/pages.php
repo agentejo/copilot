@@ -13,7 +13,7 @@
                 </ul>
 
                 <div class="uk-margin" if="{ copilot.getType(p.type).subpages !== false }">
-                    <strong class="uk-text-small">Sub pages</strong>
+                    <strong class="uk-text-small">@lang('Sub Pages')</strong>
                     <cp-pagejumplist dir="{p.dir}"></cp-pagejumplist>
                 </div>
 
@@ -46,14 +46,17 @@
 
         <div class="uk-grid-margin" each="{child,idx in children}" show="{ infilter(child) }" data-path="{ child.path }">
             <div class="uk-panel uk-panel-box uk-panel-card">
-                <div class="uk-flex">
-                    <span class="uk-margin-small-right" data-uk-dropdown>
+                <div class="uk-flex uk-flex-middle">
+                    
+                    <a class="uk-flex-item-1 uk-text-small uk-text-truncate" href="@route('/copilot/page'){ child.relpath }">{ copilot.getTypeLabel(child.type) }</a>
+                    
+                    <span class="uk-margin-small-right" data-uk-dropdown="pos:'bottom-right'">
                         <i class="uk-icon-cog uk-text-{ child.visible ? 'success':'danger' }"></i>
                         <div class="uk-dropdown uk-dropdown-close">
 
                             <div class="uk-margin" if="{ copilot.getType(child.type).subpages !== false }">
-                                <strong class="uk-text-small">Sub pages</strong>
-                                <cp-pagejumplist dir="{child.dir}"></cp-pagejumplist>
+                                <strong class="uk-text-small">@lang('Sub Pages')</strong>
+                                <cp-pagejumplist class="uk-text-small" dir="{child.dir}"></cp-pagejumplist>
                             </div>
 
                             <ul class="uk-nav uk-nav-dropdown">
@@ -65,14 +68,12 @@
                             </ul>
                         </div>
                     </span>
-                    <a class="uk-flex-item-1 uk-text-truncate" href="@route('/copilot/page'){ child.relpath }">{ child.meta.title }</a>
+
                 </div>
                 <div class="uk-position-relative">
                     <canvas width="600" height="400"></canvas>
+                    <div class="uk-position-cover uk-flex uk-flex-middle uk-flex-center"><strong class="uk-text-muted">{ child.meta.title }</strong></div>
                     <a class="uk-position-cover" href="@route('/copilot/page'){ child.relpath }"></a>
-                </div>
-                <div class="uk-margin-small-top uk-text-small uk-text-muted">
-                    { copilot.getTypeLabel(child.type) }
                 </div>
             </div>
         </div>
@@ -168,7 +169,7 @@
             }
 
             value = this.refs.txtfilter.value.toLowerCase();
-            name  = page.meta.title;
+            name  = page.meta.title.toLowerCase();
 
             return name.indexOf(value) !== -1;
         }

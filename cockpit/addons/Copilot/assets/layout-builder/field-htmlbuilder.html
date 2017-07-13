@@ -57,7 +57,7 @@
             bottom:0;
         }
 
-        .bl-grid > div {
+        .cp-grid > div {
             min-height: 165px;
         }
 
@@ -554,8 +554,8 @@
                 height: this.element.offsetHeight
             };
 
-            if (this.$element.is('.bl-grid') || this.$element.parent().is('.bl-grid')) {
-                var prop = this.$element.is('.bl-grid') ? 'margin-left':'padding-left';
+            if (this.$element.is('.cp-grid') || this.$element.parent().is('.cp-grid')) {
+                var prop = this.$element.is('.cp-grid') ? 'margin-left':'padding-left';
                 offset.left += Math.abs(parseFloat(this.$element.css(prop)));
             }
 
@@ -600,7 +600,7 @@
             this.parent.overlays.splice(this.parent.overlays.indexOf(this.element), 1);
             
             // cleanup parent container
-            if ($parent.is('.bl-grid') && !$parent.children().length) {
+            if ($parent.is('.cp-grid') && !$parent.children().length) {
 
                 var idx = this.parent.overlays.indexOf($parent[0]);
 

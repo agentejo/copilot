@@ -16,7 +16,7 @@
 
                 <div class="uk-margin" if="{ copilot.getType(p.type).subpages !== false }">
                     <strong class="uk-text-small">Sub pages</strong>
-                    <cp-pagejumplist dir="{p.dir}"></cp-pagejumplist>
+                    <cp-pagejumplist class="uk-text-small" dir="{p.dir}"></cp-pagejumplist>
                 </div>
 
             </div>
