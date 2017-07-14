@@ -10,7 +10,8 @@ if (!extension_loaded('zip')) {
 
 $zipfile     = 'copilot-backup-'.date('Y-m-d-Hms').'.zip';
 $source      = CP_ROOT_DIR;
-$destination = CP_ROOT_DIR."/{$zipfile}";
+$target      = CLI::opts('t', CP_ROOT_DIR);
+$destination = "{$target}/{$zipfile}";
 $zip         = new ZipArchive();
 
 CLI::writeln('Backup started', 'blue');

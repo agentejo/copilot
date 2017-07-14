@@ -7,6 +7,11 @@
   Deny from all
 </Files>
 
+<Files "copi">
+Order Allow,Deny
+Deny from all
+</Files>
+
 <Files ~ "\.(html|md)$">
   Header set X-Robots-Tag "noindex, nofollow"
 </Files>
