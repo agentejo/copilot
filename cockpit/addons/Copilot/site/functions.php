@@ -33,15 +33,17 @@ function url_to($path) {
     }
 
     if (substr($path, 0, 1) == '/') {
+
         return copi::$app->routeUrl($path);
-    }
-
-    if (strpos($path, ':') !== false && $file = copi::$app->path($path)) {
+    
+    } elseif (strpos($path, ':') !== false && $file = copi::$app->path($path)) {
+    
         return copi::$app->pathToUrl($file);
-    }
-
-    if ($file = copi::$app->path("site:{$path}")) {
+    
+    } elseif ($file = copi::$app->path("site:{$path}")) {
+    
         return copi::$app->pathToUrl($file);
+    
     }
 
     return $path;
