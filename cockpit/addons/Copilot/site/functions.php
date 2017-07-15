@@ -40,7 +40,7 @@ function url_to($path) {
         return copi::$app->pathToUrl($file);
     }
 
-    if (preg_match('#^(content|site|storage)/#', $path) && $file = copi::$app->path("site:{$path}")) {
+    if ($file = copi::$app->path("site:{$path}")) {
         return copi::$app->pathToUrl($file);
     }
 
