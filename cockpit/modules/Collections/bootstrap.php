@@ -209,7 +209,7 @@ $this->module("collections")->extend([
         $entry = $this->app->storage->findOne("collections/{$collection}", $criteria, $projection);
 
         if (count($fieldsFilter)) {
-           $entries = $this->_filterFields($entries, $_collection, $fieldsFilter);
+           $entry = $this->_filterFields($entry, $_collection, $fieldsFilter);
         }
 
         if ($entry && $populate) {
@@ -393,6 +393,17 @@ $this->module("collections")->extend([
         static $cache;
         static $languages;
 
+        if (null === $items) {
+            return $items;
+        }
+
+        $single = false;
+
+        if (!isset($items[0]) && count($items)) {
+            $items = [$items];
+            $single = true;
+        }
+
         $filter = array_merge([
             'user' => false,
             'lang' => false
@@ -498,7 +509,7 @@ $this->module("collections")->extend([
             }, $items);
         }
 
-        return $items;
+        return $single ? $items[0] : $items;
     }
 ]);
 
