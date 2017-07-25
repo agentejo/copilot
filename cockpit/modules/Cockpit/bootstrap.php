@@ -94,7 +94,7 @@ $this->module("cockpit")->extend([
             'filter' => '',
             'width' => false,
             'height' => false,
-            'quality' => 100,
+            'quality' => 85,
             'rebuild' => false,
             'base64' => false,
             'output' => false,
@@ -114,7 +114,7 @@ $this->module("cockpit")->extend([
         $src = rawurldecode($src);
 
         if (!preg_match('/\.(png|jpg|jpeg|gif)$/i', $src)) {
-            
+
             if ($asset = $this->app->storage->findOne("cockpit/assets", ['_id' => $src])) {
                 $asset['path'] = trim($asset['path'], '/');
                 $src = $this->app->path("#uploads:{$asset['path']}");
@@ -139,7 +139,7 @@ $this->module("cockpit")->extend([
         }
 
         if (!$width || !$height) {
-            
+
             list($w, $h, $type, $attr)  = getimagesize($path);
 
             if (!$width) $width = ceil($w * ($height/$h));
@@ -164,17 +164,17 @@ $this->module("cockpit")->extend([
 
             try {
                 $img = $this->app->helper("image")->take($path)->{$method}($width, $height);
-                
+
                 $_filters = [
-                    'blur', 'brighten', 
-                    'colorize', 'contrast', 
-                    'darken', 'desaturate', 
-                    'edge detect', 'emboss', 
+                    'blur', 'brighten',
+                    'colorize', 'contrast',
+                    'darken', 'desaturate',
+                    'edge detect', 'emboss',
                     'flip', 'invert', 'opacity', 'pixelate', 'sepia', 'sharpen', 'sketch'
                 ];
 
                 foreach($_filters as $f) {
-                    
+
                     if (isset($options[$f])) {
                         $img->{$f}($options[$f]);
                     }
@@ -200,7 +200,7 @@ $this->module("cockpit")->extend([
         $url = $this->app->pathToUrl($savepath);
 
         if ($domain) {
-            
+
             $_url = ($this->app->req_is('ssl') ? 'https':'http').'://';
 
             if (!in_array($this->app['base_port'], ['80', '443'])) {
@@ -253,7 +253,7 @@ $this->module("cockpit")->extend([
         if ($permanent) {
             $app("session")->write('cockpit.app.auth', $user);
         }
-        
+
         $app['cockpit.auth.user'] = $user;
     },
 
@@ -282,7 +282,7 @@ $this->module("cockpit")->extend([
             $user = $this->getUser();
             $group = isset($user["group"]) ? $user["group"] : null;
         }
-        
+
         if ($group) {
             if ($app("acl")->hasaccess($group, $resource, $action)) return true;
         }

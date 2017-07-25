@@ -35,15 +35,15 @@ function url_to($path) {
     if (substr($path, 0, 1) == '/') {
 
         return copi::$app->routeUrl($path);
-    
+
     } elseif (strpos($path, ':') !== false && $file = copi::$app->path($path)) {
-    
+
         return copi::$app->pathToUrl($file);
-    
+
     } elseif ($file = copi::$app->path("site:{$path}")) {
-    
+
         return copi::$app->pathToUrl($file);
-    
+
     }
 
     return $path;
@@ -57,7 +57,7 @@ function url_to($path) {
  * @param  array  $options
  * @return [type]
  */
-function thumb_url($image, $width = null, $height = null, $options=array()) {
+function thumb_url($image, $width = null, $height = null, $options = array()) {
 
     if ($width && is_array($height)) {
         $options = $height;
@@ -65,15 +65,16 @@ function thumb_url($image, $width = null, $height = null, $options=array()) {
     }
 
     $options = array_merge(array(
-        "rebuild"       => false,
-        "cachefolder"   => "site:storage/thumbs",
-        "quality"       => 100,
-        "base64"        => false,
-        "mode"          => "crop",
-        "domain"        => false,
-        "overlay"       => false,
-        "overlay_pos"   => "center",
-        "overlay_alpha" => 1
+        'rebuild'       => false,
+        'cachefolder'   => 'site:storage/thumbs',
+        'quality'       => 85,
+        'base64'        => false,
+        'mode'          => 'thumbnail',
+        'filter'        => '',
+        'domain'        => false,
+        'overlay'       => false,
+        'overlay_pos'   => 'center',
+        'overlay_alpha' => 1
     ), $options);
 
     extract($options);
@@ -91,16 +92,34 @@ function thumb_url($image, $width = null, $height = null, $options=array()) {
     }
 
     if (is_null($width) && is_null($height)) {
-        return copi::$app->pathToUrl($path);
+
+        $url = copi::$app->pathToUrl($path);
+
+        if ($domain) {
+            $url = rtrim(copi::$app->getSiteUrl(true), '/').$url;
+        }
+
+        return $url;
     }
 
-    if (!in_array($mode, ['crop', 'best_fit', 'resize','fit_to_width'])) {
-        $mode = 'crop';
+    if (!$width || !$height) {
+
+        list($w, $h, $type, $attr)  = getimagesize($path);
+
+        if (!$width) $width = ceil($w * ($height/$h));
+        if (!$height) $height = ceil($h * ($width/$w));
     }
 
-    $method = $mode == 'crop' ? 'thumbnail':$mode;
+    if (!in_array($mode, ['thumbnail', 'best_fit', 'resize','fit_to_width'])) {
+        $mode = 'thumbnail';
+    }
 
-    if ($base64) {
+    $method   = $mode == 'crop' ? 'thumbnail' : $mode;
+    $filetime = filemtime($path);
+    $hash     = md5($path.json_encode($options))."_{$width}x{$height}_{$quality}_{$filetime}_{$mode}.{$ext}";
+    $savepath = rtrim(copi::$app->path($cachefolder), '/')."/{$hash}";
+
+    if ($rebuild || !is_file($savepath)) {
 
         try {
 
@@ -110,41 +129,21 @@ function thumb_url($image, $width = null, $height = null, $options=array()) {
                 $img->overlay($overlay, $overlay_pos, $overlay_alpha);
             }
 
-            $data = $img->base64data(null, $quality);
+            $img->toFile($savepath, null, $quality);
 
         } catch(Exception $e) {
             return $url;
         }
+    }
 
-        $url = $data;
+    if ($base64) {
+        return "data:image/{$ext};base64,".base64_encode(file_get_contents($savepath));
+    }
 
-    } else {
+    $url = copi::$app->pathToUrl($savepath);
 
-        $filetime = filemtime($path);
-        $savepath = copi::$app->path($cachefolder)."/".md5($path.json_encode($options))."_{$width}x{$height}_{$quality}_{$filetime}_{$mode}.{$ext}";
-
-        if ($rebuild || !is_file($savepath)) {
-
-            try {
-
-                $img = copi::helper("image")->take($path)->{$method}($width, $height);
-
-                if ($overlay && $overlay = copi::$app->path($overlay)) {
-                    $img->overlay($overlay, $overlay_pos, $overlay_alpha);
-                }
-
-                $img->save($savepath, $quality);
-
-            } catch(Exception $e) {
-                return $url;
-            }
-        }
-
-        $url = copi::$app->pathToUrl($savepath);
-
-        if ($domain) {
-            $url = rtrim(copi::$app->getSiteUrl(true), '/').$url;
-        }
+    if ($domain) {
+        $url = rtrim(copi::$app->getSiteUrl(true), '/').$url;
     }
 
     return $url;
