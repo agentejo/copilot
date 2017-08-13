@@ -5,3 +5,4 @@ $_configpath = $_sitedir."/config/config.".(file_exists($_sitedir."/config/confi
 
 define('COCKPIT_CONFIG_PATH', $_configpath);
 define('COCKPIT_STORAGE_FOLDER' , dirname(__DIR__) . '/storage');
+define('COCKPIT_PUBLIC_STORAGE_FOLDER' , dirname(__DIR__) . '/storage');
