@@ -1838,7 +1838,7 @@ riot.tag2('field-html', '<textarea ref="input" class="uk-visibility-hidden"></te
 
 });
 
-riot.tag2('field-image', '<figure class="uk-display-block uk-panel uk-panel-box uk-panel-card uk-overlay uk-overlay-hover"> <div class="uk-flex uk-flex-middle uk-flex-center uk-text-muted"> <div class="uk-width-1-1" show="{image.path}" riot-style="min-height:160px;background-size:contain;background-repeat:no-repeat;background-position:50% 50%;{image.path ? \'background-image: url(\'+encodeURI(SITE_URL+\'/\'+image.path)+\')\':\'\'}"></div> <div class="uk-text-center uk-margin-top uk-margin-bottom" show="{!image.path}"> <img class="uk-svg-adjust uk-text-muted" riot-src="{App.base(\'/assets/app/media/icons/photo.svg\')}" width="60" data-uk-svg> <div><a class="uk-button uk-button-link" onclick="{selectimage}">{App.i18n.get(\'Select image\')}</a></div> </div> </div> <figcaption class="uk-overlay-panel uk-overlay-background" show="{image.path}"> <ul class="uk-subnav"> <li><a onclick="{selectimage}" title="{App.i18n.get(\'Select image\')}" data-uk-tooltip><i class="uk-icon-image"></i></a></li> <li><a onclick="{showMeta}" title="{App.i18n.get(\'Edit meta data\')}" data-uk-tooltip><i class="uk-icon-cog"></i></a></li> <li><a onclick="{remove}" title="{App.i18n.get(\'Reset\')}" data-uk-tooltip><i class="uk-icon-trash-o"></i></a></li> </ul> <p class="uk-text-small uk-text-truncate">{image.title}</p> </figcaption> </figure> <div class="uk-modal uk-sortable-nodrag" ref="modalmeta"> <div class="uk-modal-dialog"> <div class="uk-modal-header"><h3>{App.i18n.get(\'Image Meta\')}</h3></div> <div class="uk-grid uk-grid-match uk-grid-gutter" if="{_meta}"> <div class="uk-grid-margin uk-width-medium-{field.width}" each="{field, name in meta}" no-reorder> <div class="uk-panel"> <label class="uk-text-bold"> {field.label || name} </label> <div class="uk-margin uk-text-small uk-text-muted"> {field.info || \' \'} </div> <div class="uk-margin"> <cp-field type="{field.type || \'text\'}" bind="image.meta[\'{name}\']" opts="{field.options || {}}"></cp-field> </div> </div> </div> </div> <div class="uk-modal-footer uk-text-right"><button class="uk-button uk-button-large uk-button-link uk-modal-close">{App.i18n.get(\'Close\')}</button></div> </div> </div>', '', '', function(opts) {
+riot.tag2('field-image', '<figure class="uk-display-block uk-panel uk-panel-box uk-panel-card uk-overlay uk-overlay-hover"> <div class="uk-flex uk-flex-middle uk-flex-center uk-text-muted"> <div class="uk-width-1-1" show="{image.path}" riot-style="min-height:160px;background-size:contain;background-repeat:no-repeat;background-position:50% 50%;{image.path ? \'background-image: url(\'+(image.path.match(/^(http\\:|https\\:|\\/\\/)/) ? image.path:encodeURI(SITE_URL+\'/\'+image.path))+\')\':\'\'}"></div> <div class="uk-text-center uk-margin-top uk-margin-bottom" show="{!image.path}"> <img class="uk-svg-adjust uk-text-muted" riot-src="{App.base(\'/assets/app/media/icons/photo.svg\')}" width="60" data-uk-svg> <div class="uk-margin-top"> <a class="uk-button uk-button-link" onclick="{selectimage}">{App.i18n.get(\'Select image\')}</a> <a class="uk-button uk-button-link" onclick="{editUrl}">{App.i18n.get(\'Enter Image Url\')}</a> </div> </div> </div> <figcaption class="uk-overlay-panel uk-overlay-background" show="{image.path}"> <ul class="uk-subnav"> <li><a onclick="{selectimage}" title="{App.i18n.get(\'Select image\')}" data-uk-tooltip><i class="uk-icon-image"></i></a></li> <li><a onclick="{editUrl}" title="{App.i18n.get(\'Edit Image Url\')}" data-uk-tooltip><i class="uk-icon-link"></i></a></li> <li><a onclick="{showMeta}" title="{App.i18n.get(\'Edit meta data\')}" data-uk-tooltip><i class="uk-icon-cog"></i></a></li> <li><a onclick="{remove}" title="{App.i18n.get(\'Reset\')}" data-uk-tooltip><i class="uk-icon-trash-o"></i></a></li> </ul> <p class="uk-text-small uk-text-truncate">{image.title}</p> </figcaption> </figure> <div class="uk-modal uk-sortable-nodrag" ref="modalmeta"> <div class="uk-modal-dialog"> <div class="uk-modal-header"><h3>{App.i18n.get(\'Image Meta\')}</h3></div> <div class="uk-grid uk-grid-match uk-grid-gutter" if="{_meta}"> <div class="uk-grid-margin uk-width-medium-{field.width}" each="{field, name in meta}" no-reorder> <div class="uk-panel"> <label class="uk-text-bold"> {field.label || name} </label> <div class="uk-margin uk-text-small uk-text-muted"> {field.info || \' \'} </div> <div class="uk-margin"> <cp-field type="{field.type || \'text\'}" bind="image.meta[\'{name}\']" opts="{field.options || {}}"></cp-field> </div> </div> </div> </div> <div class="uk-modal-footer uk-text-right"><button class="uk-button uk-button-large uk-button-link uk-modal-close">{App.i18n.get(\'Close\')}</button></div> </div> </div>', '', '', function(opts) {
 
         this.on('mount', function() { this.trigger('update'); });
         this.on('update', function() { if (opts.opts) App.$.extend(opts, opts.opts); });
@@ -1888,15 +1888,23 @@ riot.tag2('field-image', '<figure class="uk-display-block uk-panel uk-panel-box 
             this._meta = this.image.meta;
 
             setTimeout(function() {
-                UIkit.modal($this.refs.modalmeta).show().on('close.uk.modal', function(){
+                UIkit.modal($this.refs.modalmeta, {modal:false}).show().on('close.uk.modal', function(){
                     $this._meta = null;
                 });
             }, 50)
         }.bind(this)
 
+        this.editUrl = function() {
+            App.ui.prompt('Image Url', this.image.path, function (url) {
+                $this.image.path = url;
+                $this.$setValue($this.image);
+                $this.update();
+            });
+        }.bind(this)
+
 });
 
-riot.tag2('field-layout', '<div class="uk-text-center uk-text-muted {opts.child ? \'uk-text-small\':\'uk-placeholder\'}" show="{!items.length}"> <img class="uk-svg-adjust" riot-src="{App.base(\'/assets/app/media/icons/layout.svg\')}" width="100" data-uk-svg> </div> <div class="uk-sortable layout-components" ref="components" show="{mode==\'edit\' && items.length}" data-uk-sortable> <div class="uk-panel-box uk-panel-card" each="{item,idx in items}" data-idx="{idx}"> <div class="uk-flex uk-flex-middle uk-text-small uk-visible-hover"> <img class="uk-margin-small-right" riot-src="{parent.components[item.component].icon ? parent.components[item.component].icon : App.base(\'/assets/app/media/icons/component.svg\')}" width="16"> <div class="uk-text-bold uk-text-truncate uk-flex-item-1"> {parent.components[item.component].label || App.Utils.ucfirst(item.component)} </div> <div class="uk-button-group uk-invisible"> <a class="uk-button uk-button-small" onclick="{parent.addComponent}" title="{App.i18n.get(\'Add Colum\')}"><i class="uk-icon-plus"></i></a> <a class="uk-button uk-button-small" onclick="{parent.settings}"><i class="uk-icon-cogs"></i></a> <a class="uk-button uk-button-small uk-button-danger" onclick="{parent.remove}"><i class="uk-icon-trash-o"></i></a> </div> </div> <div class="uk-margin" if="{parent.components[item.component].children}"> <field-layout bind="items[{idx}].children" child="true"></field-layout> </div> <div class="uk-margin" if="{item.component == \'grid\'}"> <field-layout-grid bind="items[{idx}].columns"></field-layout-grid> </div> </div> </div> <div class="uk-margin uk-text-center"> <a class="uk-button {!opts.child ? \'uk-button-primary uk-button-large\':\'uk-button-small\'}" onclick="{addComponent}" title="{App.i18n.get(\'Add component\')}" data-uk-tooltip="pos:\'bottom\'"><i class="uk-icon-plus-circle"></i></a> </div> <div class="uk-modal uk-sortable-nodrag" ref="modalComponents"> <div class="uk-modal-dialog"> <h3 class="uk-flex uk-flex-middle"> <img class="uk-margin-small-right" riot-src="{App.base(\'/assets/app/media/icons/component.svg\')}" width="30"> {App.i18n.get(\'Components\')} </h3> <div class="uk-grid uk-grid-match uk-grid-small uk-grid-width-medium-1-4"> <div class="uk-grid-margin" each="{component,name in components}"> <div class="uk-panel uk-panel-framed uk-text-center"> <img riot-src="{component.icon || App.base(\'/assets/app/media/icons/component.svg\')}" width="30"> <p class="uk-text-small">{component.label || App.Utils.ucfirst(name)}</p> <a class="uk-position-cover" onclick="{add}"></a> </div> </div> </div> <div class="uk-text-right uk-margin-top"> <a class="uk-button uk-button-link uk-button-large uk-modal-close">{App.i18n.get(\'Close\')}</a> </div> </div> </div> <div class="uk-modal uk-sortable-nodrag" ref="modalSettings"> <div class="uk-modal-dialog uk-modal-dialog-large" if="{settingsComponent}"> <a class="uk-modal-close uk-close"></a> <h3 class="uk-margin-large-bottom"> <img class="uk-margin-small-right" riot-src="{components[settingsComponent.component].icon ? components[settingsComponent.component].icon : App.base(\'/assets/app/media/icons/settings.svg\')}" width="30"> {components[settingsComponent.component].label || App.Utils.ucfirst(settingsComponent.component)} </h3> <div class="uk-margin" if="{components[settingsComponent.component].fields}"> <field-set class="uk-margin" bind="settingsComponent.settings" fields="{components[settingsComponent.component].fields}"></field-set> </div> <div class="uk-margin"> <field-set class="uk-margin" bind="settingsComponent.settings" fields="{generalSettingsFields}"></field-set> </div> <div class="uk-text-right uk-margin-top"> <a class="uk-button uk-button-link uk-button-large uk-modal-close">{App.i18n.get(\'Close\')}</a> </div> </div> </div>', 'field-layout .layout-components > div,[data-is="field-layout"] .layout-components > div{ margin-bottom: 5px; }', '', function(opts) {
+riot.tag2('field-layout', '<div class="uk-text-center uk-text-muted {opts.child ? \'uk-text-small\':\'uk-placeholder\'}" show="{!items.length}"> <img class="uk-svg-adjust" riot-src="{App.base(\'/assets/app/media/icons/layout.svg\')}" width="100" data-uk-svg> </div> <div class="uk-sortable layout-components" ref="components" show="{mode==\'edit\' && items.length}" data-uk-sortable> <div class="uk-panel-box uk-panel-card" each="{item,idx in items}" data-idx="{idx}"> <div class="uk-flex uk-flex-middle uk-text-small uk-visible-hover"> <img class="uk-margin-small-right" riot-src="{parent.components[item.component].icon ? parent.components[item.component].icon : App.base(\'/assets/app/media/icons/component.svg\')}" width="16"> <div class="uk-text-bold uk-text-truncate uk-flex-item-1"> {parent.components[item.component].label || App.Utils.ucfirst(item.component)} </div> <div class="uk-button-group uk-invisible"> <a class="uk-button uk-button-small" onclick="{parent.addComponent}" title="{App.i18n.get(\'Add Colum\')}"><i class="uk-icon-plus"></i></a> <a class="uk-button uk-button-small" onclick="{parent.settings}"><i class="uk-icon-cogs"></i></a> <a class="uk-button uk-button-small uk-button-danger" onclick="{parent.remove}"><i class="uk-icon-trash-o"></i></a> </div> </div> <div class="uk-margin" if="{parent.components[item.component].children}"> <field-layout bind="items[{idx}].children" child="true"></field-layout> </div> <div class="uk-margin" if="{item.component == \'grid\'}"> <field-layout-grid bind="items[{idx}].columns"></field-layout-grid> </div> </div> </div> <div class="uk-margin uk-text-center"> <a class="uk-button {!opts.child ? \'uk-button-primary uk-button-large\':\'uk-button-small\'}" onclick="{addComponent}" title="{App.i18n.get(\'Add component\')}" data-uk-tooltip="pos:\'bottom\'"><i class="uk-icon-plus-circle"></i></a> </div> <div class="uk-modal uk-sortable-nodrag" ref="modalComponents"> <div class="uk-modal-dialog"> <h3 class="uk-flex uk-flex-middle"> <img class="uk-margin-small-right" riot-src="{App.base(\'/assets/app/media/icons/component.svg\')}" width="30"> {App.i18n.get(\'Components\')} </h3> <div class="uk-grid uk-grid-match uk-grid-small uk-grid-width-medium-1-4"> <div class="uk-grid-margin" each="{component,name in components}"> <div class="uk-panel uk-panel-framed uk-text-center"> <img riot-src="{component.icon || App.base(\'/assets/app/media/icons/component.svg\')}" width="30"> <p class="uk-text-small">{component.label || App.Utils.ucfirst(name)}</p> <a class="uk-position-cover" onclick="{add}"></a> </div> </div> </div> <div class="uk-text-right uk-margin-top"> <a class="uk-button uk-button-link uk-button-large uk-modal-close">{App.i18n.get(\'Close\')}</a> </div> </div> </div> <div class="uk-modal uk-sortable-nodrag" ref="modalSettings"> <div class="uk-modal-dialog uk-modal-dialog-large" if="{settingsComponent}"> <a class="uk-modal-close uk-close"></a> <h3 class="uk-margin-large-bottom"> <img class="uk-margin-small-right" riot-src="{components[settingsComponent.component].icon ? components[settingsComponent.component].icon : App.base(\'/assets/app/media/icons/settings.svg\')}" width="30"> {components[settingsComponent.component].label || App.Utils.ucfirst(settingsComponent.component)} </h3> <ul class="uk-tab uk-margin-bottom uk-flex uk-flex-center"> <li class="{!settingsGroup && \'uk-active\'}"><a class="uk-text-capitalize" onclick="{toggleGroup}">{App.i18n.get(\'All\')}</a></li> <li class="{group==parent.settingsGroup && \'uk-active\'}" each="{items,group in settingsGroups}" show="{items.length}"><a class="uk-text-capitalize" onclick="{toggleGroup}">{App.i18n.get(group)}</a></li> </ul> <div class="uk-grid uk-grid-small uk-grid-match"> <div class="uk-grid-margin uk-width-medium-{field.width}" each="{field,idx in settingsFields}" show="{!settingsGroup || (settingsGroup == field.group)}" no-reorder> <div class="uk-panel"> <label class="uk-text-bold">{field.label || field.name}</label> <div class="uk-margin uk-text-small uk-text-muted">{field.info || \' \'}</div> <div class="uk-margin"> <cp-field type="{field.type || \'text\'}" bind="settingsComponent.settings[{field.name}]" opts="{field.options || {}}"></cp-field> </div> </div> </div> </div> <div class="uk-text-right uk-margin-top"> <a class="uk-button uk-button-link uk-button-large uk-modal-close">{App.i18n.get(\'Close\')}</a> </div> </div> </div>', 'field-layout .layout-components > div,[data-is="field-layout"] .layout-components > div{ margin-bottom: 5px; }', '', function(opts) {
 
         var $this = this;
 
@@ -1906,9 +1914,9 @@ riot.tag2('field-layout', '<div class="uk-text-center uk-text-muted {opts.child 
         this.items = [];
         this.settingsComponent = null;
         this.generalSettingsFields  = [
-            {name: "id", type: "text" },
-            {name: "class", type: "text" },
-            {name: "style", type: "code", options: {syntax: "css", height: "100px"} }
+            {name: "id", type: "text", group: "General" },
+            {name: "class", type: "text", group: "General" },
+            {name: "style", type: "code", group: "General", options: {syntax: "css", height: "100px"}}
         ];
 
         this.on('mount', function() {
@@ -1989,11 +1997,44 @@ riot.tag2('field-layout', '<div class="uk-text-center uk-text-muted {opts.child 
 
         this.settings = function(e) {
 
+            var component = e.item.item;
+
             this.settingsComponent = e.item.item;
+
+            this.settingsFields    = (this.components[component.component].fields || []).concat(this.generalSettingsFields);
+            this.settingsFieldsIdx = {};
+            this.settingsGroups    = {main:[]};
+            this.settingsGroup     = 'main';
+
+            this.settingsFields.forEach(function(field){
+
+                $this.settingsFieldsIdx[field.name] = field;
+
+                if (component.settings[field.name] === undefined) {
+                    component.settings[field.name] = field.options && field.options.default || null;
+                }
+
+                if (field.group && !$this.settingsGroups[field.group]) {
+                    $this.settingsGroups[field.group] = [];
+                } else if (!field.group) {
+                    field.group = 'main';
+                }
+
+                $this.settingsGroups[field.group || 'main'].push(field);
+            });
+
+            if (!this.settingsGroups[this.settingsGroup].length) {
+                this.settingsGroup = Object.keys(this.settingsGroups)[1];
+            }
 
             setTimeout(function() {
                 UIkit.modal(this.refs.modalSettings, {modal:false}).show();
             }.bind(this));
+        }.bind(this)
+
+        this.toggleGroup = function(e) {
+            e.preventDefault();
+            this.settingsGroup = e.item && e.item.group || false;
         }.bind(this)
 
         this.components = {
@@ -2030,8 +2071,7 @@ riot.tag2('field-layout', '<div class="uk-text-center uk-text-muted {opts.child 
             "image": {
                 "icon": App.base('/assets/app/media/icons/photo.svg'),
                 "fields": [
-                    {"name": "image", "type": "image"},
-                    {"name": "url", "type": "text"}
+                    {"name": "image", "type": "image"}
                 ]
             },
 
