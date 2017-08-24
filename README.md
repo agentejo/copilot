@@ -51,7 +51,7 @@ If you prefer Git, clone Copilot's Starterkit repository.
 If you have a Github account, please report issues
 directly on Github:
 
-- <https://github.com/agentejo/copilot/issues
+- https://github.com/agentejo/copilot/issues
 
 
 ## Copyright
