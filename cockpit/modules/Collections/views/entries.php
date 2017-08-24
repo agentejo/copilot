@@ -145,7 +145,11 @@
             return field.lst;
         });
 
-        this.fields.push({name:'_modified', 'label':'@lang('Modified')'});
+        this.fieldsidx['_created'] = {name:'_created', 'label':'@lang('Created')', type: 'text'};
+        this.fieldsidx['_modified'] = {name:'_modified', 'label':'@lang('Modified')', type: 'text'};
+
+        this.fields.push(this.fieldsidx['_created']);
+        this.fields.push(this.fieldsidx['_modified']);
 
         this.sort     = {'_created': -1};
         this.selected = [];
@@ -331,10 +335,10 @@
             }
 
             if (!this.sort[col]) {
-                this.sort        = {};
+                this.sort      = {};
                 this.sort[col] = 1;
             } else {
-                this.sort[col] = this.sort[col] == 1 ? -1:1;
+                this.sort[col] = this.sort[col] == 1 ? -1 : 1;
             }
 
             this.sortedBy = field;
@@ -359,7 +363,7 @@
                 });
             }
 
-            $root.find('[data-check="all"]').prop('checked', checkboxes.length === selected.length);
+            $root.find('[data-check="all"]').prop('checked', checkboxes.length && checkboxes.length === selected.length);
 
             if (update) {
                 this.update();

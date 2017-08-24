@@ -7,7 +7,7 @@
     </style>
 
     <div class="uk-text-center uk-text-muted {opts.child ? 'uk-text-small':'uk-placeholder'}" show="{ !items.length }">
-        <img class="uk-svg-adjust" src="{ App.base('/assets/app/media/icons/layout.svg') }" width="100" data-uk-svg>
+        <img class="uk-svg-adjust" riot-src="{ App.base('/assets/app/media/icons/layout.svg') }" width="100" data-uk-svg>
     </div>
 
     <div class="uk-sortable layout-components" ref="components" show="{mode=='edit' && items.length}" data-uk-sortable>
@@ -37,7 +37,7 @@
     </div>
 
     <div class="uk-margin uk-text-center">
-        <a class="uk-button { !opts.child ? 'uk-button-primary uk-button-large':'uk-button-small'}" onclick="{ addComponent }" title="{ App.i18n.get('Add component') }" data-uk-tooltip="pos:'bottom'"><i class="uk-icon-plus-circle"></i></a>
+        <a class="uk-button uk-button-outline uk-text-primary { !opts.child ? 'uk-button-large':'uk-button-small'}" onclick="{ addComponent }" title="{ App.i18n.get('Add component') }" data-uk-tooltip="pos:'bottom'"><i class="uk-icon-plus-circle"></i></a>
     </div>
 
     <div class="uk-modal uk-sortable-nodrag" ref="modalComponents">
@@ -64,7 +64,7 @@
     </div>
 
     <div class="uk-modal uk-sortable-nodrag" ref="modalSettings">
-        <div class="uk-modal-dialog uk-modal-dialog-large" if="{settingsComponent}">
+        <div class="uk-modal-dialog { components[settingsComponent.component].dialog=='large' && 'uk-modal-dialog-large' }" if="{settingsComponent}">
             
             <a class="uk-modal-close uk-close"></a>
 
@@ -248,6 +248,7 @@
 
             "text": {
                 "icon": App.base('/assets/app/media/icons/text.svg'),
+                "dialog": "large",
                 "fields": [
                     {"name": "text", "type": "wysiwyg"}
                 ]
@@ -255,6 +256,7 @@
 
             "html": {
                 "icon": App.base('/assets/app/media/icons/code.svg'),
+                "dialog": "large",
                 "fields": [
                     {"name": "html", "type": "html"}
                 ]

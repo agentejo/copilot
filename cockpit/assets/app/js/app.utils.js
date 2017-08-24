@@ -232,7 +232,7 @@
     };
 
     App.Utils.renderer.image = function(v) {
-        return v && v.path ? '<a href="'+encodeURI(SITE_URL+'/'+v.path)+'" data-uk-lightbox title="'+App.i18n.get('Preview')+'"><i class="uk-icon-image"></i></a>' : App.Utils.renderer.default(v);
+        return v && v.path ? '<a href="'+(v.path.match(/^(http\:|https\:|\/\/)/) ? v.path:encodeURI(SITE_URL+'/'+v.path))+'" data-uk-lightbox title="'+App.i18n.get('Preview')+'"><i class="uk-icon-image"></i></a>' : App.Utils.renderer.default(v);
     };
 
     App.Utils.renderer.asset = function(v) {
@@ -260,7 +260,7 @@
     };
 
     App.Utils.renderer.gallery = function(v) {
-        return Array.isArray(Array.isArray(v)) ? v.length+' '+App.i18n.get('Image(s)') : App.Utils.renderer.default(v);
+        return Array.isArray(v) ? '<span class="uk-badge">'+(v.length+' '+App.i18n.get(v.length == 1 ? 'Image':'Images'))+'</span>' : App.Utils.renderer.default(v);
     };
 
     App.Utils.renderer.boolean = function(v) {

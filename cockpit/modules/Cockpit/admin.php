@@ -10,7 +10,6 @@ include(__DIR__.'/Helper/Admin.php');
 
 $app->helpers['admin']  = 'Cockpit\\Helper\\Admin';
 
-
 // init + load i18n
 $app('i18n')->locale = 'en';
 
@@ -201,6 +200,11 @@ $app->on("after", function() {
             if ($this->req_is('ajax')) {
                 $this->response->body = '{"error": "404", "message":"File not found"}';
             } else {
+
+                if (!$this->module('cockpit')->getUser()) {
+                    $this->reroute('/auth/login');
+                }
+
                 $this->response->body = $this->view("cockpit:views/errors/404.php");
             }
 
