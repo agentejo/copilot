@@ -41,7 +41,7 @@
 
         <div class="uk-grid-margin uk-width-medium-3-4">
 
-            <form class="uk-form" show="{ fields.length }" onsubmit="{ submit }">
+            <form class="uk-form" if="{ fields.length }" onsubmit="{ submit }">
 
                 <ul class="uk-tab uk-margin-large-bottom uk-flex uk-flex-center" show="{ App.Utils.count(groups) > 1 }">
                     <li class="{ !group && 'uk-active'}"><a class="uk-text-capitalize" onclick="{ toggleGroup }">{ App.i18n.get('All') }</a></li>
@@ -181,9 +181,7 @@
 
             // bind clobal command + save
             Mousetrap.bindGlobal(['command+s', 'ctrl+s'], function(e) {
-
-                e.preventDefault();
-                $this.submit();
+                $this.submit(e);
                 return false;
             });
 
