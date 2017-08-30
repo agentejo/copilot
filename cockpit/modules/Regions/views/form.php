@@ -168,6 +168,10 @@
                     $this.submit();
                     return false;
                 });
+
+                App.$(this.root).on('submit', function(e) {
+                    $this.submit(e);
+                });
             });
 
             toggleGroup(e) {

@@ -41,7 +41,7 @@
 
         <div class="uk-grid-margin uk-width-medium-3-4">
 
-            <form class="uk-form" if="{ fields.length }" onsubmit="{ submit }">
+            <form class="uk-form" show="{ fields.length }" onsubmit="{ submit }">
 
                 <ul class="uk-tab uk-margin-large-bottom uk-flex uk-flex-center" show="{ App.Utils.count(groups) > 1 }">
                     <li class="{ !group && 'uk-active'}"><a class="uk-text-capitalize" onclick="{ toggleGroup }">{ App.i18n.get('All') }</a></li>
@@ -186,6 +186,10 @@
                 $this.submit();
                 return false;
             });
+
+            App.$(this.root).on('submit', function(e) {
+                $this.submit(e);
+            });
         });
 
         toggleGroup(e) {
@@ -219,6 +223,8 @@
             }, function(res) {
                 App.ui.notify(res && res.message ? res.message : "Saving failed.", "danger");
             });
+
+            return false;
         }
 
         hasFieldAccess(field) {

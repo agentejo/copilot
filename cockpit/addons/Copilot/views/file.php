@@ -135,14 +135,12 @@
 
         // bind clobal command + save
         Mousetrap.bindGlobal(['command+s', 'ctrl+s'], function(e) {
-
-            if (e.preventDefault) {
-                e.preventDefault();
-            } else {
-                e.returnValue = false; // ie
-            }
-            $this.save();
+            $this.save(e);
             return false;
+        });
+
+        App.$(this.root).on('submit', function(e) {
+            $this.save(e);
         });
 
     </script>
