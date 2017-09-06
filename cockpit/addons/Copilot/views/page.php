@@ -383,8 +383,8 @@
                 return false;
             });
 
-            App.$(this.root).on('submit', function(e) {
-                $this.save(e);
+            App.$(this.root).on('submit', function(e, component) {
+                if (component) $this.save(e);
             });
         });
 
