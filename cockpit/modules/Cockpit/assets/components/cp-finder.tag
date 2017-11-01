@@ -149,7 +149,9 @@
                                                 <div class="uk-dropdown">
                                                     <ul class="uk-nav uk-nav-dropdown uk-dropdown-close">
                                                         <li class="uk-nav-header uk-text-truncate">{ folder.name }</li>
+                                                        <li><a onclick="{ parent.download }">Download</a></li>
                                                         <li><a onclick="{ parent.rename }">Rename</a></li>
+                                                        <li class="uk-nav-divider"></li>
                                                         <li><a onclick="{ parent.remove }">Delete</a></li>
                                                     </ul>
                                                 </div>
@@ -187,6 +189,7 @@
                                                             <li class="uk-nav-header uk-text-truncate">{ file.name }</li>
                                                             <li> <a class="uk-link-muted uk-dropdown-close js-no-item-select" onclick="{ parent.open }">Open</a></li>
                                                             <li><a class="uk-dropdown-close" onclick="{ parent.rename }">Rename</a></li>
+                                                            <li><a onclick="{ parent.download }">Download</a></li>
                                                             <li if="{ file.ext == 'zip' }"><a onclick="{ parent.unzip }">Unzip</a></li>
                                                             <li class="uk-nav-divider"></li>
                                                             <li><a class="uk-dropdown-close" onclick="{ parent.remove }">Delete</a></li>
@@ -242,6 +245,7 @@
                                                     <li class="uk-nav-header">{ App.i18n.get('Actions') }</li>
                                                     <li> <a class="uk-link-muted uk-dropdown-close js-no-item-select" onclick="{ parent.open }">Open</a></li>
                                                     <li><a class="uk-dropdown-close" onclick="{ parent.rename }">Rename</a></li>
+                                                    <li><a onclick="{ parent.download }">Download</a></li>
                                                     <li if="{ file.ext == 'zip' }"><a onclick="{ parent.unzip }">Unzip</a></li>
                                                     <li class="uk-nav-divider"></li>
                                                     <li><a class="uk-dropdown-close" onclick="{ parent.remove }">Delete</a></li>
@@ -450,7 +454,7 @@
 
                     this.selected.count = Object.keys(this.selected.paths).length;
 
-                    return;
+                    return App.$(this.root).trigger('selectionchange', [this.selected]);
                 }
 
                 if (!(e.metaKey || e.ctrlKey)) {
@@ -498,6 +502,15 @@
                 }
 
             });
+        }
+
+        download(e, item) {
+
+            e.stopPropagation();
+
+            item = e.item.file || e.item.folder;
+
+            window.open(App.route('/media/api?cmd=download&path='+item.path));
         }
 
         unzip(e, item) {

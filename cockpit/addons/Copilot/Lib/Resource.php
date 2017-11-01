@@ -268,7 +268,7 @@ class Resource {
         }
 
         if (!$this->imageinfo) {
-            $this->imageinfo = getimagesize($this->path);
+            $this->imageinfo = @getimagesize($this->path);
         }
 
         return $this->imageinfo;

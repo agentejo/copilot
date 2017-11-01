@@ -32,14 +32,16 @@
     </ul>
 
     <div class="uk-margin" if="{children.length}">
-        <a class="uk-button uk-button-primary" onclick="{ createPage }" if="{ type.subpages !== false }">@lang('Create Page')</a>
 
-        <div class="uk-form-icon uk-form uk-text-muted uk-float-right">
+        <div class="uk-form-icon uk-form uk-text-muted">
 
             <i class="uk-icon-filter"></i>
             <input class="uk-form-large uk-form-blank" type="text" ref="txtfilter" placeholder="@lang('Filter pages...')" onkeyup="{ update }">
 
         </div>
+
+        <a class="uk-button uk-button-large uk-button-primary uk-float-right" onclick="{ createPage }" if="{ type.subpages !== false }">@lang('Create Page')</a>
+
     </div>
 
     <div name="container" class="uk-grid uk-grid-match uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-sortable" show="{children.length}">
@@ -47,9 +49,9 @@
         <div class="uk-grid-margin" each="{child,idx in children}" show="{ infilter(child) }" data-path="{ child.path }">
             <div class="uk-panel uk-panel-box uk-panel-card">
                 <div class="uk-flex uk-flex-middle">
-                    
-                    <a class="uk-flex-item-1 uk-text-small uk-text-truncate" href="@route('/copilot/page'){ child.relpath }">{ copilot.getTypeLabel(child.type) }</a>
-                    
+
+                    <a class="uk-flex-item-1 uk-text-small uk-text-truncate" href="@route('/copilot/page'){ child.relpath }"><span class="uk-badge uk-badge-outline">{ copilot.getTypeLabel(child.type) }</span></a>
+
                     <span class="uk-margin-small-right" data-uk-dropdown="pos:'bottom-right'">
                         <i class="uk-icon-cog uk-text-{ child.visible ? 'success':'danger' }"></i>
                         <div class="uk-dropdown uk-dropdown-close">
@@ -145,7 +147,7 @@
         }
 
         remove(e) {
-            
+
             e.preventDefault();
 
             var path = e.item.child.path;

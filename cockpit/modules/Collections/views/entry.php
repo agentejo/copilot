@@ -34,7 +34,7 @@
 
     <h3 class="uk-flex uk-flex-middle uk-text-bold">
         <img class="uk-margin-small-right" src="@url($collection['icon'] ? 'assets:app/media/icons/'.$collection['icon']:'collections:icon.svg')" width="25" alt="icon">
-        { entry._id ? 'Edit':'Add' } @lang('Entry')
+        { App.i18n.get(entry._id ? 'Edit Entry':'Add Entry') }
     </h3>
 
     <div class="uk-grid">
@@ -122,10 +122,10 @@
                     </div>
                 </div>
 
-                <div class="uk-margin" if="{entry._id && entry._by}">
+                <div class="uk-margin" if="{entry._id && entry._mby}">
                     <label class="uk-text-small">@lang('Last update by')</label>
                     <div class="uk-margin-small-top">
-                        <cp-account account="{entry._by}"></cp-account>
+                        <cp-account account="{entry._mby}"></cp-account>
                     </div>
                 </div>
 
@@ -158,6 +158,24 @@
 
             if ($this.entry[field.name] === undefined) {
                 $this.entry[field.name] = field.options && field.options.default || null;
+            }
+
+            if (field.localize && $this.languages.length) {
+
+                $this.languages.forEach(function(lang) {
+
+                    var key = field.name+'_'+lang.code;
+
+                    if ($this.entry[key] === undefined) {
+
+                        if (field.options && field.options['default_'+lang.code] === null) {
+                            return;
+                        }
+
+                        $this.entry[key] = field.options && field.options.default || null;
+                        $this.entry[key] = field.options && field.options['default_'+lang.code] || $this.entry[key];
+                    }
+                });
             }
 
             if (field.type == 'password') {
@@ -230,13 +248,13 @@
 
             var acl = this.fieldsidx[field] && this.fieldsidx[field].acl || [];
 
-            if (field == '_modified' || 
-                App.$data.user.group == 'admin' || 
+            if (field == '_modified' ||
+                App.$data.user.group == 'admin' ||
                 !acl ||
                 (Array.isArray(acl) && !acl.length) ||
                 acl.indexOf(App.$data.user.group) > -1 ||
                 acl.indexOf(App.$data.user._id) > -1
-            
+
             ) { return true; }
 
             return false;

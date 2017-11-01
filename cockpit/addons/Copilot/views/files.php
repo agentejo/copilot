@@ -42,17 +42,18 @@
 
     <div class="uk-margin" show="{files && files.length}">
 
-        <span class="uk-button uk-button-primary uk-margin-small-right uk-form-file">
-            <input class="js-upload-select-one" type="file" multiple="true" title="">
-            <i class="uk-icon-upload"></i> @lang('Upload files')
-        </span>
-
-        <div class="uk-form-icon uk-form uk-text-muted uk-float-right">
+        <div class="uk-form-icon uk-form uk-text-muted">
 
             <i class="uk-icon-filter"></i>
             <input class="uk-form-large uk-form-blank" type="text" ref="txtfilter" placeholder="@lang('Filter files...')" onkeyup="{ update }">
 
         </div>
+
+        <span class="uk-button uk-button-large uk-button-primary uk-margin-small-right uk-form-file uk-float-right">
+            <input class="js-upload-select-one" type="file" multiple="true" title="">
+            <i class="uk-icon-upload"></i> @lang('Upload files')
+        </span>
+
     </div>
 
     <div ref="uploadprogress" class="uk-margin uk-hidden">
@@ -91,18 +92,18 @@
                         </div>
                     </span>
                     <div>
-                        <a class="uk-flex-item-1 uk-text-truncate" href="@route('/copilot/file'){ file.relpath }">{ file.filename }</a>
+                        <a class="uk-text-small uk-flex-item-1" href="@route('/copilot/file'){ file.relpath }"><div class="uk-text-truncate">{ file.filename }</div></a>
                         <div class="uk-text-small uk-text-muted uk-margin-small-top">
                             { file.fsize }
                         </div>
                     </div>
                 </div>
-                
+
             </div>
-            
+
         </div>
     </div>
-    
+
 
     <div class="uk-margin-large-top uk-viewport-height-1-3 uk-container-center uk-text-center uk-flex uk-flex-middle uk-flex-center uk-animation-scale" if="{files && !files.length}">
 
@@ -189,7 +190,7 @@
                 var sortable = UIkit.sortable(App.$('[name="container"]'), {animation: true}).element.on("change.uk.sortable", function(e, sortable, ele) {
 
                     var order = [], fromIndex, toIndex = ele.index(), path = ele.attr('data-path');
-                    
+
                     sortable.element.children().each(function(index){
                         order.push(this.getAttribute('data-path'));
                     });
