@@ -9,6 +9,8 @@
 
         var $this = this, src;
 
+        this.inView = false;
+
         this.on('mount', function() {
 
             if (!('IntersectionObserver' in window)) {
@@ -21,6 +23,7 @@
                 if (!entries[0].intersectionRatio) return;
 
                 if (opts.src || opts.riotSrc || opts['riot-src']) {
+                    $this.inView = true;
                     $this.load();
                     observer.unobserve($this.refs.canvas);
                 }
@@ -31,6 +34,12 @@
             });
 
             observer.observe($this.refs.canvas);
+        });
+
+        this.on('update', function() {
+            if (this.inView) {
+                this.load();
+            }
         })
 
         this.load = function() {
@@ -45,6 +54,21 @@
             $this.refs.spinner.classList.remove('uk-hidden');
 
             requestAnimationFrame(function() {
+
+                if (_src.match(/^(http\:|https\:|\/\/)/)) {
+
+                    setTimeout(function() {
+                        App.$($this.refs.canvas).css({
+                            backgroundImage: 'url('+url+')',
+                            backgroundSize: 'contain',
+                            visibility: 'visible'
+                        });
+
+                        $this.refs.spinner.classList.add('uk-hidden');
+                    }, 50);
+
+                    return;
+                }
 
                 App.request('/cockpit/utils/thumb_url', {src:_src,w:opts.width,h:opts.height,m:mode}, 'text').then(function(url){
 
