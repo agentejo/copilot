@@ -263,7 +263,12 @@ class PageCollection implements \Iterator {
     public function filter($criteria) {
 
         if (is_string($criteria)) {
-            $criteria = create_function('$p', "return ({$criteria});");
+
+            if (!function_exists('create_function')) {
+                eval('$criteria = function($p) { return ('.$criteria.'); };');
+            } else {
+                $criteria = create_function('$p', "return ({$criteria});");
+            }
         }
 
         return $this->setPages(array_values(array_filter($this->pages, $criteria)));
@@ -286,7 +291,12 @@ class PageCollection implements \Iterator {
         $getValue = function($page, $expr) use($cache) {
 
             if (!isset($cache[$expr])) {
-                $cache[$expr] = create_function('$p', "return ({$expr});");
+
+                if (!function_exists('create_function')) {
+                    eval('$cache[$expr] = function($p) { return ('.$expr.'); };');
+                } else {
+                    $cache[$expr] = create_function('$p', "return ({$expr});");
+                }
             }
 
             $value = $cache[$expr]($page);

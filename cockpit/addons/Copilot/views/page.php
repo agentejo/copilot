@@ -120,7 +120,7 @@
             </div>
             <div class="uk-grid-margin uk-width-medium-1-4">
                 <div class="uk-panel-box uk-panel-card">
-                
+
                     <h3>@lang('Settings')</h3>
 
                     <div class="uk-panel">
@@ -294,7 +294,6 @@
         this.type      = {{ json_encode($type) }};
         this.updates   = { slug: '' };
         this.meta      = {};
-
 
         this.contentType = this.type.content.type ?  this.type.content.type : this.type.ext == 'md' ? 'markdown':'html';
         this.view = App.Utils.count(this.type.meta) ? 'fields':'content';
