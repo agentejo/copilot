@@ -44,7 +44,7 @@
 
     </div>
 
-    <div name="container" class="uk-grid uk-grid-match uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-sortable" show="{children.length}">
+    <div name="container" class="uk-grid uk-grid-small uk-grid-match uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-sortable" show="{children.length}">
 
         <div class="uk-grid-margin" each="{child,idx in children}" show="{ infilter(child) }" data-path="{ child.path }">
             <div class="uk-panel uk-panel-box uk-panel-card">

@@ -36,11 +36,16 @@
         </li>
         <li>
             <span class="uk-text-primary">Files <span class="uk-badge" if="{files && files.length}">{files.length}</span></span>
-            <span ref="loadprogress" class="uk-hidden"><i class="uk-icon-refresh uk-icon-spin"></i></span>
+            <span show="{ loading }"><i class="uk-icon-refresh uk-icon-spin"></i></span>
         </li>
     </ul>
 
     <div class="uk-margin" show="{files && files.length}">
+
+        <div class="uk-button-group">
+            <button class="uk-button uk-button-large {listmode=='list' && 'uk-button-primary'}" onclick="{ toggleListMode }"><i class="uk-icon-list"></i></button>
+            <button class="uk-button uk-button-large {listmode=='grid' && 'uk-button-primary'}" onclick="{ toggleListMode }"><i class="uk-icon-th"></i></button>
+        </div>
 
         <div class="uk-form-icon uk-form uk-text-muted">
 
@@ -54,6 +59,10 @@
             <i class="uk-icon-upload"></i> @lang('Upload files')
         </span>
 
+        <a class="uk-button uk-button-large uk-button-danger uk-animation-fade uk-float-right uk-margin-right" onclick="{ removeselected }" if="{ selected.length }">
+            @lang('Delete') <span class="uk-badge uk-badge-contrast uk-margin-small-left">{ selected.length }</span>
+        </a>
+
     </div>
 
     <div ref="uploadprogress" class="uk-margin uk-hidden">
@@ -63,7 +72,7 @@
     </div>
 
 
-    <div name="container" class="uk-grid uk-grid-match uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-sortable" show="{files && files.length}">
+    <div name="container" class="uk-grid uk-grid-small uk-grid-match uk-grid-width-medium-1-3 uk-grid-width-large-1-4 uk-sortable" data-uk-sortable="animation:false" if="{files && files.length && listmode=='grid'}">
 
         <div class="uk-grid-margin" each="{file, idx in files}" show="{ infilter(file) }" data-path="{ file.path }">
             <div class="uk-panel uk-panel-box uk-panel-card">
@@ -87,7 +96,7 @@
                             <ul class="uk-nav uk-nav-dropdown">
                                 <li><a onclick="{ parent.rename }">@lang('Rename')</a></li>
                                 <li class="uk-nav-divider"></li>
-                                <li><a onclick="{ parent.remove }">@lang('Delete')</a></li>
+                                <li class="uk-nav-item-danger"><a onclick="{ parent.remove }">@lang('Delete')</a></li>
                             </ul>
                         </div>
                     </span>
@@ -104,8 +113,45 @@
         </div>
     </div>
 
+    <table class="uk-table uk-table-tabbed uk-table-striped uk-margin-large-top" if="{files && files.length && listmode=='list'}">
+        <thead>
+            <tr>
+                <th width="20"><input type="checkbox" data-check="all"></th>
+                <th width="30"></th>
+                <th class="uk-text-small">{ App.i18n.get('Name') }</th>
+                <th class="uk-text-small">{ App.i18n.get('Type') }</th>
+                <th class="uk-text-small">{ App.i18n.get('Size') }</th>
+                <th width="20"></th>
+            </tr>
+        </thead>
+        <tbody data-uk-sortable="animation:false">
+            <tr each="{file, idx in files}" show="{ infilter(file) }" data-path="{ file.path }">
+                <td><input type="checkbox" data-check data-id="{ file.path }"></td>
+                <td class="uk-text-center">
+                    <cp-thumbnail src="{file.url}" width="20" height="20" if="{file.isImage}"></cp-thumbnail>
+                    <i class="uk-icon-{ copilot.getFileIconCls(file.filename) }" if="{!file.isImage}"></i>
+                </td>
+                <td><div class="uk-text-truncate"><a href="@route('/copilot/file'){ file.relpath }">{ file.filename }</a></div></td>
+                <td class="uk-text-small">{ file.mime }</td>
+                <td class="uk-text-small">{ file.fsize }</td>
+                <td>
+                    <span data-uk-dropdown="mode:'click', pos:'bottom-right'">
+                        <a><i class="uk-icon-bars"></i></a>
+                        <div class="uk-dropdown uk-dropdown-close">
+                            <ul class="uk-nav uk-nav-dropdown">
+                                <li><a onclick="{ parent.rename }">@lang('Rename')</a></li>
+                                <li class="uk-nav-divider"></li>
+                                <li class="uk-nav-item-danger"><a onclick="{ parent.remove }">@lang('Delete')</a></li>
+                            </ul>
+                        </div>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-    <div class="uk-margin-large-top uk-viewport-height-1-3 uk-container-center uk-text-center uk-flex uk-flex-middle uk-flex-center uk-animation-scale" if="{files && !files.length}">
+
+    <div class="uk-margin-large-top uk-viewport-height-1-3 uk-container-center uk-text-center uk-flex uk-flex-middle uk-flex-center uk-animation-scale" show="{files && !files.length}">
 
         <div>
 
@@ -134,11 +180,12 @@
         this.parents = {{ json_encode(array_reverse($page->parents()->toArray())) }};
         this.files   = null;
 
+        this.listmode = App.session.get('copilot.files.listmode', 'grid');
+        this.loading  = false;
+        this.selected = [];
         this.currentpath = App.Utils.dirname($this.page.relpath);
 
         this.on('mount', function(){
-
-            this.loadPath();
 
             // handle uploads
             App.assets.require(['/assets/lib/uikit/js/components/upload.js'], function() {
@@ -185,9 +232,9 @@
                 uploadselecttwo = UIkit.uploadSelect(App.$('.js-upload-select-two', $this.root)[0], uploadSettings),
                 uploaddrop      = UIkit.uploadDrop('body', uploadSettings);
 
-                UIkit.init(this.root);
+                App.$($this.root).on("change.uk.sortable", function(e, sortable, ele) {
 
-                var sortable = UIkit.sortable(App.$('[name="container"]'), {animation: true}).element.on("change.uk.sortable", function(e, sortable, ele) {
+                    if (!ele) return;
 
                     var order = [], fromIndex, toIndex = ele.index(), path = ele.attr('data-path');
 
@@ -205,24 +252,34 @@
                     });
                 });
             });
+
+            App.$(this.root).on('click', '[data-check]', function() {
+
+                if (this.getAttribute('data-check') == 'all') {
+                    App.$($this.root).find('[data-check][data-id]').prop('checked', this.checked);
+                }
+
+                $this.checkselected();
+                $this.update();
+            });
+
+            this.loadPath();
         });
 
         loadPath() {
 
-            $this.refs.loadprogress.classList.remove('uk-hidden');
+            this.loading = true;
 
             App.request('/copilot/utils/getPageResources', {path:this.page.path}).then(function(data) {
 
                 setTimeout(function(){
 
-                    $this.refs.loadprogress.classList.add('uk-hidden');
+                    $this.loading = false;
                     $this.files = data || [];
                     $this.update();
 
                 }, 100);
-
             });
-
         }
 
         rename(e, item) {
@@ -262,8 +319,71 @@
                     $this.files.splice(index, 1);
                     App.ui.notify("File deleted", "success");
                     $this.update();
+                    $this.checkselected();
                 });
             });
+        }
+
+        removeselected() {
+
+            if (this.selected.length) {
+
+                App.ui.confirm("Are you sure?", function() {
+
+                    var promises = [];
+
+                    this.files = this.files.filter(function(file, yepp){
+
+                        yepp = ($this.selected.indexOf(file.path) === -1);
+
+                        if (!yepp) {
+                            promises.push(App.request('/copilot/utils/deleteResource', {path:file.path}));
+                        }
+
+                        return yepp;
+                    });
+
+                    Promise.all(promises).then(function(){
+
+                        App.ui.notify("Files deleted", "success");
+
+                        $this.loading = false;
+                        $this.update();
+                    });
+
+                    this.loading = true;
+                    this.update();
+                    this.checkselected(true);
+
+                }.bind(this));
+            }
+        }
+
+        toggleListMode() {
+            this.selected = [];
+            this.listmode = this.listmode=='list' ? 'grid':'list';
+            App.session.set('copilot.files.listmode', this.listmode);
+        }
+
+        checkselected(update) {
+
+            var checkboxes = App.$(this.root).find('[data-check][data-id]'),
+                selected   = checkboxes.filter(':checked');
+
+            this.selected = [];
+
+            if (selected.length) {
+
+                selected.each(function(){
+                    $this.selected.push(App.$(this).attr('data-id'));
+                });
+            }
+
+            App.$(this.root).find('[data-check="all"]').prop('checked', checkboxes.length && checkboxes.length === selected.length);
+
+            if (update) {
+                this.update();
+            }
         }
 
         function requestapi(data, fn, type) {

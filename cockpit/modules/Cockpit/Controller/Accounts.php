@@ -11,8 +11,9 @@ class Accounts extends \Cockpit\AuthController {
         }
 
         $current  = $this->user["_id"];
+        $groups   = $this->module('cockpit')->getGroups();
 
-        return $this->render('cockpit:views/accounts/index.php', compact('current'));
+        return $this->render('cockpit:views/accounts/index.php', compact('current', 'groups'));
     }
 
 
@@ -30,7 +31,7 @@ class Accounts extends \Cockpit\AuthController {
 
         unset($account["password"]);
 
-        $fields    = $this->app->retrieve('config/accounts/fields', null);
+        $fields    = $this->app->retrieve('config/account/fields', null);
         $languages = $this->getLanguages();
         $groups    = $this->module('cockpit')->getGroups();
 

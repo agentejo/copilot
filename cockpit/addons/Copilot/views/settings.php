@@ -63,8 +63,8 @@
                             <span class="uk-badge uk-badge-danger">@lang('Free Trial')</span>
 
                             <div class="uk-margin-small-top uk-text-muted">
-                                @lang('Unlicensed version. Enjoy your free trial.') 
-                                <a href="http://getcockpit.com" target="_blank">@lang('Buy a license')</a>
+                                @lang('Unlicensed version. Enjoy your free trial.')
+                                <a href="http://agentejo.com" target="_blank">@lang('Buy a license')</a>
                             </div>
                             @endif
                         </div>
@@ -102,7 +102,7 @@
                 </div>
 
             </div>
-            
+
         </div>
     </form>
 

@@ -6,7 +6,7 @@
             <strong class="uk-flex-item-1">Copilot</strong>
             <span class="uk-badge {{ (strtolower($license)=='trial') ? 'uk-badge-danger':'' }} uk-flex uk-flex-middle uk-text-uppercase"><span>{{ $license }}</span></span>
             @if(strtolower($license)=='trial')
-            <a class="uk-button uk-button-link uk-button-small uk-margin-small-left" href="http://getcockpit.com" target="_blank">@lang('Buy a license')</a>
+            <a class="uk-button uk-button-link uk-button-small uk-margin-small-left" href="http://agentejo.com" target="_blank">@lang('Buy a license')</a>
             @endif
         </div>
 

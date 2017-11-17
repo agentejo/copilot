@@ -22,7 +22,13 @@
                 </div>
                 <a class="uk-position-cover" href="@route('/collections/entry/'.$collection['name'])/{ entry._id }"></a>
             </div>
-            <div class="uk-flex uk-flex-middle uk-margin-top">
+            <div class="collection-grid-avatar-container">
+                <div class="collection-grid-avatar">
+                    <cp-account account="{entry._mby || entry._by}" label="{false}" size="40" if="{entry._mby || entry._by}"></cp-account>
+                    <cp-gravatar alt="?" size="40" if="{!(entry._mby || entry._by)}"></cp-gravatar>
+                </div>
+            </div>
+            <div class="uk-flex uk-flex-middle uk-margin-small-top">
 
                 <div class="uk-flex-item-1 uk-margin-small-right uk-text-small">
                     <span class="uk-text-success uk-margin-small-right">{ App.Utils.dateformat( new Date( 1000 * entry._created )) }</span>
@@ -39,7 +45,7 @@
                             <li><a href="@route('/collections/entry/'.$collection['name'])/{ entry._id }">@lang('Edit')</a></li>
 
                             @if($app->module('collections')->hasaccess($collection['name'], 'entries_delete'))
-                            <li><a class="uk-dropdown-close" onclick="{ parent.remove }">@lang('Delete')</a></li>
+                            <li class="uk-nav-item-danger"><a class="uk-dropdown-close" onclick="{ parent.remove }">@lang('Delete')</a></li>
                             @endif
 
                             @if($app->module('collections')->hasaccess($collection['name'], 'entries_create'))
@@ -65,14 +71,14 @@
 
 </div>
 
-<table class="uk-table uk-table-border uk-table-striped uk-margin-large-top" if="{ entries.length && !loading && listmode=='list' }">
+<table class="uk-table uk-table-tabbed uk-table-striped uk-margin-large-top" if="{ entries.length && !loading && listmode=='list' }">
     <thead>
         <tr>
             @if($app->module('collections')->hasaccess($collection['name'], 'entries_delete'))
             <th width="20"><input type="checkbox" data-check="all"></th>
             @endif
             <th width="{field.name == '_modified' || field.name == '_created' ? '80':''}" class="uk-text-small" each="{field,idx in fields}" if="{ hasFieldAccess(field.name) }">
-                <a class="uk-link-muted { parent.sortedBy == field.name ? 'uk-text-primary':'' }" onclick="{ parent.updatesort }" data-sort="{ field.name }">
+                <a class="uk-link-muted uk-noselect { parent.sortedBy == field.name ? 'uk-text-primary':'' }" onclick="{ parent.updatesort }" data-sort="{ field.name }">
 
                     { field.label || field.name }
 
@@ -106,7 +112,7 @@
                             <li><a href="@route('/collections/entry/'.$collection['name'])/{ entry._id }">@lang('Edit')</a></li>
 
                             @if($app->module('collections')->hasaccess($collection['name'], 'entries_delete'))
-                            <li><a class="uk-dropdown-close" onclick="{ parent.remove }">@lang('Delete')</a></li>
+                            <li class="uk-nav-item-danger"><a class="uk-dropdown-close" onclick="{ parent.remove }">@lang('Delete')</a></li>
                             @endif
 
                             @if($app->module('collections')->hasaccess($collection['name'], 'entries_create'))
