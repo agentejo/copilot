@@ -78,9 +78,9 @@
                     <div class="uk-alert">{ type.description }</div>
                 </div>
 
-                <ul class="uk-tab uk-margin" if="{ tabs && tabs.length }">
+                <ul class="uk-tab uk-margin" if="{ tabs && tabs.length > 1 }">
                     <li class="{ t == parent.tab ? 'uk-active':'' }" each="{t in tabs}">
-                        <a onclick="{ parent.selectTab }" select="{t}">{t}</a>
+                        <a onclick="{ parent.selectTab }" select="{t}">{ App.i18n.get(t) }</a>
                     </li>
                 </ul>
 
@@ -302,7 +302,7 @@
 
         Object.keys(this.type.meta || {}).forEach(function(key, group){
 
-            group = $this.type.meta[key].group || 'Fields';
+            group = $this.type.meta[key].group || 'Main';
 
             if (!$this.meta[group]) {
                 $this.meta[group] = {};

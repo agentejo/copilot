@@ -25,12 +25,12 @@
         <div class="uk-grid-margin uk-width-medium-1-4">
 
             <div class="uk-panel">
-                <h4>@lang('Site')</h4>
+                <span class="uk-badge uk-badge-outline uk-text-primary">@lang('Site')</span>
 
-                <div class="uk-text-truncate">
+                <div class="uk-margin">
                     <ul class="uk-list uk-list-space">
                         <li>
-                            <a href="{{ $app->pathToUrl('site:') }}" target="_blank">
+                            <a href="{{ $app->pathToUrl('site:') }}" target="_blank" rel="noopener">
                                 <i class="uk-icon-globe uk-icon-justify"></i> @lang('View page')
                             </a>
                         </li>
