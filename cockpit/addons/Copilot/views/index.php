@@ -35,6 +35,7 @@
                             </a>
                         </li>
                         <li><a href="@route('/copilot/settings')"><i class="uk-icon-cogs uk-icon-justify"></i> @lang('Settings')</a></li>
+                        <li><a href="@route('/copilot/finder')"><i class="uk-icon-folder-o uk-icon-justify"></i> @lang('Files')</a></li>
                     </ul>
                 </div>
             </div>
@@ -64,7 +65,7 @@
                                         <li><a href="@route('/copilot/pages'){home.relpath}">@lang('Sub Pages')</a></li>
                                         <li><a href="@route('/copilot/files'){home.relpath}">@lang('Files')</a></li>
                                         <li class="uk-nav-divider"></li>
-                                        <li><a onclick="{ remove }" data-path="{ home.path }">@lang('Delete')</a></li>
+                                        <li class="uk-nav-item-danger"><a onclick="{ remove }" data-path="{ home.path }">@lang('Delete')</a></li>
                                     </ul>
                                 </div>
                             </span>
@@ -101,7 +102,7 @@
                                         <li><a href="@route('/copilot/pages'){page.relpath}">@lang('Sub Pages')</a></li>
                                         <li><a href="@route('/copilot/files'){page.relpath}">@lang('Files')</a></li>
                                         <li class="uk-nav-divider"></li>
-                                        <li><a onclick="{ parent.remove }" data-path="{ page.path }">@lang('Delete')</a></li>
+                                        <li class="uk-nav-item-danger"><a onclick="{ parent.remove }" data-path="{ page.path }">@lang('Delete')</a></li>
                                     </ul>
 
                                     <div class="uk-margin"  if="{ copilot.getType(page.type).subpages !== false }">
