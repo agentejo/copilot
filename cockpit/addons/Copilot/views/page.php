@@ -431,7 +431,7 @@
 
         save(e) {
 
-            if(e) e.preventDefault();
+            if (e) e.preventDefault();
 
             if (!$this.page.isWritable) {
                 App.ui.alert("This page is not writable!");
@@ -440,7 +440,7 @@
 
             App.request('/copilot/utils/updatePage', {page: this.page, updates: this.updates}).then(function(page) {
 
-                App.$.extend($this.page, page);
+                $this.page = page;
                 $this.updates = { slug: '' };
                 $this.update();
 

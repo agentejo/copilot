@@ -1,0 +1,17 @@
+{%
+
+    $gallery = isset($settings['gallery']) && is_array($settings['gallery']) ? $settings['gallery'] : [];
+
+    if (!count($gallery)) {
+        return;
+    }
+%}
+<div id="{{ @$settings['id'] }}" class="cp-builder-gallery cp-margin cp-grid cp-child-w-1-4@m {{ @$settings['class'] }}">
+    
+    @foreach($gallery as $item)
+    <div>
+        <img src="@url($item['path'])">
+    </div>
+    @endforeach
+
+</div>

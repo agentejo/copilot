@@ -1,0 +1,9 @@
+@extend('theme:layout.html') 
+
+{%
+
+    $layout = $page->meta('layoutbuilder', []);
+
+
+    render_layoutbuilder_elements($layout);
+%}

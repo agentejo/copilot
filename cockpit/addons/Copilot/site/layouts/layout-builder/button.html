@@ -1,0 +1,14 @@
+{%
+    
+    $text = isset($settings['text']) && is_string($settings['text']) ? $settings['text'] : 'Button';
+    $url = isset($settings['url']) && is_string($settings['url']) ? $settings['url'] : '';
+%}
+
+<div id="{{ @$settings['id'] }}" class="cp-builder-button cp-margin">
+
+    @if($url)
+    <a class="cp-button {{ @$settings['class'] }}" href="@url($url)">{{ $text }}</a>
+    @else
+    <button class="cp-button {{ @$settings['class'] }}">{{ $text }}</button>
+    @endif
+</div>

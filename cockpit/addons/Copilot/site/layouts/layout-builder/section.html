@@ -1,0 +1,9 @@
+<div id="{{ @$settings['id'] }}" class="cp-margin {{ @$settings['class'] }}">
+
+    {% 
+        if (count($element['children'])) { 
+            render_layoutbuilder_elements($element['children']); 
+        } 
+    %}
+
+</div>

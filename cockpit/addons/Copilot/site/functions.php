@@ -148,3 +148,16 @@ function thumb_url($image, $width = null, $height = null, $options = array()) {
 
     return $url;
 }
+
+
+function render_layoutbuilder_elements($layout) {
+
+    foreach ($layout as &$element) {
+
+        $component = $element['component'];
+        $settings  = $element['settings'];
+        $children  = isset($element['children']) ? $element['children'] : [];
+        
+        echo copi::view("layouts:layout-builder/{$component}.html", compact('element', 'component', 'settings', 'children'));
+    }
+}

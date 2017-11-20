@@ -148,6 +148,7 @@ $site->service('renderer', function() use($site) {
             'end'      => '<?php $app->end(expr); ?>',
             'block'    => '<?php $app->block(expr); ?>',
             'url'      => '<?php echo url_to(expr); ?>',
+            'dump'     => '<?php var_dump(expr); ?>',
 
             'render'   => '<?php echo copi::view(expr); ?>',
             'menu'     => '<?php echo copi::menu(expr); ?>',

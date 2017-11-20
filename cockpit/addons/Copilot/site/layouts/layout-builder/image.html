@@ -1,0 +1,11 @@
+{%
+    
+    $src = isset($settings['image']['path']) && $settings['image']['path'] ? $settings['image']['path'] : null; 
+    
+    if (!$src) {
+        return;
+    }
+%}
+<div id="{{ @$settings['id'] }}" class="cp-builder-image cp-margin {{ @$settings['class'] }}">
+    <img src="@url($settings['image']['path'])" width="{{ @$settings['width'] }}" height="{{ @$settings['height'] }}" alt="">
+</div>

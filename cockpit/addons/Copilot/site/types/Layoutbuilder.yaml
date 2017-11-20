@@ -1,4 +1,9 @@
 label: Layout Builder
+layout: layoutbuilder
 content:
-    type: htmlbuilder
-    parse: false
+    visible: false
+
+meta:
+    layoutbuilder:
+        type: layout
+        label: Page Layout
