@@ -1,12 +1,12 @@
-{% 
-    
-    $html = isset($settings['html']) && is_string($settings['html']) ? $settings['html'] : ''; 
-    
-    if (!trim($html)) { 
-        return; 
-    } 
+{%
+
+    $html = isset($settings['html']) && is_string($settings['html']) ? $settings['html'] : '';
+
+    if (!trim($html)) {
+        return;
+    }
 %}
 
-<div id="{{ @$settings['id'] }}" class="cp-builder-html cp-margin {{ @$settings['class'] }}">
+<div id="{{ @$settings['id'] }}" class="cp-builder-html cp-m {{ @$settings['class'] }}">
     {{ $html }}
 </div>

@@ -1,10 +1,10 @@
-{% 
-    
+{%
+
     if (!trim(strip_tags(@$settings['text']))) {
         return;
     }
 %}
 
-<div id="{{ @$settings['id'] }}" class="cp-margin {{ @$settings['class'] }}">
+<div id="{{ @$settings['id'] }}" class="cp-m {{ @$settings['class'] }}">
     {{ @$settings['text'] }}
 </div>

@@ -1,6 +1,6 @@
-{% 
-    
-    $columns = isset($element['columns']) && is_array($element['columns']) ? $element['columns'] : []; 
+{%
+
+    $columns = isset($element['columns']) && is_array($element['columns']) ? $element['columns'] : [];
 
 
     if (!count($columns)) {
@@ -8,7 +8,7 @@
     }
 %}
 
-<div id="{{ @$settings['id'] }}" class="cp-builder-grid cp-grid cp-margin cp-child-w-1-{{ count($columns)}}@m {{ @$settings['class'] }}">
+<div id="{{ @$settings['id'] }}" class="cp-builder-grid cp-grid cp-m cp-child-w-1-{{ count($columns)}}@m {{ @$settings['class'] }}">
 
     @foreach($columns as &$column)
     <div id="{{ @$column['settings']['id'] }}" class="{{ @$column['settings']['class'] }}">
