@@ -1,5 +1,11 @@
 <field-gallery>
 
+    <div ref="uploadprogress" class="uk-margin uk-hidden">
+        <div class="uk-progress">
+            <div ref="progressbar" class="uk-progress-bar" style="width: 0%;">&nbsp;</div>
+        </div>
+    </div>
+
     <div ref="panel">
 
         <div ref="imagescontainer" class="uk-sortable uk-grid uk-grid-match uk-grid-small uk-flex-center uk-grid-gutter uk-grid-width-medium-1-4" show="{ images && images.length }">
@@ -138,6 +144,67 @@
                     }, 30)
                 }, 10);
 
+            });
+
+            // handle uploads
+
+            var _uploads = [];
+
+            App.assets.require(['/assets/lib/uikit/js/components/upload.js'], function() {
+
+                UIkit.uploadDrop($this.root, {
+
+                    action: App.route('/assetsmanager/upload'),
+                    type: 'json',
+                    allow : '*.(jpg|jpeg|gif|png)',
+                    beforeAll: function() {
+                        _uploads = [];
+                    },
+                    loadstart: function() {
+                        $this.refs.uploadprogress.classList.remove('uk-hidden');
+                    },
+                    progress: function(percent) {
+
+                        percent = Math.ceil(percent) + '%';
+
+                        $this.refs.progressbar.innerHTML   = '<span>'+percent+'</span>';
+                        $this.refs.progressbar.style.width = percent;
+                    },
+
+                    complete: function(response) {
+
+                        if (response && response.failed && response.failed.length) {
+                            App.ui.notify("File(s) failed to uploaded.", "danger");
+                        }
+
+                        if (response && Array.isArray(response.assets) && response.assets.length) {
+
+                            response.assets.forEach(function(asset){
+
+                                if (asset.mime.match(/^image\//)) {
+                                    _uploads.push({
+                                        meta:{title:'', asset: asset._id},
+                                        path: ASSETS_URL.replace(SITE_URL, '')+asset.path
+                                    });
+                                }
+                            });
+                        }
+
+                        if (!response) {
+                            App.ui.notify("Something went wrong.", "danger");
+                        }
+                    },
+
+                    allcomplete: function(response) {
+
+                        $this.refs.uploadprogress.classList.add('uk-hidden');
+
+                        if (Array.isArray(_uploads) && _uploads.length) {
+
+                            $this.$setValue($this.images.concat(_uploads));
+                        }
+                    }
+                });
             });
 
         });

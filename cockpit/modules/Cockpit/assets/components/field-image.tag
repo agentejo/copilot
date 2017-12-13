@@ -1,10 +1,16 @@
 <field-image>
 
+    <div ref="uploadprogress" class="uk-margin uk-hidden">
+        <div class="uk-progress">
+            <div ref="progressbar" class="uk-progress-bar" style="width: 0%;">&nbsp;</div>
+        </div>
+    </div>
+
     <div class="uk-display-block uk-panel uk-panel-box uk-panel-card">
 
         <div class="uk-flex uk-flex-middle uk-flex-center uk-text-muted">
             <div class="uk-width-1-1 uk-text-center" if="{ image.path }">
-                <cp-thumbnail src="{ (SITE_URL+'/'+image.path) }" height="160"></cp-thumbnail>
+                <cp-thumbnail src="{ image.path.match(/^(http\:|https\:|\/\/)/) ? image.path : (SITE_URL+'/'+image.path) }" height="160"></cp-thumbnail>
             </div>
             <div class="uk-text-center uk-margin-top uk-margin-bottom" show="{ !image.path }">
                 <img class="uk-svg-adjust uk-text-muted" riot-src="{App.base('/assets/app/media/icons/photo.svg')}" width="60" data-uk-svg>
@@ -86,6 +92,50 @@
                     label: 'Title'
                 }
             });
+
+            // handle uploads
+            App.assets.require(['/assets/lib/uikit/js/components/upload.js'], function() {
+
+                UIkit.uploadDrop($this.root, {
+
+                    action: App.route('/assetsmanager/upload'),
+                    type: 'json',
+                    allow : '*.(jpg|jpeg|gif|png)',
+                    filelimit: 1,
+                    before: function(options) {
+
+                    },
+                    loadstart: function() {
+                        $this.refs.uploadprogress.classList.remove('uk-hidden');
+                    },
+                    progress: function(percent) {
+
+                        percent = Math.ceil(percent) + '%';
+
+                        $this.refs.progressbar.innerHTML   = '<span>'+percent+'</span>';
+                        $this.refs.progressbar.style.width = percent;
+                    },
+                    allcomplete: function(response) {
+
+                        $this.refs.uploadprogress.classList.add('uk-hidden');
+
+                        if (response && response.failed && response.failed.length) {
+                            App.ui.notify("File(s) failed to uploaded.", "danger");
+                        }
+
+                        if (response && Array.isArray(response.assets) && response.assets.length) {
+                            $this.image.path = ASSETS_URL.replace(SITE_URL, '')+response.assets[0].path;
+                            $this.$setValue($this.image);
+                        }
+
+                        if (!response) {
+                            App.ui.notify("Something went wrong.", "danger");
+                        }
+
+                    }
+                });
+            });
+
         });
 
         this.$updateValue = function(value, field) {
