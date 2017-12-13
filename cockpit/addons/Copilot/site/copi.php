@@ -251,8 +251,6 @@ class copi {
     public static function render_page($view, $slots = []) {
 
         $view = self::$app->path($view);
-        $meta = self::$meta;
-        $site = self::$app;
 
         // page not found
         if (!$view) {
@@ -264,9 +262,17 @@ class copi {
             return false;
         }
 
-        $page        = new Copilot\Lib\Page($view);
-        $meta->page  = $page;
+        $page = new Copilot\Lib\Page($view);
 
+        return self::_render_page($page, $slots);
+    }
+
+    public static function _render_page($page, $slots = []) {
+
+        $meta = self::$meta;
+        $site = self::$app;
+
+        $meta->page  = $page;
         $meta->extend($meta->page->meta());
         $site->path('current', $page->dir());
 

@@ -564,6 +564,10 @@ class Page {
         return $this->contents;
     }
 
+    public function setContents($content) {
+        $this->contents = $content;
+    }
+
     /**
      * @param null $part
      * @param array $slots

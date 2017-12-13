@@ -1,3 +1,5 @@
+<script type="riot/tag" src="@base('copilot:assets/components/pagepreview.html')"></script>
+
 <div class="uk-form" riot-view>
 
     <ul  class="uk-breadcrumb">
@@ -84,7 +86,7 @@
                     </li>
                 </ul>
 
-                <div class="uk-grid" show="{tab == name}" tab="{name}" each="{group, name in meta}">
+                <div class="uk-grid" show="{tab == name}" tab="{name}" each="{group, name in meta}" if="{!preview}">
 
                     <div class="uk-width-medium-{field.width || '1-1'} uk-grid-margin" each="{field, fname in group}" no-reorder>
 
@@ -235,28 +237,7 @@
 
     </form>
 
-    <div id="modal-preview" class="uk-modal">
-        <div class="uk-modal-dialog uk-modal-dialog-blank uk-height-viewport uk-flex uk-flex-column">
-            <div class="uk-flex uk-flex-middle preview-header">
-
-                <span class="uk-margin-left uk-text-bold uk-text-primary"><i class="uk-icon-eye uk-margin-small-right"></i> @lang('Live')</span>
-
-                <ul class="uk-subnav uk-text-large uk-margin-left uk-flex-item-1 uk-flex-center uk-margin-small-top">
-                    <li><a onclick="App.$('#preview-frame').css('max-width', 360).attr('screen', 'mobile')"><i class="uk-icon-mobile-phone"></i></a></li>
-                    <li><a onclick="App.$('#preview-frame').css('max-width', 768).attr('screen', 'tablet')"><i class="uk-icon-tablet"></i></a></li>
-                    <li><a onclick="App.$('#preview-frame').css('max-width', '100%').attr('screen', '')"><i class="uk-icon-desktop"></i></a></li>
-                </ul>
-
-                <a class="uk-margin-right" href="{{ $page->url() }}" target="_blank"><i class="uk-icon-share"></i></a>
-
-                <a class="uk-modal-close uk-link-muted uk-margin-right"><i class="uk-icon-button uk-icon-close"></i></a>
-
-            </div>
-            <div class="uk-position-relative uk-bg-light uk-flex-item-1">
-                <iframe id="preview-frame" name="preview-frame" class="uk-position-top uk-container-center" riot-src="{ page.url }?_m={page.meta.modified}" width="100%" height="100%"></iframe>
-            </div>
-        </div>
-    </div>
+    <cp-pagepreview page="{page}" meta="{meta}" type="{type}" contentype="{contentType}" if="{preview}"></cp-pagepreview>
 
     <style>
 
@@ -425,8 +406,7 @@
         }
 
         showPreview() {
-            App.$('#preview-frame').attr('src', [this.page.url, '?_m=', this.page.meta.modified, '&nc=', Math.random()].join(''));
-            UIkit.modal('#modal-preview').show();
+            this.preview = true;
         }
 
         save(e) {
