@@ -227,18 +227,20 @@
 
             var data = { page: this.page }, scrollX = this.$iframe.scrollX, scrollY = this.$iframe.scrollY;
 
-
             App.request('/copilot/page-preview', data, 'html').then(function(response) {
-                $this.$iframe.document.open();
+
+                $this.$iframe.document.open('text/html', 'replace');
                 $this.$iframe.document.write(response);
 
-                // prevent leaving page
-                App.$($this.$iframe.document).on('click', 'a[href]:not([href^="#"])', function(e) {
-                    e.preventDefault();
-                });
-
                 setTimeout(function() {
+
                     $this.$iframe.scrollTo(scrollX, scrollY);
+
+                    // prevent leaving page
+                    App.$($this.$iframe.document.body).on('click', 'a[href]:not([href^="#"])', function(e) {
+                        e.preventDefault();
+                    });
+
                 }, 50);
             });
 
