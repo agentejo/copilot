@@ -36,15 +36,20 @@ class RestApi extends \LimeExtra\Controller {
         if ($skip     = $this->param('skip', null))     $options['skip'] = intval($skip);
         if ($populate = $this->param('populate', null)) $options['populate'] = $populate;
 
+        // cast string values if get request
+        if ($filter && isset($_GET['filter'])) {
+            $options['filter'] = $this->_fixStringBooleanNumericValues($filter);
+        }
+
         // fields filter
         $fieldsFilter = [];
 
-        if ($fieldsFilter = $this->param('fieldsFilter', null)) $options['fieldsFilter'] = $fieldsFilter;
+        if ($fieldsFilter = $this->param('fieldsFilter', [])) $options['fieldsFilter'] = $fieldsFilter;
         if ($lang = $this->param('lang', false)) $fieldsFilter['lang'] = $lang;
         if ($ignoreDefaultFallback = $this->param('ignoreDefaultFallback', false)) $fieldsFilter['ignoreDefaultFallback'] = $ignoreDefaultFallback;
         if ($user) $fieldsFilter["user"] = $user;
 
-        if (count($fieldsFilter)) {
+        if (is_array($fieldsFilter) && count($fieldsFilter)) {
             $options['fieldsFilter'] = $fieldsFilter;
         }
 
@@ -155,7 +160,7 @@ class RestApi extends \LimeExtra\Controller {
         $name = $this->param('name', null);
         $data = $this->param('data', null);
 
-        if (!$name || !$data || !$user) {
+        if (!$name || !$data) {
             return false;
         }
 
@@ -168,19 +173,18 @@ class RestApi extends \LimeExtra\Controller {
         return $collection;
     }
 
-    public function updateCollection() {
+    public function updateCollection($name = null) {
 
         $user = $this->module('cockpit')->getUser();
-        $name = $this->param('name', null);
         $data = $this->param('data', null);
 
-        if (!$name || !$data || !$user) {
+        if (!$name || !$data) {
             return false;
         }
 
         $collection = $this->module('collections')->collection($name);
 
-        if ($user && !$this->module('cockpit')->isSuperAdmin()) {
+        if ($user && !$this->module('collections')->hasaccess($collection, 'collection_edit')) {
             return $this->stop('{"error": "Unauthorized"}', 401);
         }
 
@@ -193,11 +197,11 @@ class RestApi extends \LimeExtra\Controller {
 
         $user = $this->module('cockpit')->getUser();
 
-        if (!$user) {
-            return $this->stop('{"error": "Unauthorized"}', 401);
+        if ($user) {
+            $collections = $this->module("collections")->getCollectionsInGroup($user['group'], true);
+        } else {
+            $collections = $this->module("collections")->collections(true);
         }
-
-        $collections = $this->module("collections")->getCollectionsInGroup($user['group'], true);
 
         if (!isset($collections[$name])) {
            return $this->stop('{"error": "Collection not found"}', 412);
@@ -217,5 +221,32 @@ class RestApi extends \LimeExtra\Controller {
         }
 
         return $extended ? $collections : array_keys($collections);
+    }
+
+    protected function _fixStringBooleanNumericValues(&$array) {
+
+        if (!is_array($array)) {
+            return $array;
+        }
+
+        foreach ($array as $k => $v) {
+
+            if (is_array($array[$k])) {
+                $array[$k] = $this->_fixStringBooleanNumericValues($array[$k]);
+            }
+
+            if (is_string($v)) {
+
+                if ($v === 'true' || $v === 'false') {
+                    $v = filter_var($v, FILTER_VALIDATE_BOOLEAN);
+                } elseif(is_numeric($v)) {
+                    $v = $v + 0;
+                }
+            }
+
+            $array[$k] = $v;
+        }
+
+        return $array;
     }
 }

@@ -3,6 +3,7 @@
 // Helpers
 
 $this->helpers['revisions']  = 'Cockpit\\Helper\\Revisions';
+$this->helpers['updater']  = 'Cockpit\\Helper\\Updater';
 
 // API
 
@@ -40,7 +41,7 @@ $this->module("cockpit")->extend([
             foreach ($files as $file) {
 
                 if (!$file->isFile()) continue;
-                if (preg_match('/(.gitkeep|index\.html)$/', $file)) continue;
+                if (preg_match('/(\.gitkeep|\.gitignore|index\.html)$/', $file)) continue;
 
                 @unlink($file->getRealPath());
             }
@@ -91,6 +92,7 @@ $this->module("cockpit")->extend([
             'cachefolder' => '#thumbs:',
             'src' => '',
             'mode' => 'thumbnail',
+            'fp' => null,
             'filter' => '',
             'width' => false,
             'height' => false,
@@ -122,6 +124,11 @@ $this->module("cockpit")->extend([
                 if ($src) {
                     $src = str_replace(COCKPIT_SITE_DIR, '', $src);
                 }
+
+                if (isset($asset['fp']) && !$fp) {
+                    $fp = $asset['fp']['x'].' '.$asset['fp']['y'];
+                }
+
             }
         }
 
@@ -160,6 +167,10 @@ $this->module("cockpit")->extend([
             return $this->app->pathToUrl($path);
         }
 
+        if (!$fp) {
+            $fp = 'center';
+        }
+
         if (!in_array($mode, ['thumbnail', 'bestFit', 'resize','fitToWidth','fitToHeight'])) {
             $mode = 'thumbnail';
         }
@@ -167,13 +178,14 @@ $this->module("cockpit")->extend([
         $method = $mode == 'crop' ? 'thumbnail' : $mode;
 
         $filetime = filemtime($path);
-        $hash = md5($path.json_encode($options))."_{$width}x{$height}_{$quality}_{$filetime}_{$mode}.{$ext}";
+        $hash = md5($path.json_encode($options))."_{$width}x{$height}_{$quality}_{$filetime}_{$mode}_".md5($fp).".{$ext}";
         $savepath = rtrim($this->app->path($cachefolder), '/')."/{$hash}";
 
         if ($rebuild || !file_exists($savepath)) {
 
             try {
-                $img = $this->app->helper("image")->take($path)->{$method}($width, $height);
+
+                $img = $this->app->helper("image")->take($path)->{$method}($width, $height, $fp);
 
                 $_filters = [
                     'blur', 'brighten',

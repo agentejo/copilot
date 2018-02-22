@@ -77,7 +77,7 @@
 
                 </div>
 
-                <div class="uk-margin-top">
+                <div class="uk-margin-large-top">
                     <button class="uk-button uk-button-large uk-button-primary uk-margin-right">@lang('Save')</button>
                     <a href="@route('/collections/entries/'.$collection['name'])">
                         <span show="{ !entry._id }">@lang('Cancel')</span>
@@ -139,7 +139,7 @@
 
     </div>
 
-    <collection-entrypreview entry="{entry}" groups="{ groups }" fields="{ fields }" fieldsidx="{ fieldsidx }" excludeFields="{ excludeFields }" languages="{ languages }" settings="{ collection.contentpreview }" if="{ preview }"></collection-entrypreview>
+    <collection-entrypreview collection="{collection}" entry="{entry}" groups="{ groups }" fields="{ fields }" fieldsidx="{ fieldsidx }" excludeFields="{ excludeFields }" languages="{ languages }" settings="{ collection.contentpreview }" if="{ preview }"></collection-entrypreview>
 
     <script type="view/script">
 
@@ -156,7 +156,7 @@
 
         this.languages    = App.$data.languages;
         this.groups       = {Main:[]};
-        this.group        = 'Main';
+        this.group        = '';
 
         if (this.languages.length) {
             this.lang = App.session.get('collections.entry.'+this.collection._id+'.lang', '');
@@ -206,10 +206,6 @@
             $this.groups[field.group || 'Main'].push(field);
         });
 
-        if (!this.groups[this.group].length) {
-            this.group = Object.keys(this.groups)[1];
-        }
-
         this.on('mount', function(){
 
             // bind clobal command + save
@@ -238,7 +234,7 @@
 
                     App.ui.notify("Saving successful", "success");
 
-                    $this.entry = entry;
+                    _.extend($this.entry, entry);
 
                     $this.fields.forEach(function(field){
 

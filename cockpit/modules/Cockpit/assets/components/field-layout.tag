@@ -1,6 +1,7 @@
 <field-layout>
 
     <style>
+
         .layout-components > div {
             margin-bottom: 5px;
         }
@@ -14,19 +15,33 @@
             pointer-events: none;
         }
 
+        .layout-components.empty {
+            min-height: 100px;
+            border: 1px rgba(0,0,0,.1) solid;
+        }
+
+        .layout-components.empty:after {
+            font-family: FontAwesome;
+            content: "\f1b3";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 14px;
+            transform: translate3d(-50%, -50%, 0);
+            color: rgba(0,0,0,.3);
+        }
+
     </style>
 
-    <div class="uk-text-center uk-text-muted {opts.child ? 'uk-text-small':'uk-placeholder'}" show="{ !items.length }">
-        <img class="uk-svg-adjust" riot-src="{ App.base('/assets/app/media/icons/layout.svg') }" width="100" data-uk-svg>
-    </div>
 
-    <div class="uk-sortable layout-components" ref="components" show="{mode=='edit' && items.length}" data-uk-sortable="animation:false, group:'field-layout-items'">
+    <div class="uk-sortable layout-components {!items.length && 'empty'}" ref="components" data-uk-sortable="animation:false, group:'field-layout-items'">
+
         <div class="uk-panel-box uk-panel-card" each="{ item,idx in items }" data-idx="{idx}">
 
             <div class="uk-flex uk-flex-middle uk-text-small uk-visible-hover">
                 <img class="uk-margin-small-right" riot-src="{ parent.components[item.component].icon ? parent.components[item.component].icon : App.base('/assets/app/media/icons/component.svg')}" width="16">
                 <div class="uk-text-bold uk-text-truncate uk-flex-item-1">
-                    <a class="uk-link-muted" onclick="{ parent.settings }">{ parent.components[item.component].label || App.Utils.ucfirst(item.component) }</a>
+                    <a class="uk-link-muted" onclick="{ parent.settings }">{ item.name || parent.components[item.component].label || App.Utils.ucfirst(item.component) }</a>
                 </div>
                 <div class="uk-text-small uk-invisible">
                     <a onclick="{ parent.addComponent }" title="{ App.i18n.get('Add Component') }"><i class="uk-icon-plus"></i></a>
@@ -56,8 +71,13 @@
                 { App.i18n.get('Components') }
             </h3>
 
+            <ul class="uk-tab uk-margin-bottom uk-flex uk-flex-center uk-noselect" show="{ App.Utils.count(componentGroups) > 1 }">
+                <li class="{ !componentGroup && 'uk-active'}"><a class="uk-text-capitalize" onclick="{ toggleComponentGroup }">{ App.i18n.get('All') }</a></li>
+                <li class="{ group==parent.componentGroup && 'uk-active'}" each="{items,group in componentGroups}" show="{ items.length }"><a class="uk-text-capitalize" onclick="{ toggleComponentGroup }">{ App.i18n.get(group) }</a></li>
+            </ul>
+
             <div class="uk-grid uk-grid-match uk-grid-small uk-grid-width-medium-1-4">
-                 <div class="uk-grid-margin" each="{component,name in components}">
+                 <div class="uk-grid-margin" each="{component,name in components}" show="{ !componentGroup || (componentGroup == component.group) }">
                     <div class="uk-panel uk-panel-framed uk-text-center">
                         <img riot-src="{ component.icon || App.base('/assets/app/media/icons/component.svg')}" width="30">
                         <p class="uk-text-small">{ component.label || App.Utils.ucfirst(name) }</p>
@@ -66,7 +86,7 @@
                 </div>
             </div>
 
-            <div class="uk-text-right uk-margin-top">
+            <div class="uk-modal-footer uk-text-right">
                 <a class="uk-button uk-button-link uk-button-large uk-modal-close">{ App.i18n.get('Close') }</a>
             </div>
         </div>
@@ -77,10 +97,17 @@
 
             <a class="uk-modal-close uk-close"></a>
 
-            <h3 class="uk-margin-large-bottom">
-                <img class="uk-margin-small-right" riot-src="{ components[settingsComponent.component].icon ? components[settingsComponent.component].icon : App.base('/assets/app/media/icons/settings.svg')}" width="30">
-                { components[settingsComponent.component].label || App.Utils.ucfirst(settingsComponent.component) }
-            </h3>
+            <div class="uk-margin-large-bottom">
+                <div class="uk-grid uk-grid-small">
+                    <div>
+                        <img riot-src="{ components[settingsComponent.component].icon ? components[settingsComponent.component].icon : App.base('/assets/app/media/icons/settings.svg')}" width="30">
+                    </div>
+                    <div class="uk-flex-item-1">
+                        <h3 class="uk-margin-remove">{ components[settingsComponent.component].label || App.Utils.ucfirst(settingsComponent.component) }</h3>
+                        <input type="text" class="uk-form-blank uk-width-1-1 uk-text-primary" bind="settingsComponent.name" placeholder="Name" >
+                    </div>
+                </div>
+            </div>
 
             <ul class="uk-tab uk-margin-bottom uk-flex uk-flex-center">
                 <li class="{ !settingsGroup && 'uk-active'}"><a class="uk-text-capitalize" onclick="{ toggleGroup }">{ App.i18n.get('All') }</a></li>
@@ -105,7 +132,7 @@
                 </div>
             </div>
 
-            <div class="uk-text-right uk-margin-top">
+            <div class="uk-modal-footer uk-text-right">
                 <a class="uk-button uk-button-link uk-button-large uk-modal-close">{ App.i18n.get('Close') }</a>
             </div>
 
@@ -121,6 +148,7 @@
         this.mode = 'edit';
         this.items = [];
         this.settingsComponent = null;
+        this.componentGroups = {'Core':[]};
         this.generalSettingsFields  = [
             {name: "id", type: "text", group: "General" },
             {name: "class", type: "text", group: "General" },
@@ -129,14 +157,16 @@
 
         this.components = {
             "section": {
+                "group": "Core",
                 "children":true
             },
 
             "grid": {
-
+                "group": "Core"
             },
 
             "text": {
+                "group": "Core",
                 "icon": App.base('/assets/app/media/icons/text.svg'),
                 "dialog": "large",
                 "fields": [
@@ -145,6 +175,7 @@
             },
 
             "html": {
+                "group": "Core",
                 "icon": App.base('/assets/app/media/icons/code.svg'),
                 "dialog": "large",
                 "fields": [
@@ -153,6 +184,7 @@
             },
 
             "heading": {
+                "group": "Core",
                 "icon": App.base('/assets/app/media/icons/heading.svg'),
                 "fields": [
                     {"name": "text", "type": "text", "default": "Header"},
@@ -161,6 +193,7 @@
             },
 
             "image": {
+                "group": "Core",
                 "icon": App.base('/assets/app/media/icons/photo.svg'),
                 "fields": [
                     {"name": "image", "type": "image", "default": {}},
@@ -170,6 +203,7 @@
             },
 
             "gallery": {
+                "group": "Core",
                 "icon": App.base('/assets/app/media/icons/gallery.svg'),
                 "fields": [
                     {"name": "gallery", "type": "gallery", "default": []}
@@ -177,10 +211,12 @@
             },
 
             "divider": {
+                "group": "Core",
                 "icon": App.base('/assets/app/media/icons/divider.svg'),
             },
 
             "button": {
+                "group": "Core",
                 "icon": App.base('/assets/app/media/icons/button.svg'),
                 "fields": [
                     {"name": "text", "type": "text", "default": ""},
@@ -200,6 +236,19 @@
             if (opts.components && App.Utils.isObject(opts.components)) {
                 this.components = App.$.extend(true, this.components, opts.components);
             }
+
+            Object.keys(this.components).forEach(function(k) {
+
+                $this.components[k].group = $this.components[k].group || 'Misc';
+
+                var g = $this.components[k].group;
+
+                if (!$this.componentGroups[g]) {
+                    $this.componentGroups[g] = [];
+                }
+
+                $this.componentGroups[g].push(k);
+            });
 
             window.___moved_layout_item = null;
 
@@ -305,6 +354,7 @@
         }
 
         addComponent(e) {
+            this.componentGroup = null;
             this.refs.modalComponents.afterComponent = e.item && e.item.item ? e.item.idx : false;
             UIkit.modal(this.refs.modalComponents, {modal:false}).show();
         }
@@ -400,6 +450,11 @@
             this.settingsGroup = e.item && e.item.group || false;
         }
 
+        toggleComponentGroup(e) {
+            e.preventDefault();
+            this.componentGroup = e.item && e.item.group || false;
+        }
+
     </script>
 
 </field-layout>
@@ -433,7 +488,7 @@
             </h3>
             <field-set class="uk-margin" bind="settingsComponent.settings" fields="{fields}"></field-set>
 
-            <div class="uk-text-right uk-margin-top">
+            <div class="uk-modal-footer uk-text-right">
                 <a class="uk-button uk-button-link uk-button-large uk-modal-close">{ App.i18n.get('Close') }</a>
             </div>
 

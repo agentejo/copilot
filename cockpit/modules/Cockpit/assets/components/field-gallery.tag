@@ -10,11 +10,11 @@
 
         <div ref="imagescontainer" class="uk-sortable uk-grid uk-grid-match uk-grid-small uk-flex-center uk-grid-gutter uk-grid-width-medium-1-4" show="{ images && images.length }">
             <div data-idx="{ idx }" each="{ img,idx in images }">
-                <div class="uk-panel uk-panel-box uk-panel-thumbnail uk-panel-card uk-visible-hover">
+                <div class="uk-panel uk-panel-box uk-panel-thumbnail uk-panel-framed uk-visible-hover">
 
                         <div class="uk-flex uk-flex-middle uk-flex-center" style="min-height:120px;">
                             <div class="uk-width-1-1 uk-text-center">
-                                <cp-thumbnail src="{ (SITE_URL+'/'+img.path) }" width="400" height="250"></cp-thumbnail>
+                                <cp-thumbnail src="{ (SITE_URL+'/'+img.path.replace(/^\//, '')) }" width="400" height="250"></cp-thumbnail>
                             </div>
                         </div>
 
@@ -31,7 +31,7 @@
                                     </div>
                                 </li>
                                 <li><a class="uk-text-muted" onclick="{ parent.showMeta }" title="{ App.i18n.get('Edit meta data') }" data-uk-tooltip><i class="uk-icon-cog"></i></a></li>
-                                <li><a class="uk-text-muted" href="{ (SITE_URL+'/'+img.path) }" data-uk-lightbox="type:'image'" title="{ App.i18n.get('Full size') }" data-uk-tooltip><i class="uk-icon-eye"></i></a></li>
+                                <li><a class="uk-text-muted" href="{ (SITE_URL+'/'+img.path.replace(/^\//, '')) }" data-uk-lightbox="type:'image'" title="{ App.i18n.get('Full size') }" data-uk-tooltip><i class="uk-icon-eye"></i></a></li>
                                 <li><a class="uk-text-danger" onclick="{ parent.remove }" title="{ App.i18n.get('Remove image') }" data-uk-tooltip><i class="uk-icon-trash-o"></i></a></li>
                             </ul>
                         </div>

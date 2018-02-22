@@ -1,9 +1,11 @@
 <field-textarea>
 
-    <textarea ref="input" class="uk-width-1-1 {opts.cls}" bind="{opts.bind}" riot-rows="{opts.rows || 10}" riot-placeholder="{ opts.placeholder }" bind-event="change"></textarea>
+    <textarea ref="input" class="uk-width-1-1 {opts.cls}" bind="{opts.bind}" bind-event="input" riot-rows="{opts.rows || 10}" riot-placeholder="{ opts.placeholder }"></textarea>
 
     <script>
-        
+
+        var $this = this;
+
         this.on('mount', function() {
 
             if (opts.allowtabs) {
@@ -23,6 +25,10 @@
             if (opts.required) {
                 this.refs.input.setAttribute('required', 'required');
             }
+
+            (['maxlength', 'minlength', 'placeholder', 'cols', 'rows']).forEach( function(key) {
+                if (opts[key]) $this.refs.input.setAttribute(key, opts[key]);
+            });
 
             this.update();
         });

@@ -196,6 +196,7 @@
         this.excludeFields = opts.excludeFields || [];
         this.groups = opts.groups;
         this.languages = opts.languages || [];
+        this.collection = opts.collection;
         this.entry = opts.entry;
 
         this.mode = 'desktop';
@@ -268,9 +269,10 @@
             if (!this.$iframe) return;
 
             var data = {
-                type: 'cockpit:contentpreview',
-                entry: this.entry,
-                lang: (this.lang || 'default')
+                'event': 'cockpit:collections.preview',
+                'collection': this.collection.name,
+                'entry': this.entry,
+                'lang': this.lang || 'default'
             };
 
             this.$iframe.postMessage(data, '*');
