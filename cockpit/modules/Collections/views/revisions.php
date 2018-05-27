@@ -9,7 +9,7 @@
     <ul class="uk-breadcrumb">
         <li><a href="@route('/collections')">@lang('Collections')</a></li>
         <li data-uk-dropdown="mode:'hover', delay:300">
-            <a href="@route('/collections/entries/'.$collection['name'])"><i class="uk-icon-bars"></i> {{ @$collection['label'] ? $collection['label']:$collection['name'] }}</a>
+            <a href="@route('/collections/entries/'.$collection['name'])"><i class="uk-icon-bars"></i> {{ htmlspecialchars(@$collection['label'] ? $collection['label']:$collection['name']) }}</a>
 
             @if($app->module('collections')->hasaccess($collection['name'], 'collection_edit'))
             <div class="uk-dropdown">
@@ -35,7 +35,7 @@
             <img class="uk-svg-adjust" src="@url('assets:app/media/icons/revisions.svg')" width="150" alt="icon" data-uk-svg>
             <div class="uk-h2 uk-margin">@lang('No revisions available')</div>
             <div class="uk-margin-large">
-                <a class="uk-button uk-button-large uk-button-primary" href="@route("/collections/entry/{$collection['name']}/{$entry['_id']}")">@lang('Back to entry')</a>
+                <a class="uk-button uk-button-large uk-button-link" href="@route("/collections/entry/{$collection['name']}/{$entry['_id']}")">@lang('Back to entry')</a>
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
                                 @lang('Restore to this version')
                             </button>
 
-                            <a class="uk-margin-left uk-button uk-button-large uk-button-primary" href="@route("/collections/entry/{$collection['name']}/{$entry['_id']}")">@lang('Back to entry')</a>
+                            <a class="uk-margin-left uk-button uk-button-large uk-button-link" href="@route("/collections/entry/{$collection['name']}/{$entry['_id']}")">@lang('Back to entry')</a>
                         </div>
                     </div>
                 </div>

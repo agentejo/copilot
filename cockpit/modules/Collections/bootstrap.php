@@ -110,7 +110,7 @@ $this->module("collections")->extend([
                 $this->app->helper("fs")->delete("#storage:collections/rules/{$name}.{$method}.php");
             }
 
-            $this->app->storage->dropCollection("collections/{$collection}");
+            $this->app->storage->dropCollection("collections/{$collection['_id']}");
 
             $this->app->trigger('collections.removecollection', [$name]);
             $this->app->trigger("collections.removecollection.{$name}", [$name]);
@@ -189,11 +189,8 @@ $this->module("collections")->extend([
 
         // sort by custom order if collection is sortable
         if (isset($_collection['sortable']) && $_collection['sortable'] && !isset($options['sort'])) {
-            $options['sort'] = ['_order' => 1];
+            //$options['sort'] = ['_o' => 1];
         }
-
-        $this->app->trigger('collections.find.before', [$name, &$options, false]);
-        $this->app->trigger("collections.find.before.{$name}", [$name, &$options, false]);
 
         // check rule
         $context = new \stdClass();
@@ -204,6 +201,9 @@ $this->module("collections")->extend([
         } else {
             $options = $context->options;
         }
+
+        $this->app->trigger('collections.find.before', [$name, &$options, false]);
+        $this->app->trigger("collections.find.before.{$name}", [$name, &$options, false]);
 
         $entries = (array)$this->app->storage->find("collections/{$collection}", $options);
 
@@ -330,6 +330,10 @@ $this->module("collections")->extend([
                             break;
                     }
 
+                    if (!$isUpdate && isset($field['required']) && $field['required'] && !$value) {
+                        // Todo
+                    }
+
                     if ($isUpdate && $field['type'] == 'password' && !$value && isset($entry[$field['name']])) {
                         unset($entry[$field['name']]);
                     } else {
@@ -343,9 +347,6 @@ $this->module("collections")->extend([
                 $entry["_created"] = $entry["_modified"];
             }
 
-            $this->app->trigger('collections.save.before', [$name, &$entry, $isUpdate]);
-            $this->app->trigger("collections.save.before.{$name}", [$name, &$entry, $isUpdate]);
-
             // check rule
             $context = _check_collection_rule($_collection, 'read', [
                 'options' => $options,
@@ -358,6 +359,9 @@ $this->module("collections")->extend([
                 $entry   = $context->entry;
                 $options = $context->options;
             }
+
+            $this->app->trigger('collections.save.before', [$name, &$entry, $isUpdate]);
+            $this->app->trigger("collections.save.before.{$name}", [$name, &$entry, $isUpdate]);
 
             $ret = $this->app->storage->save("collections/{$collection}", $entry);
 
@@ -383,9 +387,6 @@ $this->module("collections")->extend([
         $name       = $collection;
         $collection = $_collection['_id'];
 
-        $this->app->trigger('collections.remove.before', [$name, &$criteria]);
-        $this->app->trigger("collections.remove.before.{$name}", [$name, &$criteria]);
-
         // check rule
         $context = _check_collection_rule($_collection, 'remove', ['options' => ['filter' => $criteria]]);
 
@@ -394,6 +395,9 @@ $this->module("collections")->extend([
         } else {
             $criteria = $context->options['filter'];
         }
+
+        $this->app->trigger('collections.remove.before', [$name, &$criteria]);
+        $this->app->trigger("collections.remove.before.{$name}", [$name, &$criteria]);
 
         $result = $this->app->storage->remove("collections/{$collection}", $criteria);
 
@@ -723,6 +727,10 @@ if (COCKPIT_API_REQUEST) {
 
 // ADMIN
 if (COCKPIT_ADMIN && !COCKPIT_API_REQUEST) {
-
     include_once(__DIR__.'/admin.php');
+}
+
+// CLI
+if (COCKPIT_CLI) {
+    $this->path('#cli', __DIR__.'/cli');
 }

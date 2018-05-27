@@ -19,7 +19,7 @@
 
             <div class="uk-float-right">
 
-                <a class="uk-button uk-button-large uk-button-primary uk-width-1-1" href="@route('/forms/form')"><i class="uk-icon-plus-circle uk-icon-justify"></i>  @lang('Form')</a>
+                <a class="uk-button uk-button-large uk-button-primary uk-width-1-1" href="@route('/forms/form')">@lang('Add Form')</a>
 
             </div>
 
@@ -33,7 +33,7 @@
                     <img class="uk-svg-adjust uk-text-muted" src="@url('forms:icon.svg')" width="80" height="80" alt="Forms" data-uk-svg />
                 </p>
                 <hr>
-                <span class="uk-text-large"><strong>@lang('No forms').</strong> <a href="@route('/forms/form')">Create one</a></span>
+                <span class="uk-text-large"><strong>@lang('No forms').</strong> <a href="@route('/forms/form')">@lang('Create one')</a></span>
 
             </div>
 

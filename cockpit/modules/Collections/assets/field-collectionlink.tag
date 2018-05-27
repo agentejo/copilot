@@ -8,8 +8,8 @@
         { App.i18n.get('Failed loading collection') } {opts.link}
     </div>
 
-    <div class="uk-alert" if="{opts.link && !collection && !error}">
-        <i class="uk-icon-spinner uk-icon-spin"></i> { App.i18n.get('Loading field') }
+    <div class="uk-margin" if="{opts.link && !collection && !error}">
+        <cp-preloader class="uk-container-center"></cp-preloader>
     </div>
 
     <div if="{opts.link && collection}">
@@ -74,7 +74,7 @@
 
             <div class="uk-overflow-container">
 
-                <div class="uk-alert" if="{ !entries.length && filter && !loading }">
+                <div class="uk-text-xlarge uk-text-center uk-text-muted uk-margin-large-bottom" if="{ !entries.length && filter && !loading }">
                     { App.i18n.get('No entries found') }.
                 </div>
 
@@ -105,8 +105,8 @@
                     </tbody>
                 </table>
 
-                <div class="uk-alert" if="{ loading }">
-                    <i class="uk-icon-spinner uk-icon-spin"></i> {App.i18n.get('Loading...')}.
+                <div class="uk-margin-large-bottom" if="{ loading }">
+                    <cp-preloader class="uk-container-center"></cp-preloader>
                 </div>
 
                 <div class="uk margin" if="{ loadmore && !loading }">
@@ -160,7 +160,7 @@
 
         if (!opts.link) return;
 
-        modal = UIkit.modal(App.$('.uk-modal', this.root));
+        modal = UIkit.modal(App.$('.uk-modal', this.root), {modal:false});
 
         App.request('/collections/_collections').then(function(data){
             collections = data;
@@ -194,15 +194,16 @@
         }
 
         modal.show();
-        this.load();
+
+        if (!this.entries.length) this.load();
     }
 
     linkItem(e) {
 
         var _entry = e.item.entry;
         var entry = {
-            _id: _entry._id, 
-            link: this.collection.name, 
+            _id: _entry._id,
+            link: this.collection.name,
             display: _entry[opts.display] || _entry[this.collection.fields[0].name] || 'n/a'
         };
 

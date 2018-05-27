@@ -55,11 +55,11 @@
 
                    <div class="uk-margin">
                        <label class="uk-text-small">@lang('Description')</label>
-                       <textarea class="uk-width-1-1 uk-form-large" name="description" bind="collection.description" rows="5"></textarea>
+                       <textarea class="uk-width-1-1 uk-form-large" name="description" bind="collection.description" bind-event="input" rows="5"></textarea>
                    </div>
 
                     <div class="uk-margin">
-                        <field-boolean bind="collection.sortable" title="@lang('Sortable entries')" label="@lang('Sortable entries')"></field-boolean>
+                        <field-boolean bind="collection.sortable" title="@lang('Sortable entries')" label="@lang('Custom sortable entries')"></field-boolean>
                     </div>
 
                     <div class="uk-margin">
@@ -199,12 +199,12 @@
 
                 <div class="uk-margin-large-top" show="{ collection.fields.length }">
 
-                    <div class="uk-button-group uk-margin-right">
+                    <div class="uk-button-group">
                         <button class="uk-button uk-button-large uk-button-primary">@lang('Save')</button>
-                        <a class="uk-button uk-button-large" href="@route('/collections/entries')/{ collection.name }" if="{ collection._id }"><i class="uk-icon-list"></i> @lang('Show entries')</a>
+                        <a class="uk-button uk-button-large" href="@route('/collections/entries')/{ collection.name }" if="{ collection._id }">@lang('Show entries')</a>
                     </div>
 
-                    <a href="@route('/collections')">
+                    <a class="uk-button uk-button-large uk-button-link" href="@route('/collections')">
                         <span show="{ !collection._id }">@lang('Cancel')</span>
                         <span show="{ collection._id }">@lang('Close')</span>
                     </a>
@@ -235,11 +235,18 @@
         this.aclgroups  = {{ json_encode($aclgroups) }};
 
         this.collection.rules = this.collection.rules || {
-            create: {},
-            read: {},
-            update: {},
-            'delete': {},
+            "create" : {enabled:false},
+            "read"   : {enabled:false},
+            "update" : {enabled:false},
+            "delete" : {enabled:false}
         };
+
+        // hack to not break old installations - @todo remove in future
+        'create,read,update,delete'.split(',').forEach(function(m){
+            if (Array.isArray($this.collection.rules[m])) {
+                $this.collection.rules[m] = {enabled:false};
+            }
+        })
 
         this.rules = {{ json_encode($rules) }};
 
@@ -284,22 +291,16 @@
 
         submit(e) {
 
-            if(e) e.preventDefault();
+            if (e) e.preventDefault();
 
-            var collection = this.collection;
+            App.request('/collections/save_collection', {collection: this.collection, rules: this.rules}).then(function(collection) {
 
-            App.callmodule('collections:saveCollection', [this.collection.name, collection, this.rules]).then(function(data) {
+                App.ui.notify("Saving successful", "success");
+                $this.collection = collection;
+                $this.update();
 
-                if (data.result) {
-
-                    App.ui.notify("Saving successful", "success");
-                    $this.collection = data.result;
-                    $this.update();
-
-                } else {
-
-                    App.ui.notify("Saving failed.", "danger");
-                }
+            }).catch(function() {
+                App.ui.notify("Saving failed.", "danger");
             });
         }
 

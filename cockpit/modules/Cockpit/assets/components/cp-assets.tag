@@ -75,7 +75,7 @@
         </div>
 
         <div class="uk-text-center uk-text-muted uk-h2 uk-margin-large-top" show="{ loading }">
-            <i class="uk-icon-spinner uk-icon-spin"></i>
+            <cp-preloader class="uk-container-center"></cp-preloader>
         </div>
 
         <div class="uk-margin-large-top {modal && 'uk-overflow-container'}" if="{ !loading && assets.length }">
@@ -88,7 +88,7 @@
                             <div class="uk-position-absolute uk-position-cover uk-flex uk-flex-middle">
                                 <div class="uk-width-1-1 uk-text-center">
                                     <span if="{ asset.mime.match(/^image\//) == null }"><i class="uk-h1 uk-text-muted uk-icon-{ parent.getIconCls(asset.path) }"></i></span>
-                                    <cp-thumbnail src="{ASSETS_URL+asset.path}" height="150" if="{ asset.mime.match(/^image\//) }" title="{ asset.width && [asset.width, asset.height].join('x') }"></cp-thumbnail>
+                                    <cp-thumbnail src="{asset._id}" height="150" if="{ asset.mime.match(/^image\//) }" title="{ asset.width && [asset.width, asset.height].join('x') }"></cp-thumbnail>
                                 </div>
                             </div>
                         </div>
@@ -226,7 +226,7 @@
                     <div class="uk-margin" if="{asset.colors && Array.isArray(asset.colors) && asset.colors.length}">
                         <label class="uk-text-small uk-text-bold">{ App.i18n.get('Colors') }</label>
                         <div class="uk-margin-small-top uk-text-muted">
-                            <span class="uk-icon-circle uk-text-large uk-margin-small-right" each="{color in asset.colors}" riot-style="color: #{color}"></span>
+                            <span class="uk-icon-circle uk-text-large uk-margin-small-right" each="{color in asset.colors}" riot-style="color: #{String(color).replace('#', '')}"></span>
                         </div>
                     </div>
                     <div class="uk-margin">
@@ -254,8 +254,8 @@
             </div>
 
             <div class="uk-margin-large-top">
-                <button type="submit" class="uk-button uk-button-large uk-button-primary uk-margin-right">{ App.i18n.get('Save') }</button>
-                <a onclick="{ cancelEdit }">{ App.i18n.get('Cancel') }</a>
+                <button type="submit" class="uk-button uk-button-large uk-button-primary">{ App.i18n.get('Save') }</button>
+                <a class="uk-button uk-button-large uk-button-link" onclick="{ cancelEdit }">{ App.i18n.get('Cancel') }</a>
             </div>
 
         </form>
@@ -278,7 +278,7 @@
 
         this.mode     = 'list';
         this.listmode = App.session.get('app.assets.listmode', 'list');
-        this.loading  = false;
+        this.loading  = true;
         this.assets   = [];
         this.selected = [];
 
@@ -381,7 +381,7 @@
             App.request('/assetsmanager/listAssets', options).then(function(response){
 
                 $this.assets   = Array.isArray(response.assets) ? response.assets:[];
-                $this.count    = response.count || 0;
+                $this.count    = response.total || 0;
                 $this.pages    = Math.ceil($this.count/$this.limit);
                 $this.loading  = false;
                 $this.selected = [];

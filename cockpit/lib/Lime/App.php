@@ -502,7 +502,7 @@ class App implements \ArrayAccess {
      * @param $path
      * @return bool|string
      */
-    public function pathToUrl($path) {
+    public function pathToUrl($path, $full = false) {
 
         $url = false;
 
@@ -513,13 +513,11 @@ class App implements \ArrayAccess {
 
             $url = '/'.ltrim(str_replace($root, '', $file), '/');
             $url = implode('/', array_map('rawurlencode', explode('/', $url)));
-        }
 
-        /*
-        if ($this->registry['base_port'] != "80") {
-            $url = $this->registry['site_url'].$url;
+            if ($full) {
+                $url = rtrim($this['site_url'], '/').$url;
+            }
         }
-        */
 
         return $url;
     }
@@ -724,7 +722,24 @@ class App implements \ArrayAccess {
     public function param($index=null, $default = null, $source = null) {
 
         $src = $source ? $source : $_REQUEST;
-        return fetch_from_array($src, $index, $default);
+        $cast = null;
+
+        if (strpos($index, ':') !== false) {
+            list($index, $cast) = explode(':', $index, 2);
+        }
+
+        $value = fetch_from_array($src, $index, $default);
+
+        if ($cast) {
+
+            if (in_array($cast, ['bool', 'boolean']) && is_string($value) && in_array($cast, ['true', 'false'])) {
+                $value = $value == 'true' ? true : false;
+            }
+
+            settype($value, $cast);
+        }
+
+        return $value;
     }
 
     /**
@@ -1071,7 +1086,9 @@ class App implements \ArrayAccess {
 
         $controller = new $class($this);
 
-        return method_exists($controller, $action) ? call_user_func_array([$controller,$action], $params):false;
+        return method_exists($controller, $action) && is_callable([$controller, $action])
+                ? call_user_func_array([$controller,$action], $params)
+                : false;
     }
 
     /**
@@ -1366,6 +1383,13 @@ class Response {
 
         if (!headers_sent($filename, $linenum)) {
 
+            $body = $this->body;
+
+            if (is_array($this->body) || is_object($this->body)) {
+                $body = json_encode($this->body);
+                $this->mime = 'json';
+            }
+
             if ($this->nocache){
                 header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
                 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
@@ -1383,7 +1407,7 @@ class Response {
                 header($h);
             }
 
-            echo is_array($this->body) ? json_encode($this->body) : $this->body;
+            echo $body;
         }
     }
 }

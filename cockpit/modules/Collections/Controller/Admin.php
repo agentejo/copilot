@@ -94,6 +94,18 @@ class Admin extends \Cockpit\AuthController {
         return $this->render('collections:views/collection.php', compact('collection', 'templates', 'aclgroups', 'rules'));
     }
 
+    public function save_collection() {
+
+        $collection = $this->param('collection');
+        $rules      = $this->param('rules', null);
+
+        if (!$collection) {
+            return false;
+        }
+
+        return $this->module('collections')->saveCollection($collection['name'], $collection, $rules);
+    }
+
     public function entries($collection) {
 
         if (!$this->module('collections')->hasaccess($collection, 'entries_view')) {
@@ -214,7 +226,7 @@ class Admin extends \Cockpit\AuthController {
             $_entry = $this->module('collections')->findOne($collection['name'], ['_id' => $entry['_id']]);
             $revision = !(json_encode($_entry) == json_encode($entry));
         } else {
-            $entry['_by'] = $this->module('cockpit')->getUser('_id');
+            $entry['_by'] = $entry['_mby'];
             $revision = true;
         }
 
@@ -246,6 +258,26 @@ class Admin extends \Cockpit\AuthController {
         return true;
     }
 
+    public function update_order($collection) {
+
+        $collection = $this->module('collections')->collection($collection);
+        $entries = $this->param('entries');
+
+        if (!$collection) return false;
+        if (!$entries) return false;
+
+        $_collectionId = $collection['_id'];
+
+        if (is_array($entries) && count($entries)) {
+
+            foreach($entries as $entry) {
+                $this->app->storage->save("collections/{$_collectionId}", $entry);
+            }
+        }
+
+        return $entries;
+    }
+
     public function export($collection) {
 
         if (!$this->app->module("cockpit")->hasaccess("collections", 'manage')) {
@@ -259,6 +291,28 @@ class Admin extends \Cockpit\AuthController {
         $entries = $this->module('collections')->find($collection['name']);
 
         return json_encode($entries, JSON_PRETTY_PRINT);
+    }
+
+
+    public function tree() {
+
+        $collection = $this->app->param('collection');
+
+        if (!$collection) return false;
+
+        $items = $this->app->module('collections')->find($collection);
+
+        if (count($items)) {
+
+            $items = $this->helper('utils')->buildTree($items, [
+                'parent_id_column_name' => '_pid',
+                'children_key_name' => 'children',
+                'id_column_name' => '_id',
+    			'sort_column_name' => '_o'
+            ]);
+        }
+
+        return $items;
     }
 
     public function find() {

@@ -20,30 +20,32 @@ class Filesystem extends \Lime\Helper {
         $dir     = null;
 
         $args = func_get_args();
-        $lst  = array();
+        $lst  = [];
 
         switch(count($args)){
             case 0:
                 $dir = getcwd();
             case 1:
-                $dir = $this->app->path($args[0]);
+                $dir = (strpos($args[0], ':')) ? $this->app->path($args[0]) : $args[0];
                 break;
             case 2:
                 $pattern = $args[0];
-                $dir = $this->app->path($args[1]);
+                $dir = (strpos($args[1], ':')) ? $this->app->path($args[1]) : $args[1];
                 break;
             default:
                 return $lst;
         }
 
-        if(!$dir || !file_exists($dir)) {
+        if (!$dir || !file_exists($dir)) {
             return $lst;
         }
 
-        foreach (new \DirectoryIterator($dir) as $file) {
+        $iter = new \DirectoryIterator($dir);
 
-            if($file->isDot()) continue;
-            if($pattern && !fnmatch($pattern, $file->getBasename())) continue;
+        foreach ($iter as $file) {
+
+            if ($file->isDot()) continue;
+            if ($pattern && !fnmatch($pattern, $file->getBasename())) continue;
 
             $lst[] = $file->isDir() ? clone $file : new \SplFileObject($file->getRealPath());
 
@@ -59,11 +61,11 @@ class Filesystem extends \Lime\Helper {
 
         $args = func_get_args();
 
-        if(!count($args)) {
+        if (!count($args)) {
             return false;
         }
 
-        $args[0] = $this->app->path($args[0]);
+        $args[0] = strpos($args[0], ':') ? $this->app->path($args[0]) : $args[0];
 
         return $args[0] ? call_user_func_array('file_get_contents', $args) : '';
     }
@@ -151,22 +153,22 @@ class Filesystem extends \Lime\Helper {
     public function copy($path, $dest, $_init = true) {
 
         if ($_init) {
-            $path = $this->app->path($path);
-            $dest = $this->app->path($dest);
+            if (strpos($path, ':')) $path = $this->app->path($path);
+            if (strpos($dest, ':')) $dest = $this->app->path($dest);
         }
 
-        if(is_dir($path)) {
+        if (is_dir($path)) {
 
             @mkdir($dest);
 
             $items = scandir($path);
 
-            if(sizeof($items) > 0) {
+            if (sizeof($items) > 0) {
                 foreach($items as $file) {
 
-                    if($file == "." || $file == "..") continue;
+                    if ($file == "." || $file == "..") continue;
 
-                    if(is_dir("{$path}/{$file}")) {
+                    if (is_dir("{$path}/{$file}")) {
                         $this->copy("{$path}/{$file}", "{$dest}/{$file}", false);
                     } else {
                         copy("{$path}/{$file}", "{$dest}/{$file}");
@@ -176,7 +178,7 @@ class Filesystem extends \Lime\Helper {
 
             return true;
 
-        } elseif(is_file($path)) {
+        } elseif (is_file($path)) {
             return copy($path, $dest);
         }
 
@@ -219,13 +221,13 @@ class Filesystem extends \Lime\Helper {
 
         $size = 0;
 
-        if($path = $this->app->path($dir)) {
+        if ($path = $this->app->path($dir)) {
 
             $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path), \RecursiveIteratorIterator::SELF_FIRST);
 
             foreach ($files as $file) {
 
-                if(!$file->isFile() || $file->isLink()) continue;
+                if (!$file->isFile() || $file->isLink()) continue;
 
                 $size += $file->getSize();
             }
@@ -257,7 +259,7 @@ class Filesystem extends \Lime\Helper {
 }
 
 
-if(!function_exists('fnmatch')) {
+if (!function_exists('fnmatch')) {
     function fnmatch($pattern, $string){
         return preg_match("#^".strtr(preg_quote($pattern, '#'), array('\*' => '.*', '\?' => '.'))."$#i", $string);
     }

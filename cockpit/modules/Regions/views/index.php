@@ -19,7 +19,7 @@
 
             @hasaccess?('regions', 'create')
             <div class="uk-float-right">
-                <a class="uk-button uk-button-large uk-button-primary uk-width-1-1" href="@route('/regions/region')"><i class="uk-icon-plus-circle uk-icon-justify"></i>  @lang('Region')</a>
+                <a class="uk-button uk-button-large uk-button-primary uk-width-1-1" href="@route('/regions/region')">@lang('Add Region')</a>
             </div>
             @endif
 
@@ -36,7 +36,7 @@
                 <span class="uk-text-large"><strong>@lang('No regions').</strong>
 
                 @hasaccess?('regions', 'create')
-                <a href="@route('/regions/region')">Create one</a></span>
+                <a href="@route('/regions/region')">@lang('Create one')</a></span>
                 @end
 
             </div>

@@ -5,7 +5,12 @@
  */
 define('COCKPIT_START_TIME', microtime(true));
 
-if (!defined('COCKPIT_CLI')) define('COCKPIT_CLI', PHP_SAPI == 'cli');
+// Autoload vendor libs
+include(__DIR__.'/lib/vendor/autoload.php');
+
+if (!defined('COCKPIT_CLI')) {
+    define('COCKPIT_CLI', PHP_SAPI == 'cli');
+}
 
 /*
  * Autoload from lib folder (PSR-0)
@@ -15,6 +20,9 @@ spl_autoload_register(function($class){
     $class_path = __DIR__.'/lib/'.str_replace('\\', '/', $class).'.php';
     if(file_exists($class_path)) include_once($class_path);
 });
+
+// load .env file if exists
+DotEnv::load();
 
 // check for custom defines
 if (file_exists(__DIR__.'/defines.php')) {
@@ -98,7 +106,9 @@ function cockpit($module = null) {
                 '#config'   => COCKPIT_CONFIG_DIR,
                 'assets'    => COCKPIT_DIR.'/assets',
                 'site'      => COCKPIT_SITE_DIR
-            ]
+            ],
+
+            'filestorage' => []
 
         ], is_array($customconfig) ? $customconfig : []);
 
@@ -115,6 +125,59 @@ function cockpit($module = null) {
         $app->service('storage', function() use($config) {
             $client = new MongoHybrid\Client($config['database']['server'], $config['database']['options']);
             return $client;
+        });
+
+        // file storage
+        $app->service('filestorage', function($name) use($config, $app) {
+
+            $storages = array_replace_recursive([
+
+                'root' => [
+                    'adapter' => 'League\Flysystem\Adapter\Local',
+                    'args' => [$app->path('#root:')],
+                    'mount' => true,
+                    'url' => $app->pathToUrl('#root:', true)
+                ],
+
+                'site' => [
+                    'adapter' => 'League\Flysystem\Adapter\Local',
+                    'args' => [$app->path('site:')],
+                    'mount' => true,
+                    'url' => $app->pathToUrl('site:', true)
+                ],
+
+                'tmp' => [
+                    'adapter' => 'League\Flysystem\Adapter\Local',
+                    'args' => [$app->path('#tmp:')],
+                    'mount' => true,
+                    'url' => $app->pathToUrl('#tmp:', true)
+                ],
+
+                'thumbs' => [
+                    'adapter' => 'League\Flysystem\Adapter\Local',
+                    'args' => [$app->path('#thumbs:')],
+                    'mount' => true,
+                    'url' => $app->pathToUrl('#thumbs:', true)
+                ],
+
+                'uploads' => [
+                    'adapter' => 'League\Flysystem\Adapter\Local',
+                    'args' => [$app->path('#uploads:')],
+                    'mount' => true,
+                    'url' => $app->pathToUrl('#uploads:', true)
+                ],
+
+                'assets' => [
+                    'adapter' => 'League\Flysystem\Adapter\Local',
+                    'args' => [$app->path('#uploads:')],
+                    'mount' => true,
+                    'url' => $app->pathToUrl('#uploads:', true)
+                ]
+
+            ], $config['filestorage']);
+
+            $filestorage = new FileStorage($storages);
+            return $filestorage;
         });
 
         // key-value storage

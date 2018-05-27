@@ -12,7 +12,7 @@
 
         <span class="uk-form-icon">
             <i class="uk-icon-filter"></i>
-            <input type="text" class="uk-form-large uk-form-blank" ref="txtfilter" placeholder="@lang('Filter by name...')" onchange="{ updatefilter }">
+            <input type="text" class="uk-form-large uk-form-blank" ref="txtfilter" placeholder="@lang('Filter accounts...')" onchange="{ updatefilter }">
         </span>
 
         <div class="uk-form-select">
@@ -25,15 +25,15 @@
 
         <div class="uk-float-right">
             <a class="uk-button uk-button-primary uk-button-large" href="@route('/accounts/create')">
-                <i class="uk-icon-plus-circle uk-icon-justify"></i> @lang('Account')
+                @lang('Add Account')
             </a>
         </div>
 
     </div>
     @endif
 
-    <div class="uk-text-xlarge uk-text-center uk-text-primary uk-margin-large-top" show="{ loading }">
-        <i class="uk-icon-spinner uk-icon-spin"></i>
+    <div class="uk-margin-large-top" show="{ loading }">
+        <cp-preloader class="uk-container-center"></cp-preloader>
     </div>
 
     <div class="uk-text-large uk-text-center uk-margin-large-top uk-text-muted" show="{ !loading && !accounts.length }">
@@ -60,12 +60,12 @@
                         @lang('Group') <span if="{sortedBy == 'group'}" class="uk-icon-long-arrow-{ sortedOrder == -1 ? 'up':'down'}"></span>
                     </a>
                 </th>
-                <th class="uk-text-small" width="80" data-sort="_created">
+                <th class="uk-text-small" width="100" data-sort="_created">
                     <a class="uk-link-muted uk-noselect {sortedBy == '_created' && 'uk-text-primary'}">
                         @lang('Created') <span if="{sortedBy == '_created'}" class="uk-icon-long-arrow-{ sortedOrder == -1 ? 'up':'down'}"></span>
                     </a>
                 </th>
-                <th class="uk-text-small" width="80" data-sort="_modified">
+                <th class="uk-text-small" width="100" data-sort="_modified">
                     <a class="uk-link-muted uk-noselect {sortedBy == '_modified' && 'uk-text-primary'}">
                         @lang('Modified')  <span if="{sortedBy == '_modified'}" class="uk-icon-long-arrow-{ sortedOrder == -1 ? 'up':'down'}"></span>
                     </a>
@@ -74,7 +74,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr each="{account, $index in accounts}" if="{ infilter(account) }">
+            <tr each="{account, $index in accounts}">
                 <td class="uk-text-center">
                     <a class="uk-link-muted" href="@route('/accounts/account')/{ account._id }" title="@lang('Edit account')">
                         <cp-gravatar email="{ account.email }" size="25" alt="{ account.name || account.user }"></cp-gravatar>
@@ -196,11 +196,6 @@
             }
         }
 
-        infilter(account) {
-            var name = account.name.toLowerCase();
-            return (!this.filter || (name && name.indexOf(this.filter) !== -1));
-        }
-
         updatesort(field) {
 
             if (!field) {
@@ -233,11 +228,7 @@
             }
 
             if (this.filter) {
-                options.filter.$or = [
-                    {name  : {$regex : this.filter}},
-                    {user  : {$regex : this.filter}},
-                    {email : {$regex : this.filter}}
-                ];
+                options.filter = this.filter;
             }
 
             if (this.filterGroup && this.filterGroup != '_all') {

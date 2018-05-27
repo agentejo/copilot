@@ -11,7 +11,7 @@
     <ul class="uk-breadcrumb">
         <li><a href="@route('/collections')">@lang('Collections')</a></li>
         <li data-uk-dropdown="mode:'hover', delay:300">
-            <a href="@route('/collections/entries/'.$collection['name'])"><i class="uk-icon-bars"></i> {{ @$collection['label'] ? $collection['label']:$collection['name'] }}</a>
+            <a href="@route('/collections/entries/'.$collection['name'])"><i class="uk-icon-bars"></i> {{ htmlspecialchars(@$collection['label'] ? $collection['label']:$collection['name']) }}</a>
 
             @if($app->module('collections')->hasaccess($collection['name'], 'collection_edit'))
             <div class="uk-dropdown">
@@ -58,9 +58,21 @@
 
                         <div class="uk-panel">
 
-                            <label class="uk-text-bold">
-                                { field.label || field.name }
-                                <span if="{ field.localize }" class="uk-icon-globe" title="@lang('Localized field')" data-uk-tooltip="pos:'right'"></span>
+                            <label>
+
+                                <span class="uk-text-bold">{ field.label || field.name }</span>
+
+                                <span if="{ field.localize }" data-uk-dropdown="mode:'click'">
+                                    <a class="uk-icon-globe" title="@lang('Localized field')" data-uk-tooltip="pos:'right'"></a>
+                                    <div class="uk-dropdown uk-dropdown-close">
+                                        <ul class="uk-nav uk-nav-dropdown">
+                                            <li class="uk-nav-header">@lang('Copy content from:')</li>
+                                            <li show="{parent.lang}"><a onclick="{parent.copyLocalizedValue}" lang="" field="{field.name}">@lang('Default')</a></li>
+                                            <li show="{parent.lang != language.code}" each="{language,idx in languages}" value="{language.code}"><a onclick="{parent.parent.copyLocalizedValue}" lang="{language.code}" field="{field.name}">{language.label}</a></li>
+                                        </ul>
+                                    </div>
+                                </span>
+
                             </label>
 
                             <div class="uk-margin uk-text-small uk-text-muted">
@@ -78,8 +90,8 @@
                 </div>
 
                 <div class="uk-margin-large-top">
-                    <button class="uk-button uk-button-large uk-button-primary uk-margin-right">@lang('Save')</button>
-                    <a href="@route('/collections/entries/'.$collection['name'])">
+                    <button class="uk-button uk-button-large uk-button-primary">@lang('Save')</button>
+                    <a class="uk-button uk-button-link" href="@route('/collections/entries/'.$collection['name'])">
                         <span show="{ !entry._id }">@lang('Cancel')</span>
                         <span show="{ entry._id }">@lang('Close')</span>
                     </a>
@@ -226,9 +238,31 @@
 
         submit(e) {
 
-            if(e) e.preventDefault();
+            if (e) {
+                e.preventDefault();
+            }
 
-            App.request('/collections/save_entry/'+this.collection.name,{entry:this.entry}).then(function(entry) {
+            var required = [];
+
+            this.fields.forEach(function(field){
+
+                if (field.required && !$this.entry[field.name]) {
+
+                    if (!($this.entry[field.name]===false || $this.entry[field.name]===0)) {
+                        required.push(field.label || field.name);
+                    }
+                }
+            });
+
+            if (required.length) {
+                App.ui.notify([
+                    App.i18n.get('Fill in these required fields before saving:'),
+                    '<div class="uk-margin-small-top">'+required.join(',')+'</div>'
+                ].join(''), 'danger');
+                return;
+            }
+
+            App.request('/collections/save_entry/'+this.collection.name, {entry:this.entry}).then(function(entry) {
 
                 if (entry) {
 
@@ -286,6 +320,14 @@
 
         persistLanguage(e) {
             App.session.set('collections.entry.'+this.collection._id+'.lang', e.target.value);
+        }
+
+        copyLocalizedValue(e) {
+
+            var field = e.target.getAttribute('field'),
+                lang = e.target.getAttribute('lang');
+
+            this.entry[field+(this.lang ? '_':'')+this.lang] = this.entry[field+(lang ? '_':'')+lang];
         }
 
     </script>

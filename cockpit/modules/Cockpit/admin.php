@@ -43,6 +43,7 @@ $assets = [
     'assets:polyfills/document-register-element.js',
     'assets:polyfills/web-animations.min.js',
     'assets:polyfills/pointer-events.js',
+    'assets:polyfills/URLSearchParams.js',
 
     // libs
     'assets:lib/moment.js',
@@ -72,8 +73,8 @@ $assets = [
 ];
 
 // load custom css style
-if ($app->path('config:cockpit/style.css')) {
-    $assets[] = 'config:cockpit/style.css';
+if ($app->path('#config:cockpit/style.css')) {
+    $assets[] = '#config:cockpit/style.css';
 }
 
 $app['app.assets.base'] = $assets;

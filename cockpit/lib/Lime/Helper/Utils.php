@@ -37,11 +37,11 @@ class Utils extends \Lime\Helper {
         $regex     = '#\s+(src|href|poster)="(?!/|' . $protocols . '|\#|\')([^"]*)"#m';
 
         preg_match_all($regex, $content, $matches);
-        
+
         if (isset($matches[0])) {
 
             foreach ($matches[0] as $i => $match) {
-                
+
                 if (trim($matches[2][$i])) {
                     $content = str_replace($match, " {$matches[1][$i]}=\"{$base}{$matches[2][$i]}\"", $content);
                 }
@@ -216,16 +216,18 @@ class Utils extends \Lime\Helper {
 
 		return $ret;
 	}
-	
+
 	/**
 	* Get content from url source.
 	*
-	* @param   string  $url 
+	* @param   string  $url
 	* @return  string
 	*/
 	public function url_get_contents ($url) {
+
         $content = '';
-        if (function_exists('curl_exec')){
+
+		if (function_exists('curl_exec')){
             $conn = curl_init($url);
             curl_setopt($conn, CURLOPT_SSL_VERIFYPEER, true);
             curl_setopt($conn, CURLOPT_FRESH_CONNECT,  true);
@@ -246,4 +248,83 @@ class Utils extends \Lime\Helper {
         }
         return $content;
 	}
+
+	public function buildTree(array $elements, $options = [], $parentId = null) {
+
+        $options = array_merge([
+            'parent_id_column_name' => '_pid',
+            'children_key_name' => 'children',
+            'id_column_name' => '_id',
+			'sort_column_name' => null
+        ], $options);
+
+        $branch = [];
+
+        foreach ($elements as $element) {
+
+			$pid = isset($element[$options['parent_id_column_name']]) ? $element[$options['parent_id_column_name']] : null;
+
+            if ($pid == $parentId) {
+
+				$element[$options['children_key_name']] = [];
+                $children = $this->buildTree($elements, $options, $element[$options['id_column_name']]);
+
+                if ($children) {
+                    $element[$options['children_key_name']] = $children;
+                }
+
+                $branch[] = $element;
+            }
+        }
+
+		if ($options['sort_column_name']) {
+
+			usort($branch, function ($a, $b) use($options) {
+
+				$_a = isset($a[$options['sort_column_name']]) ? $a[$options['sort_column_name']] : null;
+				$_b = isset($b[$options['sort_column_name']]) ? $b[$options['sort_column_name']] : null;
+
+				if ($_a == $_b) {
+					return 0;
+				}
+
+				return ($_a < $_b) ? -1 : 1;
+			});
+		}
+
+        return $branch;
+    }
+
+	public function buildTreeList($items, $options = [], $parent = null, $result = null, $depth = 0, $path = '-') {
+
+		$options = array_merge([
+            'parent_id_column_name' => '_pid',
+            'id_column_name' => '_id'
+        ], $options);
+
+        if (!$result) {
+            $result = new ArrayObject([]);
+        }
+
+        foreach ($items as $key => &$item) {
+
+            if ($item[$options['parent_id_column_name']] == $parent) {
+                $item['_depth'] = $depth;
+                $item['_path'] = $path.$item[$options['id_column_name']];
+                $result[] = $item;
+                $idx = count($result) - 1;
+                unset($items[$key]);
+                $this->buildTreeList($items, $item[$options['id_column_name']], $result, $depth + 1, "{$path}{$item[$options['id_column_name']]}-");
+            }
+        }
+
+        if ($depth == 0) {
+
+            foreach ($result as $i => $item) {
+                $result[$i]['_isParent'] = isset($result[$i+1]) && $result[($i+1)][$options['parent_id_column_name']]===$item[$options['id_column_name']];
+            }
+        }
+
+        return $depth == 0 ? $result->getArrayCopy() : $result;
+    }
 }

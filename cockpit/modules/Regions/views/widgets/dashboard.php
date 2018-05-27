@@ -27,7 +27,7 @@
 
                             <img class="uk-margin-small-right uk-svg-adjust" src="@url(isset($region['icon']) && $region['icon'] ? 'assets:app/media/icons/'.$region['icon']:'regions:icon.svg')" width="18px" alt="icon" data-uk-svg>
 
-                            {{ @$region['label'] ? $region['label'] : $region['name'] }}
+                            {{ htmlspecialchars(@$region['label'] ? $region['label'] : $region['name']) }}
                         </a>
                     </li>
                     @endforeach
@@ -35,9 +35,11 @@
 
             </div>
 
-            <div class="uk-panel-box-footer">
-                <a href="@route('/regions')">@lang('See all')</a>
+            @if(count($regions) > 5)
+            <div class="uk-panel-box-footer uk-text-center">
+                <a class="uk-button uk-button-small uk-button-link" href="@route('/regions')">@lang('Show all')</a>
             </div>
+            @endif
 
         @else
 

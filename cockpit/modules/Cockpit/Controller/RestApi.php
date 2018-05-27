@@ -146,11 +146,10 @@ class RestApi extends \LimeExtra\Controller {
             'quality' => intval($this->param('q', 100)),
             'rebuild' => intval($this->param('r', false)),
             'base64' => intval($this->param('b64', false)),
-            'output' => intval($this->param('o', false)),
-            'domain' => intval($this->param('d', false)),
+            'output' => intval($this->param('o', false))
         ];
 
-        foreach([
+        foreach ([
             'blur', 'brighten',
             'colorize', 'contrast',
             'darken', 'desaturate',
@@ -169,21 +168,35 @@ class RestApi extends \LimeExtra\Controller {
             'sort' => ['created' => -1]
         ];
 
-        if ($filter = $this->param("filter", null)) $options["filter"] = $filter;
+        if ($filter = $this->param('filter', null)) $options['filter'] = $filter;
         if ($fields = $this->param('fields', null)) $options['fields'] = $fields;
-        if ($limit  = $this->param("limit", null))  $options["limit"] = $limit;
-        if ($sort   = $this->param("sort", null))   $options["sort"] = $sort;
-        if ($skip   = $this->param("skip", null))   $options["skip"] = $skip;
+        if ($limit  = $this->param('limit', null))  $options['limit'] = $limit;
+        if ($sort   = $this->param('sort', null))   $options['sort'] = $sort;
+        if ($skip   = $this->param('skip', null))   $options['skip'] = $skip;
 
-        $assets = $this->storage->find("cockpit/assets", $options);
-        $total  = (!$skip && !$limit) ? count($assets) : $this->storage->count("cockpit/assets", $filter);
-
-        $this->app->trigger('cockpit.assets.list', [&$assets]);
-
-        return [
-            'assets' => $assets->toArray(),
-            'total' => $total
-        ];
+        return $this->module('cockpit')->listAssets($options);
     }
 
+    public function addAssets() {
+
+        return $this->module('cockpit')->uploadAssets('files');
+    }
+
+    public function updateAssets() {
+
+        if ($asset = $this->param('asset', false)) {
+            return $this->module('cockpit')->updateAssets($asset);
+        }
+
+        return false;
+    }
+
+    public function removeAssets() {
+
+        if ($assets = $this->param('assets', false)) {
+            return $this->module('cockpit')->removeAssets($assets);
+        }
+
+        return false;
+    }
 }
