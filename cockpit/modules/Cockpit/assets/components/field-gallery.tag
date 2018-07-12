@@ -14,7 +14,7 @@
 
                         <div class="uk-flex uk-flex-middle uk-flex-center" style="min-height:120px;">
                             <div class="uk-width-1-1 uk-text-center">
-                                <cp-thumbnail src="{ (SITE_URL+'/'+img.path.replace(/^\//, '')) }" width="400" height="250"></cp-thumbnail>
+                                <cp-thumbnail src="{ img.path.match(/^(http\:|https\:|\/\/)/) ? img.path : (SITE_URL+'/'+img.path.replace(/^\//, '')) }" width="400" height="250"></cp-thumbnail>
                             </div>
                         </div>
 
@@ -31,7 +31,7 @@
                                     </div>
                                 </li>
                                 <li><a class="uk-text-muted" onclick="{ parent.showMeta }" title="{ App.i18n.get('Edit meta data') }" data-uk-tooltip><i class="uk-icon-cog"></i></a></li>
-                                <li><a class="uk-text-muted" href="{ (SITE_URL+'/'+img.path.replace(/^\//, '')) }" data-uk-lightbox="type:'image'" title="{ App.i18n.get('Full size') }" data-uk-tooltip><i class="uk-icon-eye"></i></a></li>
+                                <li><a class="uk-text-muted" href="{ img.path.match(/^(http\:|https\:|\/\/)/) ? img.path : (SITE_URL+'/'+img.path.replace(/^\//, '')) }" data-uk-lightbox="type:'image'" title="{ App.i18n.get('Full size') }" data-uk-tooltip><i class="uk-icon-eye"></i></a></li>
                                 <li><a class="uk-text-danger" onclick="{ parent.remove }" title="{ App.i18n.get('Remove image') }" data-uk-tooltip><i class="uk-icon-trash-o"></i></a></li>
                             </ul>
                         </div>
@@ -47,7 +47,7 @@
                 <p>{ App.i18n.get('Gallery is empty') }</p>
             </div>
             <div class="uk-display-inline-block uk-position-relative" data-uk-dropdown="pos:'bottom-center'">
-                <a class="uk-button uk-text-primary uk-button-outline uk-button-large" onclick="{ selectAssetsImages }">
+                <a class="uk-text-large" onclick="{ selectAssetsImages }">
                     <i class="uk-icon-plus-circle" title="{ App.i18n.get('Add images') }" data-uk-tooltip></i>
                 </a>
                 <div class="uk-dropdown">

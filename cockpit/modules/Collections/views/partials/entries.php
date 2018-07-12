@@ -187,17 +187,18 @@
 
         </div>
 
-        <div class="uk-margin-large-top" if="{ entries.length && !loading && listmode=='list' }">
+        <div class="uk-margin-large-top uk-overflow-container" if="{ entries.length && !loading && listmode=='list' }">
             <table class="uk-table uk-table-tabbed uk-table-striped">
                 <thead>
                     <tr>
                         <th width="20"><input class="uk-checkbox" type="checkbox" data-check="all"></th>
                         <th width="{field.name == '_modified' || field.name == '_created' ? '100':''}" class="uk-text-small" each="{field,idx in fields}">
-                            <a class="uk-link-muted uk-noselect { parent.sortedBy == field.name ? 'uk-text-primary':'' }" onclick="{ parent.updatesort }" data-sort="{ field.name }">
+
+                            <a class="uk-link-muted uk-noselect { (parent.sort[field.name] || parent.sort[field.name+'.display']) ? 'uk-text-primary':'' }" onclick="{ parent.updatesort }" data-sort="{ field.name }">
 
                                 { field.label || field.name }
 
-                                <span if="{parent.sortedBy == field.name}" class="uk-icon-long-arrow-{ parent.sortedOrder == 1 ? 'up':'down'}"></span>
+                                <span if="{(parent.sort[field.name] || parent.sort[field.name+'.display'])}" class="uk-icon-long-arrow-{ (parent.sort[field.name] == 1 || parent.sort[field.name+'.display']==1) ? 'up':'down'}"></span>
                             </a>
                         </th>
                         <th width="20"></th>
@@ -268,6 +269,21 @@
                 <a class="uk-button uk-button-small" onclick="{ loadpage.bind(this, page+1) }" if="{page+1 <= pages}">@lang('Next')</a>
             </div>
 
+            <div class="uk-margin-small-right" data-uk-dropdown="mode:'click'">
+                <a class="uk-button uk-button-link uk-button-small uk-text-muted">{limit}</a>
+                <div class="uk-dropdown">
+                    <ul class="uk-nav uk-nav-dropdown">
+                        <li class="uk-nav-header">@lang('Show')</li>
+                        <li><a onclick="{updateLimit.bind(this, 20)}">20</a></li>
+                        <li><a onclick="{updateLimit.bind(this, 40)}">40</a></li>
+                        <li><a onclick="{updateLimit.bind(this, 80)}">80</a></li>
+                        <li><a onclick="{updateLimit.bind(this, 100)}">100</a></li>
+                        <li class="uk-nav-divider"></li>
+                        <li><a onclick="{updateLimit.bind(this, null)}">@lang('All')</a></li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
 
         </div>
@@ -279,13 +295,14 @@
 
     <script type="view/script">
 
-        var $this = this, $root = App.$(this.root), limit = 20;
+        var $this = this, $root = App.$(this.root);
 
         this.collection = {{ json_encode($collection) }};
         this.loadmore   = false;
         this.loading    = true;
         this.count      = 0;
         this.page       = 1;
+        this.limit      = 20;
         this.entries    = [];
         this.fieldsidx  = {};
         this.imageField = null;
@@ -344,10 +361,12 @@
 
                     if (q.sort) this.sort = q.sort;
                     if (q.page) this.page = q.page;
+                    if (q.limit) this.limit = (parseInt(q.limit) || 20);
                     if (q.filter) {
                         this.filter = q.filter;
                         this.refs.txtfilter.value = q.filter;
                     }
+
                 } catch(e){}
             }
 
@@ -434,8 +453,11 @@
                 options.filter = this.filter;
             }
 
-            options.limit = limit;
-            options.skip  = (this.page - 1) * limit;
+            if (this.limit) {
+                options.limit = this.limit;
+            }
+
+            options.skip  = (this.page - 1) * this.limit;
 
             this.loading = true;
 
@@ -444,7 +466,8 @@
                 App.route(['/collections/entries/', this.collection.name, '?q=', JSON.stringify({
                     page: this.page || null,
                     filter: this.filter || null,
-                    sort: this.sort || null
+                    sort: this.sort || null,
+                    limit: this.limit
                 })].join(''))
             );
 
@@ -457,7 +480,7 @@
                 this.page    = data.page;
                 this.count   = data.count;
 
-                this.loadmore = data.entries.length && data.entries.length == limit;
+                this.loadmore = data.entries.length && data.entries.length == this.limit;
 
                 this.checkselected();
                 this.loading = false;
@@ -472,6 +495,8 @@
         }
 
         updatesort(e, field) {
+
+            e.preventDefault();
 
             field = e.target.getAttribute('data-sort');
 
@@ -492,15 +517,24 @@
                     col = field;
             }
 
+            if (e.metaKey || e.ctrlKey) {
+                // multi select
+            } else {
+
+                var sort = {};
+
+                if (this.sort[col]) {
+                    sort[col] = this.sort[col];
+                }
+
+                this.sort = sort;
+            }
+
             if (!this.sort[col]) {
-                this.sort      = {};
                 this.sort[col] = 1;
             } else {
                 this.sort[col] = this.sort[col] == 1 ? -1 : 1;
             }
-
-            this.sortedBy = field;
-            this.sortedOrder = this.sort[col];
 
             this.entries = [];
             this.load();
@@ -539,6 +573,12 @@
                 this.page = 1;
                 this.load();
             }
+        }
+
+        updateLimit(limit) {
+            this.limit = limit;
+            this.page = 1;
+            this.load();
         }
 
         duplicateEntry(e, collection, entry, idx) {

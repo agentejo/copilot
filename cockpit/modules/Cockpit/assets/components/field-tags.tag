@@ -38,7 +38,18 @@
 
             if (opts.autocomplete) {
 
-                UIkit.autocomplete(this.refs.autocomplete, {source: opts.autocomplete});
+                var _source = opts.autocomplete;
+
+                if (Array.isArray(opts.autocomplete) && opts.autocomplete.length && !opts.autocomplete[0].value) {
+
+                    _source = [];
+
+                    opts.autocomplete.forEach(function(val) {
+                        _source.push({value:val})
+                    })
+                }
+
+                UIkit.autocomplete(this.refs.autocomplete, {source: _source, minLength: opts.minLength || 1});
             }
 
             App.$(this.root).on({
@@ -47,7 +58,7 @@
 
                     var value = e.type=='keydown' ? $this.refs.input.value : data.value;
 
-                    if (e.type=='keydown' && e.keyCode != 13) {
+                    if (e.type=='keydown' && e.keyCode != 13 && e.keyCode != 188) {
                         return;
                     }
 

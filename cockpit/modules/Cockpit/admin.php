@@ -15,7 +15,7 @@ $app('i18n')->locale = 'en';
 
 if ($user = $app->module('cockpit')->getUser()) {
 
-    $locale = isset($user['i18n']) ? $user['i18n'] : $app->retrieve('i18n', 'en');
+    $locale = $user['i18n'] ?? $app->retrieve('i18n', 'en');
 
     if ($translationspath = $app->path("#config:cockpit/i18n/{$locale}.php")) {
         $app('i18n')->locale = $locale;
@@ -37,9 +37,7 @@ $app->bind('/cockpit.i18n.data', function() {
 $assets = [
 
     // polyfills
-    'assets:polyfills/es6-shim.js',
     'assets:polyfills/dom4.js',
-    'assets:polyfills/fetch.js',
     'assets:polyfills/document-register-element.js',
     'assets:polyfills/web-animations.min.js',
     'assets:polyfills/pointer-events.js',

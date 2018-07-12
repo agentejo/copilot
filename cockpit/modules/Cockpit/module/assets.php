@@ -5,7 +5,9 @@ $this->module("cockpit")->extend([
     'listAssets' => function($options = []) {
 
         $assets = $this->app->storage->find('cockpit/assets', $options)->toArray();
-        $total  = (!isset($options['skip']) && !isset($options['limit'])) ? count($assets) : $this->app->storage->count('cockpit/assets', isset($options['filter']) ? $options['filter'] : null);
+        $total  = (!isset($options['skip']) && !isset($options['limit']))
+                   ? count($assets)
+                   : $this->app->storage->count('cockpit/assets', ($options['filter'] ?? null));
 
         $this->app->trigger('cockpit.assets.list', [$assets]);
 
@@ -46,6 +48,10 @@ $this->module("cockpit")->extend([
                 '_by' => $this->app->module('cockpit')->getUser('_id')
             ];
 
+            if (!$asset['mime']) {
+                $asset['mime'] = 'unknown';
+            }
+
             if ($asset['image'] && !preg_match('/\.svg$/i', $file)) {
 
                 $info = getimagesize($file);
@@ -85,7 +91,7 @@ $this->module("cockpit")->extend([
 
     'uploadAssets' => function($param = 'files') {
 
-        $files     = isset($_FILES[$param]) ? $_FILES[$param] : [];
+        $files     = $_FILES[$param] ?? [];
         $uploaded  = [];
         $failed    = [];
         $_files    = [];

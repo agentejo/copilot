@@ -37,8 +37,8 @@ class RestApi extends \LimeExtra\Controller {
         if ($populate = $this->param('populate', null)) $options['populate'] = $populate;
 
         // cast string values if get request
-        if ($filter && isset($_GET['filter'])) $options['filter'] = $this->_fixStringBooleanNumericValues($filter);
-        if ($fields && isset($_GET['fields'])) $options['fields'] = $this->_fixStringBooleanNumericValues($fields);
+        if ($filter && isset($_GET['filter'])) $options['filter'] = $this->_fixStringBooleanValues($filter);
+        if ($fields && isset($_GET['fields'])) $options['fields'] = $this->_fixStringBooleanValues($fields);
 
         // fields filter
         $fieldsFilter = [];
@@ -52,7 +52,7 @@ class RestApi extends \LimeExtra\Controller {
             $options['fieldsFilter'] = $fieldsFilter;
         }
 
-        if (isset($options["sort"])) {
+        if ($sort) {
 
             foreach ($sort as $key => &$value) {
                 $options["sort"][$key]= intval($value);
@@ -60,6 +60,19 @@ class RestApi extends \LimeExtra\Controller {
         }
 
         $entries = $this->module('collections')->find($collection['name'], $options);
+        $count = count($entries);
+        $isSortable = $collection['sortable'] ?? false;
+
+        // sort by custom order if collection is sortable
+        if (!$sort && $isSortable && $count) {
+
+            $entries = $this->helper('utils')->buildTree($entries, [
+                'parent_id_column_name' => '_pid',
+                'children_key_name'     => 'children',
+                'id_column_name'        => '_id',
+    			'sort_column_name'      => '_o'
+            ]);
+        }
 
         // return only entries array - due to legacy
         if ((boolean) $this->param('simple', false)) {
@@ -89,7 +102,7 @@ class RestApi extends \LimeExtra\Controller {
         return [
             'fields'   => $fields,
             'entries'  => $entries,
-            'total'    => (!$skip && !$limit) ? count($entries) : $this->module('collections')->count($collection['name'], $filter ? $filter : [])
+            'total'    => (!$skip && !$limit) ? $count : $this->module('collections')->count($collection['name'], $filter ? $filter : [])
         ];
 
         return $entries;
@@ -112,7 +125,17 @@ class RestApi extends \LimeExtra\Controller {
             return $this->stop('{"error": "Unauthorized"}', 401);
         }
 
-        $data['_by'] = $this->module('cockpit')->getUser('_id');
+        $userId = $this->module('cockpit')->getUser('_id');
+
+        if (isset($data[0])) {
+
+            foreach ($data as &$entry) {
+                $entry['_by'] = $userId;
+            }
+
+        } else {
+            $data['_by'] = $userId;
+        }
 
         $data = $this->module('collections')->save($collection, $data);
 
@@ -222,7 +245,7 @@ class RestApi extends \LimeExtra\Controller {
         return $extended ? $collections : array_keys($collections);
     }
 
-    protected function _fixStringBooleanNumericValues(&$array) {
+    protected function _fixStringBooleanValues(&$array) {
 
         if (!is_array($array)) {
             return $array;
@@ -231,15 +254,13 @@ class RestApi extends \LimeExtra\Controller {
         foreach ($array as $k => $v) {
 
             if (is_array($array[$k])) {
-                $array[$k] = $this->_fixStringBooleanNumericValues($array[$k]);
+                $array[$k] = $this->_fixStringBooleanValues($array[$k]);
             }
 
             if (is_string($v)) {
 
                 if ($v === 'true' || $v === 'false') {
                     $v = filter_var($v, FILTER_VALIDATE_BOOLEAN);
-                } elseif(is_numeric($v)) {
-                    $v = $v + 0;
                 }
             }
 

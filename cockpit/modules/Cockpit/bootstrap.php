@@ -109,8 +109,20 @@ $this->module('cockpit')->extend([
 
             $path = trim(str_replace(rtrim($this->app->filestorage->getUrl('assets://'), '/'), '', $src), '/');
 
-            if ($this->app->filestorage->has('assets://'.$path)) {
-                $asset = $this->app->storage->findOne('cockpit/assets', ['path' => "/{$path}"]);
+            try {
+
+                if ($this->app->filestorage->has('assets://'.$path)) {
+
+                    $asset = $this->app->storage->findOne('cockpit/assets', ['path' => "/{$path}"]);
+
+                    if (!$asset) {
+                        $asset = ['path' => "/{$path}"];
+                    }
+                }
+
+            } catch (\Exception $e) {
+
+                return $src;
             }
 
         } elseif (!preg_match('/\.(png|jpg|jpeg|gif)$/i', $src)) {
@@ -143,12 +155,12 @@ $this->module('cockpit')->extend([
 
         if ($src) {
 
-            $src = ltrim($src, '/');
+            $path = trim(str_replace(rtrim($this->app->filestorage->getUrl('site://'), '/'), '', $src), '/');
 
-            if (file_exists(COCKPIT_SITE_DIR.'/'.$src)) {
-                $src = COCKPIT_SITE_DIR.'/'.$src;
-            } elseif (file_exists(COCKPIT_DOCS_ROOT.'/'.$src)) {
-                $src = COCKPIT_DOCS_ROOT.'/'.$src;
+            if (file_exists(COCKPIT_SITE_DIR.'/'.$path)) {
+                $src = COCKPIT_SITE_DIR.'/'.$path;
+            } elseif (file_exists(COCKPIT_DOCS_ROOT.'/'.$path)) {
+                $src = COCKPIT_DOCS_ROOT.'/'.$path;
             }
         }
 
