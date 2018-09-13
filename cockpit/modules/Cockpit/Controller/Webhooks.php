@@ -4,10 +4,19 @@ namespace Cockpit\Controller;
 
 class Webhooks extends \Cockpit\AuthController {
 
+    public function __construct($app) {
+
+        parent::__construct($app);
+
+        if (!$this->module('cockpit')->hasaccess('cockpit', 'webhooks')) {
+            return $this->helper('admin')->denyRequest();
+        }
+    }
+
     public function index() {
 
-        $webhooks = $this->storage->find("cockpit/webhooks", [
-            "sort"   => ["name" => 1]
+        $webhooks = $this->storage->find('cockpit/webhooks', [
+            'sort' => ['name' => 1]
         ])->toArray();
 
         return $this->render('cockpit:views/webhooks/index.php', compact('webhooks'));
@@ -26,7 +35,7 @@ class Webhooks extends \Cockpit\AuthController {
 
         if ($id) {
 
-            $webhook = $this->storage->findOne("cockpit/webhooks", ['_id' => $id]);
+            $webhook = $this->storage->findOne('cockpit/webhooks', ['_id' => $id]);
 
             if (!$webhook) {
                 return false;
@@ -38,15 +47,20 @@ class Webhooks extends \Cockpit\AuthController {
 
     public function save() {
 
-        if ($data = $this->param("webhook", false)) {
+        if ($data = $this->param('webhook', false)) {
 
             $data['_modified'] = time();
 
-            if (!isset($data["_id"])) {
+            if (!isset($data['_id'])) {
                 $data['_created'] = $data['_modified'];
             }
 
-            $this->app->storage->save("cockpit/webhooks", $data);
+            $this->app->storage->save('cockpit/webhooks', $data);
+
+            // invalidate cache
+            if ($cache = $this->app->path('#tmp:webhooks.cache.php')) {
+                @unlink($cache);
+            }
 
             return json_encode($data);
         }
@@ -57,9 +71,14 @@ class Webhooks extends \Cockpit\AuthController {
 
     public function remove() {
 
-        if ($data = $this->param("webhook", false)) {
+        if ($data = $this->param('webhook', false)) {
 
-            $this->app->storage->remove("cockpit/webhooks", ['_id'=>$data['_id']]);
+            $this->app->storage->remove('cockpit/webhooks', ['_id'=>$data['_id']]);
+
+            // invalidate cache
+            if ($cache = $this->app->path('#tmp:webhooks.cache.php')) {
+                @unlink($cache);
+            }
 
             return true;
         }

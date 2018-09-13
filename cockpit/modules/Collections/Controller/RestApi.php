@@ -45,8 +45,8 @@ class RestApi extends \LimeExtra\Controller {
 
         if ($fieldsFilter = $this->param('fieldsFilter', [])) $options['fieldsFilter'] = $fieldsFilter;
         if ($lang = $this->param('lang', false)) $fieldsFilter['lang'] = $lang;
-        if ($ignoreDefaultFallback = $this->param('ignoreDefaultFallback', false)) $fieldsFilter['ignoreDefaultFallback'] = $ignoreDefaultFallback;
-        if ($user) $fieldsFilter["user"] = $user;
+        if ($ignoreDefaultFallback = $this->param('ignoreDefaultFallback', false)) $fieldsFilter['ignoreDefaultFallback'] = in_array($ignoreDefaultFallback, ['1', '0']) ? boolval($ignoreDefaultFallback) : $ignoreDefaultFallback;
+        if ($user) $fieldsFilter['user'] = $user;
 
         if (is_array($fieldsFilter) && count($fieldsFilter)) {
             $options['fieldsFilter'] = $fieldsFilter;
@@ -55,7 +55,7 @@ class RestApi extends \LimeExtra\Controller {
         if ($sort) {
 
             foreach ($sort as $key => &$value) {
-                $options["sort"][$key]= intval($value);
+                $options['sort'][$key]= intval($value);
             }
         }
 
@@ -64,7 +64,7 @@ class RestApi extends \LimeExtra\Controller {
         $isSortable = $collection['sortable'] ?? false;
 
         // sort by custom order if collection is sortable
-        if (!$sort && $isSortable && $count) {
+        if (!$sort && !$filter && $isSortable && $count) {
 
             $entries = $this->helper('utils')->buildTree($entries, [
                 'parent_id_column_name' => '_pid',
@@ -220,9 +220,9 @@ class RestApi extends \LimeExtra\Controller {
         $user = $this->module('cockpit')->getUser();
 
         if ($user) {
-            $collections = $this->module("collections")->getCollectionsInGroup($user['group'], true);
+            $collections = $this->module('collections')->getCollectionsInGroup($user['group'], true);
         } else {
-            $collections = $this->module("collections")->collections(true);
+            $collections = $this->module('collections')->collections(true);
         }
 
         if (!isset($collections[$name])) {
@@ -237,7 +237,7 @@ class RestApi extends \LimeExtra\Controller {
         $user = $this->module('cockpit')->getUser();
 
         if ($user) {
-            $collections = $this->module("collections")->getCollectionsInGroup($user['group'], $extended);
+            $collections = $this->module('collections')->getCollectionsInGroup($user['group'], $extended);
         } else {
             $collections = $this->module('collections')->collections($extended);
         }

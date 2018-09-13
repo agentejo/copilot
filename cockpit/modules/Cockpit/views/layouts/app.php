@@ -30,6 +30,8 @@
 
     <script>
         App.$data = {{ json_encode($app('admin')->data->get('extract')) }};
+        UIkit.modal.labels.Ok = App.i18n.get(UIkit.modal.labels.Ok);
+        UIkit.modal.labels.Cancel = App.i18n.get(UIkit.modal.labels.Cancel);
     </script>
 
     @trigger('app.layout.header')
@@ -197,7 +199,11 @@
 
     <!-- RIOT COMPONENTS -->
     @foreach($app('admin')->data['components'] as $component)
-    <script type="riot/tag" src="@base($component)"></script>
+    <script type="riot/tag" src="@base($component)?nc={{ $app['debug'] ? time() : $app['cockpit/version'] }}"></script>
+    @endforeach
+
+    @foreach($app('fs')->ls('*.tag', '#config:tags') as $component)
+    <script type="riot/tag" src="{{$app->pathToUrl('#config:tags/'.$component->getBasename())}}?nc={{ $app['debug'] ? time() : $app['cockpit/version'] }}"></script>
     @endforeach
 
 </body>

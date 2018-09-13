@@ -19,7 +19,7 @@ class Mailer {
 
         $options = array_merge($this->options, is_array($options) ? $options: []);
 
-        $message = $this->createMessage($to, $subject, $message);
+        $message = $this->createMessage($to, $subject, $message, $options);
 
         if (isset($options['from'])) {
             $message->setFrom($options['from'], $options['from_name'] ?? '');
@@ -32,7 +32,7 @@ class Mailer {
         return $message->send();
     }
 
-    public function createMessage($to, $subject, $message) {
+    public function createMessage($to, $subject, $message, $options=[]) {
 
         $mail = new PHPMailer();
 
@@ -72,17 +72,48 @@ class Mailer {
 
         $mail->Subject = $subject;
         $mail->Body    = $message;
-        $mail->AltBody = strip_tags($message);
         $mail->CharSet = 'utf-8';
 
-        $to_array = explode(",", $to);
+        $mail->IsHTML($message !=  strip_tags($message)); // auto-set email format to HTML
+
+        $to_array = explode(',', $to);
 
         foreach ($to_array as $to_single) {
             $mail->addAddress($to_single);
         }
 
-        if ($mail->Body != $mail->AltBody) {
-            $mail->IsHTML(true); // Set email format to HTML
+        if (isset($options['altMessage']) && $options['altMessage']) {
+            $mail->AltBody = $options['altMessage'];
+        }
+
+        if (isset($options['embedded'])) {
+            foreach ($options['embedded'] as $id => $file) {
+                $mail->AddEmbeddedImage($file, $id);
+            }
+        }
+
+        if (isset($options['attachments'])) {
+
+            foreach ($options['attachments'] as $id => $file) {
+
+                if (is_string($id)) {
+                    $mail->addStringAttachment($file, $id);
+                } else {
+                    $mail->addAttachment($file);
+                }
+            }
+        }
+
+        if (isset($options['cc'])) {
+            foreach ($options['cc'] as $email) {
+                $mail->AddCC($email);
+            }
+        }
+
+        if (isset($options['bcc'])) {
+            foreach ($options['bcc'] as $email) {
+                $mail->addBCC($email);
+            }
         }
 
         $msg = new Mailer_Message($mail);

@@ -75,21 +75,38 @@ $this->module('cockpit')->extend([
         return $this->app->helper('fs')->write($container, "<?php\n return {$export};");
     },
 
+    /**
+     * Generate thumbnail
+     * @param array $options {
+     *   @var string [cachefolder=thumbs://] - Cache folder
+     *   @var string $source - Source file path
+     *   @var string [$mode=thumbnail] - One of thumbnail|bestFit|resize|fitToWidth|fitToHeight
+     *   @var string [$fp] - Position
+     *   @var array [$filters] - Associative array of filters and it's options: ['sepia', 'sharpen']
+     *   @var integer [$width] - Output width
+     *   @var integer [$height] - Output height
+     *   @var integer [$quality=100] - Output quality
+     *   @var boolean [$rebuild=false] - Force image rebuild
+     *   @var boolean [$base64=false] - Base64 output
+     *   @var boolean [$output=false] - Echo response and exit application
+     * }
+     * @return string URL to file or Base64 output
+     */
     'thumbnail' => function($options) {
 
-        $options = array_merge(array(
+        $options = array_merge([
             'cachefolder' => 'thumbs://',
             'src' => '',
             'mode' => 'thumbnail',
             'fp' => null,
-            'filter' => '',
+            'filters' => [],
             'width' => false,
             'height' => false,
             'quality' => 100,
             'rebuild' => false,
             'base64' => false,
             'output' => false
-        ), $options);
+        ], $options);
 
         extract($options);
 
@@ -118,14 +135,16 @@ $this->module('cockpit')->extend([
                     if (!$asset) {
                         $asset = ['path' => "/{$path}"];
                     }
+
+                } else {
+                    return $src;
                 }
 
             } catch (\Exception $e) {
-
                 return $src;
             }
 
-        } elseif (!preg_match('/\.(png|jpg|jpeg|gif)$/i', $src)) {
+        } elseif (!preg_match('/\.(png|jpg|jpeg|gif|svg)$/i', $src)) {
             $asset = $this->app->storage->findOne('cockpit/assets', ['_id' => $src]);
         }
 
@@ -165,14 +184,31 @@ $this->module('cockpit')->extend([
         }
 
         $path  = $this->app->path($src);
-        $ext   = pathinfo($path, PATHINFO_EXTENSION);
+        $ext   = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 
         if (!file_exists($path) || is_dir($path)) {
             return false;
         }
 
-        if (!in_array(strtolower($ext), array('png','jpg','jpeg','gif'))) {
-            return $url;
+        // handle svg files
+        if ($ext == 'svg') {
+
+            if ($base64) {
+                return 'data:image/svg+xml;base64,'.base64_encode(file_get_contents($path));
+            }
+
+            if ($output) {
+                header('Content-Type: image/svg+xml');
+                header('Content-Length: '.filesize($path));
+                echo file_get_contents($path);
+                $this->app->stop();
+            }
+
+            return $this->app->pathToUrl($path, true);
+        }
+
+        if (!in_array($ext, ['png','jpg','jpeg','gif'])) {
+            return $this->app->pathToUrl($path, true);
         }
 
         if (!$width || !$height) {
@@ -215,10 +251,24 @@ $this->module('cockpit')->extend([
                     'flip', 'invert', 'opacity', 'pixelate', 'sepia', 'sharpen', 'sketch'
                 ];
 
+                // Apply single filter
                 foreach ($_filters as $f) {
 
                     if (isset($options[$f])) {
                         $img->{$f}($options[$f]);
+                    }
+                }
+
+                // Apply multiple filters
+                foreach ($filters as $filterName => $filterOptions) {
+                    // Handle non-associative array
+                    if (is_int($filterName)) {
+                        $filterName = $filterOptions;
+                        $filterOptions = [];
+                    }
+
+                    if (in_array($filterName, $_filters)) {
+                        call_user_func_array([$img, $filterName], (array) $filterOptions);
                     }
                 }
 

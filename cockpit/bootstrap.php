@@ -89,8 +89,8 @@ function cockpit($module = null) {
             'session.name' => md5(__DIR__),
             'sec-key'      => 'c3b40c4c-db44-s5h7-a814-b4931a15e5e1',
             'i18n'         => 'en',
-            'database'     => [ "server" => "mongolite://".(COCKPIT_STORAGE_FOLDER."/data"), "options" => ["db" => "cockpitdb"] ],
-            'memory'       => [ "server" => "redislite://".(COCKPIT_STORAGE_FOLDER."/data/cockpit.memory.sqlite"), "options" => [] ],
+            'database'     => ['server' => 'mongolite://'.(COCKPIT_STORAGE_FOLDER.'/data'), 'options' => ['db' => 'cockpitdb'] ],
+            'memory'       => ['server' => 'redislite://'.(COCKPIT_STORAGE_FOLDER.'/data/cockpit.memory.sqlite'), 'options' => [] ],
 
             'paths'         => [
                 '#root'     => COCKPIT_DIR,
@@ -108,13 +108,13 @@ function cockpit($module = null) {
                 'site'      => COCKPIT_SITE_DIR
             ],
 
-            'filestorage' => []
+            'filestorage' => [],
 
         ], is_array($customconfig) ? $customconfig : []);
 
         $app = new LimeExtra\App($config);
 
-        $app["config"] = $config;
+        $app['config'] = $config;
 
         // register paths
         foreach ($config['paths'] as $key => $path) {
@@ -203,7 +203,7 @@ function cockpit($module = null) {
         $app->renderer->setCachePath($tmppath);
 
         // i18n
-        $app("i18n")->locale = $config['i18n'] ?? 'en';
+        $app('i18n')->locale = $config['i18n'] ?? 'en';
 
         // load modules
         $app->loadModules(array_merge([

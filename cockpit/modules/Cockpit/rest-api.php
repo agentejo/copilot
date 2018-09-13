@@ -19,7 +19,7 @@ $this->on('before', function() {
             return false;
         }
 
-        $token = $this->param('token', $_SERVER['HTTP_COCKPIT_TOKEN'] ?? null);
+        $token = $this->param('token', $_SERVER['HTTP_COCKPIT_TOKEN'] ?? $this->helper('utils')->getBearerToken());
 
         // api key check
         $allowed = false;
@@ -83,7 +83,7 @@ $this->on('before', function() {
                 'authenticated' => false,
                 'resource' => $resource,
                 'query' => ['path' => $path, 'parts' => $parts, 'params' => $params],
-                'user'=>null,
+                'user' => null,
             ]);
 
             $this->trigger('cockpit.api.authenticate', [$data]);

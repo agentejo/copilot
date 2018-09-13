@@ -6,7 +6,8 @@
             <li><a href="@route('/copilot/settings')"><i class="uk-icon-cogs uk-icon-justify"></i> @lang('Settings')</a></li>
             <li class="uk-nav-divider"></li>
             <li><a href="@route('/copilot/finder')"><i class="uk-icon-folder-o uk-icon-justify"></i> @lang('Files')</a></li>
-            <!--<li><a href="@route('/copilot/update')">@lang('Update')</a></li> -->
+            <li class="uk-nav-divider"></li>
+            <li><a href="{{ $app->pathToUrl('site:') }}" target="_blank" rel="noopener"><i class="uk-icon-globe uk-icon-justify"></i> @lang('View site')</a></li>
         </ul>
     </div>
 </li>

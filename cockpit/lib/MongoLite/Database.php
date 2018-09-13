@@ -101,11 +101,7 @@ class Database {
 
             $fn = null;
 
-            if (!function_exists('create_function')) {
-                eval('$fn = function($document) { return '.UtilArrayQuery::buildCondition($criteria).'; };');
-            } else {
-                $fn = create_function('$document','return '.UtilArrayQuery::buildCondition($criteria).';');
-            }
+            eval('$fn = function($document) { return '.UtilArrayQuery::buildCondition($criteria).'; };');
 
             $this->document_criterias[$id] = $fn;
 
@@ -479,4 +475,31 @@ function fuzzy_search($search, $text, $distance = 3){
     }
 
     return $score / count($needles);
+}
+
+function createMongoDbLikeId() {
+
+    // based on https://gist.github.com/h4cc/9b716dc05869296c1be6
+
+    $timestamp = microtime(true);
+    $hostname  = php_uname('n');
+    $processId = getmypid();
+    $id        = random_int(10, 1000);
+    $result    = '';
+
+    // Building binary data.
+    $bin = sprintf(
+        "%s%s%s%s",
+        pack('N', $timestamp),
+        substr(md5($hostname), 0, 3),
+        pack('n', $processId),
+        substr(pack('N', $id), 1, 3)
+    );
+
+    // Convert binary to hex.
+    for ($i = 0; $i < 12; $i++) {
+        $result .= sprintf("%02x", ord($bin[$i]));
+    }
+
+    return $result;
 }

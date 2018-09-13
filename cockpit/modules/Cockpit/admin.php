@@ -11,16 +11,14 @@ include(__DIR__.'/Helper/Admin.php');
 $app->helpers['admin']  = 'Cockpit\\Helper\\Admin';
 
 // init + load i18n
-$app('i18n')->locale = 'en';
 
-if ($user = $app->module('cockpit')->getUser()) {
+$app('i18n')->locale = $app->retrieve('i18n', 'en');
 
-    $locale = $user['i18n'] ?? $app->retrieve('i18n', 'en');
+$locale = $app->module('cockpit')->getUser('i18n', $app('i18n')->locale);
 
-    if ($translationspath = $app->path("#config:cockpit/i18n/{$locale}.php")) {
-        $app('i18n')->locale = $locale;
-        $app('i18n')->load($translationspath, $locale);
-    }
+if ($translationspath = $app->path("#config:cockpit/i18n/{$locale}.php")) {
+    $app('i18n')->locale = $locale;
+    $app('i18n')->load($translationspath, $locale);
 }
 
 $app->bind('/cockpit.i18n.data', function() {
@@ -144,14 +142,14 @@ $app->on('cockpit.search', function($search, $list) {
 // dashboard widgets
 
 
-$app->on("admin.dashboard.widgets", function($widgets) {
+$app->on('admin.dashboard.widgets', function($widgets) {
 
-    $title   = $this("i18n")->get("Today");
+    $title   = $this('i18n')->get('Today');
 
     $widgets[] = [
-        "name"    => "time",
-        "content" => $this->view("cockpit:views/widgets/datetime.php", compact('title')),
-        "area"    => 'main'
+        'name'    => 'time',
+        'content' => $this->view('cockpit:views/widgets/datetime.php', compact('title')),
+        'area'    => 'main'
     ];
 
 }, 100);
@@ -159,7 +157,7 @@ $app->on("admin.dashboard.widgets", function($widgets) {
 /**
  * handle error pages
  */
-$app->on("after", function() {
+$app->on('after', function() {
 
     switch ($this->response->status) {
         case 500:
@@ -169,7 +167,7 @@ $app->on("after", function() {
                 if ($this->req_is('ajax')) {
                     $this->response->body = json_encode(['error' => json_decode($this->response->body, true)]);
                 } else {
-                    $this->response->body = $this->render("cockpit:views/errors/500-debug.php", ['error' => json_decode($this->response->body, true)]);
+                    $this->response->body = $this->render('cockpit:views/errors/500-debug.php', ['error' => json_decode($this->response->body, true)]);
                 }
 
             } else {
@@ -177,11 +175,11 @@ $app->on("after", function() {
                 if ($this->req_is('ajax')) {
                     $this->response->body = '{"error": "500", "message": "system error"}';
                 } else {
-                    $this->response->body = $this->view("cockpit:views/errors/500.php");
+                    $this->response->body = $this->view('cockpit:views/errors/500.php');
                 }
             }
 
-            $this->trigger("cockpit.request.error", ['500']);
+            $this->trigger('cockpit.request.error', ['500']);
             break;
 
         case 401:
@@ -189,10 +187,10 @@ $app->on("after", function() {
             if ($this->req_is('ajax')) {
                 $this->response->body = '{"error": "401", "message":"Unauthorized"}';
             } else {
-                $this->response->body = $this->view("cockpit:views/errors/401.php");
+                $this->response->body = $this->view('cockpit:views/errors/401.php');
             }
 
-            $this->trigger("cockpit.request.error", ['401']);
+            $this->trigger('cockpit.request.error', ['401']);
             break;
 
         case 404:
@@ -205,10 +203,10 @@ $app->on("after", function() {
                     $this->reroute('/auth/login');
                 }
 
-                $this->response->body = $this->view("cockpit:views/errors/404.php");
+                $this->response->body = $this->view('cockpit:views/errors/404.php');
             }
 
-            $this->trigger("cockpit.request.error", ['404']);
+            $this->trigger('cockpit.request.error', ['404']);
             break;
     }
 

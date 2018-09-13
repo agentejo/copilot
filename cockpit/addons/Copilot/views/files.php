@@ -35,7 +35,7 @@
             </div>
         </li>
         <li>
-            <span class="uk-text-primary">Files <span class="uk-badge" if="{files && files.length}">{files.length}</span></span>
+            <span class="uk-text-primary">Files</span>
             <span show="{ loading }"><i class="uk-icon-refresh uk-icon-spin"></i></span>
         </li>
     </ul>

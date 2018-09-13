@@ -105,7 +105,7 @@ class App implements \ArrayAccess {
         'bin'   => 'application/octet-stream',
         'class' => 'application/octet-stream',
         'css'   => 'text/css',
-        'csv' => 'application/vnd.ms-excel',
+        'csv'   => 'application/vnd.ms-excel',
         'doc'   => 'application/msword',
         'dll'   => 'application/octet-stream',
         'dvi'   => 'application/x-dvi',
@@ -115,6 +115,11 @@ class App implements \ArrayAccess {
         'json'  => 'application/json',
         'js'    => 'application/x-javascript',
         'txt'   => 'text/plain',
+        'rtf'   => 'text/rtf',
+        'wml'   => 'text/vnd.wap.wml',
+        'wmls'  => 'text/vnd.wap.wmlscript',
+        'xsl'   => 'text/xml',
+        'xml'   => 'text/xml',
         'bmp'   => 'image/bmp',
         'rss'   => 'application/rss+xml',
         'atom'  => 'application/atom+xml',
@@ -123,21 +128,31 @@ class App implements \ArrayAccess {
         'jpg'   => 'image/jpeg',
         'jpe'   => 'image/jpeg',
         'png'   => 'image/png',
+        'tiff'  => 'image/tiff',
+        'tif'   => 'image/tiff',
         'ico'   => 'image/vnd.microsoft.icon',
+        'svg'   => 'image/svg+xml',
         'mpeg'  => 'video/mpeg',
         'mpg'   => 'video/mpeg',
         'mpe'   => 'video/mpeg',
+        'webm'  => 'video/webm',
         'qt'    => 'video/quicktime',
         'mov'   => 'video/quicktime',
         'wmv'   => 'video/x-ms-wmv',
         'mp2'   => 'audio/mpeg',
         'mp3'   => 'audio/mpeg',
+        'snd'   => 'audio/basic',
+        'midi'  => 'audio/midi',
+        'mid'   => 'audio/midi',
+        'm3u'   => 'audio/x-mpegurl',
         'rm'    => 'audio/x-pn-realaudio',
         'ram'   => 'audio/x-pn-realaudio',
         'rpm'   => 'audio/x-pn-realaudio-plugin',
         'ra'    => 'audio/x-realaudio',
         'wav'   => 'audio/x-wav',
+        'weba'  => 'audio/webm',
         'zip'   => 'application/zip',
+        'epub'  => 'application/epub+zip',
         'pdf'   => 'application/pdf',
         'xls'   => 'application/vnd.ms-excel',
         'ppt'   => 'application/vnd.ms-powerpoint',
@@ -150,17 +165,6 @@ class App implements \ArrayAccess {
         'swf'   => 'application/x-shockwave-flash',
         'tar'   => 'application/x-tar',
         'xhtml' => 'application/xhtml+xml',
-        'snd'   => 'audio/basic',
-        'midi'  => 'audio/midi',
-        'mid'   => 'audio/midi',
-        'm3u'   => 'audio/x-mpegurl',
-        'tiff'  => 'image/tiff',
-        'tif'   => 'image/tiff',
-        'rtf'   => 'text/rtf',
-        'wml'   => 'text/vnd.wap.wml',
-        'wmls'  => 'text/vnd.wap.wmlscript',
-        'xsl'   => 'text/xml',
-        'xml'   => 'text/xml'
     ];
 
     /**
@@ -550,6 +554,14 @@ class App implements \ArrayAccess {
     */
     public function on($event, $callback, $priority = 0){
 
+        if (is_array($event)) {
+
+            foreach ($event as &$evt) {
+                $this->on($evt, $callback, $priority);
+            }
+            return $this;
+        }
+
         if (!isset($this->events[$event])) $this->events[$event] = [];
 
         // make $this available in closures
@@ -557,7 +569,7 @@ class App implements \ArrayAccess {
             $callback = $callback->bindTo($this, $this);
         }
 
-        $this->events[$event][] = ["fn" => $callback, "prio" => $priority];
+        $this->events[$event][] = ['fn' => $callback, 'prio' => $priority];
 
         return $this;
     }
@@ -580,16 +592,16 @@ class App implements \ArrayAccess {
 
         $queue = new \SplPriorityQueue();
 
-        foreach($this->events[$event] as $index => $action){
-            $queue->insert($index, $action["prio"]);
+        foreach ($this->events[$event] as $index => $action){
+            $queue->insert($index, $action['prio']);
         }
 
         $queue->top();
 
-        while($queue->valid()){
+        while ($queue->valid()){
             $index = $queue->current();
-            if (is_callable($this->events[$event][$index]["fn"])){
-                if (call_user_func_array($this->events[$event][$index]["fn"], $params) === false) {
+            if (is_callable($this->events[$event][$index]['fn'])){
+                if (call_user_func_array($this->events[$event][$index]['fn'], $params) === false) {
                     break; // stop Propagation
                 }
             }
