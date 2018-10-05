@@ -10,11 +10,18 @@
         }
     }
 
+    // Generate title
+    $_title = [];
+
+    foreach (explode('/', $app['route']) as $part) {
+        if (trim($part)) $_title[] = $app('i18n')->get(ucfirst($part));
+    }
+
 ?><!doctype html>
 <html lang="{{ $app('i18n')->locale }}" data-base="@base('/')" data-route="@route('/')" data-version="{{ $app['cockpit/version'] }}" data-locale="{{ $app('i18n')->locale }}">
 <head>
     <meta charset="UTF-8">
-    <title>{{ $app['app.name'] }}</title>
+    <title>{{ implode(' &raquo; ', $_title).(count($_title) ? ' - ':'').$app['app.name'] }}</title>
     <link rel="icon" href="@base('/favicon.ico')" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
@@ -50,10 +57,10 @@
 
                     <div>
 
-                        <div class="uk-display-inline-block" data-uk-dropdown="delay:400,mode:'click'">
+                        <div data-uk-dropdown="delay:400,mode:'click'">
 
-                            <a href="@route('/')" class="uk-link-muted uk-text-bold app-name-link">
-                                <i class="uk-icon-bars"></i>
+                            <a href="@route('/')" class="uk-link-muted uk-text-bold app-name-link uk-flex uk-flex-middle">
+                                <span class="app-logo"></span>
                                 <span class="app-name">{{ $app['app.name'] }}</span>
                             </a>
 
