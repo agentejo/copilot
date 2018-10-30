@@ -61,7 +61,7 @@ class Utils extends \Cockpit\AuthController {
 
             $page['rawmeta']['modified'] = date('Y-m-d H:i:s', time());
 
-            $meta = $this->app->helper('yaml')->toYAML($page['rawmeta']);
+            $meta = json_encode($page['rawmeta'], JSON_PRETTY_PRINT);
 
             file_put_contents($p->path(), implode("\n===\n\n", [$meta, $page['rawcontent']]));
 
@@ -138,13 +138,13 @@ class Utils extends \Cockpit\AuthController {
         $pagepath      = $contentfolder.($root=='home' ? '':  $root.'/'.$meta['slug']).'/'.'index.'.($type['ext']=='md' ? 'md':'html');
         $time          = date('Y-m-d H:i:s', time());
 
-        $content = $this->app->helper('yaml')->toYAML([
+        $content = json_encode([
             "uid" => uniqid('pid-'),
             "type" => $meta['type'],
             "created" => $time,
             "modified" => $time,
             "title" => $meta['title']
-        ])."\n===\n\n";
+        ], JSON_PRETTY_PRINT)."\n===\n\n";
 
         $this->app->helper('fs')->write($pagepath, $content);
 

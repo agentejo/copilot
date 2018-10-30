@@ -9,11 +9,7 @@ $app->bind('/copilot/page-preview', function() use($app) {
     $_page = $this->param('page');
     $page  = new \Copilot\Lib\Page($_page['path']);
 
-    $page->setContents(implode("\n===\n\n", [
-        $this->helper('yaml')->toYAML($_page['rawmeta']),
-        $_page['rawcontent']
-    ]));
-
+    $page->setContent($_page['rawcontent']);
     $page->meta()->extend($_page['rawmeta']);
 
     return copi::_render_page($page);

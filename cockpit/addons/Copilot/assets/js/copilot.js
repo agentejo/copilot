@@ -49,7 +49,7 @@
                             <label class="uk-text-small">Title</label>
                             <input ref="title" type="text" class="uk-width-1-1 uk-form-large" onkeyup="{ updateSlugPreview }" required>
                         </div>
-                        <div class="uk-form-row" if="{opts.root!='home'}">
+                        <div class="uk-form-row" show="{opts.root!='home'}">
                             <label class="uk-text-small">Slug</label>
                             <input ref="slug" type="text" class="uk-width-1-1 uk-form-large" placeholder="{ slugpreview }"  onkeyup="{ updateSlugPreview }">
                         </div>
@@ -87,7 +87,7 @@
                             App.$(this.refs.form).on('submit', function(e) {
 
                                 e.preventDefault();
-                          
+
                                 App.request('/copilot/utils/createPage', {root: opts.root, meta: {
                                     title: $this.refs.title.value,
                                     slug: $this.refs.slug.value ? $this.refs.slug.value : App.Utils.sluggify($this.refs.title.value),

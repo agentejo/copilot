@@ -12,6 +12,7 @@
 
         <div class="uk-margin">
 
+            @if($home || $pages->count())
             <ul class="uk-list">
 
                 @if($home)
@@ -26,6 +27,9 @@
                 </li>
                 @endforeach
             </ul>
+            @else
+                @lang('No pages')
+            @endif
 
         </div>
 

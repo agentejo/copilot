@@ -106,7 +106,7 @@ class Page {
         }
 
         if ($parse) {
-            $meta = copi::$app->helper('yaml')->fromString($meta);
+            $meta = json_decode($meta, true);
             $meta = new \ContainerArray($meta);
         }
 
@@ -122,7 +122,7 @@ class Page {
 
         $meta = $extend ? $this->rawmeta()->extend($data) : new \ContainerArray($data);
         $this->meta = $meta;
-        file_put_contents($this->path(), implode("\n===\n\n", [copi::$app->helper('yaml')->toYAML($meta->toArray()), $this->rawcontent()]));
+        file_put_contents($this->path(), implode("\n===\n\n", [json_encode($meta->toArray(), JSON_PRETTY_PRINT), $this->rawcontent()]));
 
         return $this;
     }
@@ -801,7 +801,7 @@ class Page {
             $filemtime = filemtime($this->path);
         }
 
-        $meta = copi::$app->helper('yaml')->fromString($this->rawmeta(false));
+        $meta = json_decode($this->rawmeta(false), true);
 
         $data = var_export($meta, true);
 
