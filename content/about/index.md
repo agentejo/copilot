@@ -1,8 +1,10 @@
-title: About
-type: markdown
-sort: 1
-uid: pid-5938720f0d275
-modified: 2017-06-07 21:37:22
+{
+	"title": "About",
+	"type": "markdown",
+	"sort": 4,
+	"uid": "pid-5938720f0d275",
+	"modified": "2017-06-07T21:37:22.000Z"
+}
 
 ===
 
