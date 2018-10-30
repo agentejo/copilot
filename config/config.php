@@ -1,0 +1,8 @@
+<?php
+
+return [
+
+    'app.name' => 'Copilot',
+    'copilot.license' => 'Enter your license code here'
+    
+];
