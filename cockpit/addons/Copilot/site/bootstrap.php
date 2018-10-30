@@ -32,8 +32,8 @@ if (COCOPI_FRONTEND) {
  define('CP_BASE_URL'     , $CP_BASE_URL);
  define('CP_BASE_ROUTE'   , CP_BASE_URL);
  define('CP_CURRENT_ROUTE', $CP_ROUTE);
- 
- 
+
+
 // allow cockpit to autoload from cocopi modules
 $app->retrieve('autoload')->append(CP_SITE_DIR.'/modules');
 
@@ -157,7 +157,6 @@ $site->service('renderer', function() use($site) {
 
             // cockpit related macros
             'form'     => '<?php echo cockpit("forms")->open(expr); ?>',
-            'region'   => '<?php echo cockpit("regions")->render(expr); ?>'
         ];
 
         $content = preg_replace_callback('/\B@(\w+)([ \t]*)(\( ( (?>[^()]+) | (?3) )* \))?/x', function($match) use($replace) {
