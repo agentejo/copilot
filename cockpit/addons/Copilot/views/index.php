@@ -24,8 +24,8 @@
 
     <div class="uk-margin-small-bottom">
 
-        <div class="uk-panel uk-panel-space uk-panel-box uk-text-center" if="{!home}">
-            <i class="uk-icon-home uk-text-large"></i>
+        <div class="uk-panel uk-panel-space uk-panel-box uk-panel-card uk-text-center uk-text-large" if="{!home}">
+            <i class="uk-icon-home"></i>
             <p>
                 @lang('No homepage.') <a onclick="{ createPage }" root="home">@lang('Create one.')</a>
             </p>
@@ -114,9 +114,9 @@
 
     </div>
 
-    <div class="uk-margin uk-panel uk-panel-box uk-text-center" if="{!pages.length}">
+    <div class="uk-margin uk-panel uk-panel-box uk-panel-card uk-text-center uk-text-large" if="{home && !pages.length}">
 
-        <i class="uk-icon-file-text-o uk-text-large"></i>
+        <i class="uk-icon-file-text-o"></i>
         <p>
             @lang('No pages.') <a onclick="{ createPage }" root="/">@lang('Create a page')</a>.
         </p>
