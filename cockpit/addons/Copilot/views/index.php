@@ -17,7 +17,7 @@
         <img class="uk-svg-adjust" src="@base('copilot:assets/media/icons/license.svg')" width="50" alt="License" data-uk-svg>
     </div>
     <div class="uk-flex-item-1">
-        <span class="uk-badge uk-badge-danger">@lang('Free Trial')</span>
+        <span class="uk-badge uk-badge-danger uk-margin-small-top">@lang('Free Trial')</span>
         <div class="uk-margin-small-top">
             @lang('Unlicensed version. Enjoy your free trial.')
             <a href="http://agentejo.com" target="_blank">@lang('Buy a license')</a>
