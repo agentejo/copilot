@@ -1,3 +1,11 @@
+<style>
+
+    .home-panel {
+        box-shadow: 0 0 20px rgba(0,0,0,0.22);
+        border-radius: 3px;
+    }
+</style>
+
 <ul class="uk-breadcrumb">
     @render('copilot:views/partials/subnav.php')
     <li><span class="uk-text-primary">@lang('Pages')</span></li>
@@ -50,7 +58,7 @@
             </p>
         </div>
 
-        <div class="uk-panel uk-panel-box uk-panel-card uk-margin" if="{home}">
+        <div class="uk-panel uk-panel-box home-panel uk-margin" if="{home}">
             <div class="uk-grid uk-flex-middle uk-grid-small">
                 <div class="">
                     <span class="uk-margin-small-right" data-uk-dropdown>
