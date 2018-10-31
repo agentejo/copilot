@@ -20,7 +20,26 @@
 
 <div riot-view>
 
-    <h2 class="uk-margin">@lang('Pages')</h2>
+    <div class="uk-flex uk-flex-middle uk-margin">
+        <h2 class="uk-margin-remove uk-flex-item-1">
+            @lang('Pages')
+        </h2>
+        @if($app['config/languages'])
+        <div class="uk-margin-small-left" data-uk-dropdown="mode:'click'">
+            <a class="uk-button uk-button-outline uk-button-large uk-text-muted"><i class="uk-icon-globe"></i> Default</a>
+            <div class="uk-dropdown">
+                <ul class="uk-nav uk-nav-dropdown">
+                    <li class="uk-nav-header">@lang('Language')</li>
+                    <li><a href="?lang="><i class="uk-icon-globe"></i> @lang('Default')</a></li>
+                    @foreach ($app['config/languages'] as $lang => $label)
+                    <li><a href="?lang={{$lang}}"><i class="uk-icon-globe"></i> @lang($label)</a></li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+        @endif
+
+    </div>
 
     <div class="uk-margin-small-bottom">
 

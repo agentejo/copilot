@@ -470,7 +470,7 @@ class Page {
      */
     public function data($store) {
 
-        $store = $this->dir."/{$store}.yaml";
+        $store = $this->dir."/{$store}.json";
 
         return copi::data($store);
     }
@@ -498,7 +498,7 @@ class Page {
 
             foreach(copi::$app->helper('fs')->ls($this->_getPath($path)) as $file) {
 
-                if ($file->isFile() && substr($file->getFilename(), 0, 1) !== '.' && !in_array($file->getExtension(), ['md', 'html', 'yaml'])) {
+                if ($file->isFile() && substr($file->getFilename(), 0, 1) !== '.' && !in_array($file->getExtension(), ['md', 'html', 'json'])) {
                     $files[] = new Resource($file->getRealPath());
                 }
             }
@@ -742,15 +742,15 @@ class Page {
         $meta = [];
 
         $dir      = $this->dir;
-        $metafile = "{$dir}/_meta.yaml";
+        $metafile = "{$dir}/_meta.json";
 
         while ($dir != CP_ROOT_DIR) {
 
-            $metafile = "{$dir}/_meta.yaml";
+            $metafile = "{$dir}/_meta.json";
 
             if (!isset(self::$metaCache[$metafile])) {
 
-                self::$metaCache[$metafile] = is_file($metafile) ? copi::$app->helper('yaml')->fromFile($metafile) : false;
+                self::$metaCache[$metafile] = is_file($metafile) ? parse_json_file($metafile) : false;
             }
 
             if (self::$metaCache[$metafile]) {

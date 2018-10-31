@@ -7,7 +7,7 @@ use Copilot\Lib\Type;
 
 class Admin extends \Cockpit\AuthController {
 
-    public function index() {
+    public function index($lang = 'default') {
 
         $home  = copi::home();
         $pages = copi::pages('content:');
@@ -17,7 +17,7 @@ class Admin extends \Cockpit\AuthController {
 
     public function settings() {
 
-        $meta    = (object)$this->helper('yaml')->fromFile('site:content/_meta.yaml');
+        $meta    = (object)parse_json_file('site:content/_meta.json');
         $info    = json_decode($this->helper('fs')->read('copilot:module.json'));
         $license = $this->module('copilot')->getLicense();
 

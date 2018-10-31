@@ -90,7 +90,7 @@
 
                 <div class="uk-margin-top uk-flex">
 
-                    <span class="uk-margin-right" data-uk-dropdown>
+                    <span class="uk-margin-small-right" data-uk-dropdown>
                         <a class="uk-text-success"><i class="uk-icon-cog"></i></a>
                         <div class="uk-dropdown uk-dropdown-close">
                             <ul class="uk-nav uk-nav-dropdown">
@@ -101,7 +101,7 @@
                         </div>
                     </span>
                     <div>
-                        <a class="uk-text-small uk-flex-item-1" href="@route('/copilot/file'){ file.relpath }"><div class="uk-text-truncate">{ file.filename }</div></a>
+                        <a class="uk-text-small uk-flex-item-1 uk-nbfc" href="@route('/copilot/file'){ file.relpath }"><div>{ file.filename }</div></a>
                         <div class="uk-text-small uk-text-muted uk-margin-small-top">
                             { file.fsize }
                         </div>

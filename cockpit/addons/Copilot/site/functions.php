@@ -18,6 +18,15 @@ function parse_yaml_file($path) {
     return copi::helper('yaml')->fromFile($path);
 }
 
+/**
+ * [parse_json_file description]
+ * @param  string $path
+ * @return array
+ */
+function parse_json_file($path) {
+    return json_decode(copi::helper('fs')->read($path), true);
+}
+
 
 /**
  *
@@ -157,7 +166,7 @@ function render_layoutbuilder_elements($layout) {
         $component = $element['component'];
         $settings  = $element['settings'];
         $children  = isset($element['children']) ? $element['children'] : [];
-        
+
         echo copi::view("layouts:layout-builder/{$component}.html", compact('element', 'component', 'settings', 'children'));
     }
 }

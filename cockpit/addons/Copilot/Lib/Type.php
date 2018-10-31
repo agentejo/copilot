@@ -28,9 +28,9 @@ class Type {
                 $type    = trim($parts[0]);
             }
 
-            if ($typepath = copi::path("types:{$type}.yaml")) {
+            if ($typepath = copi::path("types:{$type}.json")) {
 
-                $typedef = copi::$app->helper('yaml')->fromFile($typepath);
+                $typedef = parse_json_file($typepath);
 
                 if ($subtype && isset($typedef['subtypes'][$subtype])) {
                     $typedef = $typedef['subtypes'][$subtype];

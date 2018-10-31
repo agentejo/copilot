@@ -29,7 +29,7 @@ class Utils extends \Cockpit\AuthController {
     public function updateSettings() {
 
         if ($meta = $this->param('settings', null)) {
-            $this->helper('yaml')->toFile($this->app->path('site:content').'/_meta.yaml', $meta);
+            $this->helper('fs')->write($this->app->path('site:content').'/_meta.json', \json_encode($meta, JSON_PRETTY_PRINT));
             return $meta;
         }
 

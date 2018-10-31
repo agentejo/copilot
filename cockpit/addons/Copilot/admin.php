@@ -35,9 +35,9 @@ $app->on('admin.init', function() use($app) {
 
             if (!$folder) continue;
 
-            foreach($this->helper('fs')->ls('*.yaml', $folder) as $file) {
-                $type = $file->getBasename('.yaml');
-                $types[$type] = $this->helper('yaml')->fromFile($file->getRealPath());
+            foreach($this->helper('fs')->ls('*.json', $folder) as $file) {
+                $type = $file->getBasename('.json');
+                $types[$type] = parse_json_file($file->getRealPath());
 
                 if (isset($types[$type]['subtypes'])) {
 

@@ -177,7 +177,7 @@ class copi {
 
 
         if (strpos($menu, ':') === false && !self::$app->isAbsolutePath($menu)) {
-            $path = "menu:{$menu}.yaml";
+            $path = "menu:{$menu}.json";
         } else {
             $path = $menu;
         }
@@ -189,7 +189,7 @@ class copi {
                 "class" => ""
             ], $options);
 
-            if ($data = self::$app->helper('yaml')->fromFile($file)) {
+            if ($data = parse_json_file($file)) {
 
                 return self::snippet('menu/default', ['data' => $data, 'options' => $options]);
             }

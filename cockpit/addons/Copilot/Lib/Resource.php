@@ -46,8 +46,8 @@ class Resource {
 
             $meta = [];
 
-            if (is_file($this->path.'.yaml')) {
-                $meta = copi::$app->helper('yaml')->fromFile($this->path.'.yaml');
+            if (is_file($this->path.'.json')) {
+                $meta = parse_json_file($this->path.'.json');
             }
 
             $this->meta = new \ContainerArray($meta);
@@ -71,7 +71,7 @@ class Resource {
 
         $this->meta = $meta;
 
-        copi::$app->helper('yaml')->toFile($this->path.'.yaml', $this->meta->toArray());
+        copi::$app->helper('fs')->write($this->path.'.json', json_encode($this->meta->toArray(), JSON_PRETTY_PRINT));
 
         return $this;
     }
@@ -360,8 +360,8 @@ class Resource {
     public function delete() {
 
         // delete meta
-        if (is_file($this->path.'.yaml')) {
-            unlink($this->path.'.yaml');
+        if (is_file($this->path.'.json')) {
+            unlink($this->path.'.json');
         }
 
         return unlink($this->path);
@@ -376,8 +376,8 @@ class Resource {
         rename($this->path, $this->dir.'/'.$filename);
 
         // rename meta
-        if (file_exists($this->path.'.yaml')) {
-            rename($this->path.'.yaml', $this->dir.'/'.$filename.'.yaml');
+        if (file_exists($this->path.'.json')) {
+            rename($this->path.'.json', $this->dir.'/'.$filename.'.json');
         }
 
         $this->path = $this->dir.'/'.$filename;

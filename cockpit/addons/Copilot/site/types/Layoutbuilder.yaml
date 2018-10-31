@@ -1,9 +1,0 @@
-label: Layout Builder
-layout: layoutbuilder
-content:
-    visible: false
-
-meta:
-    layoutbuilder:
-        type: layout
-        label: Page Layout
